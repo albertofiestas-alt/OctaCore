@@ -152,7 +152,7 @@ def _ajustar_con_palabras_clave(intent: Intencion, texto: str, cfg: Config) -> I
         return intent
     t = _normalizar(texto)
     for nombre, claves in a["palabras_clave"].items():
-        if any(c in t for c in claves):
+        if any(re.search(r"\b" + re.escape(c.strip()) + r"\b", t) for c in claves):
             return replace(intent, nombre=nombre)
     return intent
 
@@ -194,10 +194,20 @@ def _dias(t: str) -> list[tuple[int, int, int]]:
     return [(0 if m.group(3) else int(m.group(1) or m.group(2)), m.start(), m.end()) for m in _RE_DIA.finditer(t)]
 
 
-def _montos(t: str, dias: list[tuple[int, int, int]], gasto: set[str]) -> list[dict[str, Any]]:
+def _es_gasto(palabras: list[str], a: Config) -> bool:
+    """La palabra de gasto o de ingreso más cercana al monto (la última antes de él) decide; sin ninguna: ingreso."""
+    for p in reversed(palabras):
+        if p in a["ingreso_palabras"]:
+            return False
+        if p in a["gasto_palabras"]:
+            return True
+    return False
+
+
+def _montos(t: str, dias: list[tuple[int, int, int]], a: Config) -> list[dict[str, Any]]:
     """Montos (sin contar los números que son días) con su día y si son gasto.
 
-    Gasto = una palabra de gasto entre el monto anterior y este. El día de un monto es la mención de día
+    Gasto o ingreso: la palabra más cercana antes del monto, entre el monto anterior y este. El día de un monto es la mención de día
     más cercana a él, y cada mención de día se le da solo a su monto más cercano.
     """
     limpio = t
@@ -205,10 +215,8 @@ def _montos(t: str, dias: list[tuple[int, int, int]], gasto: set[str]) -> list[d
         limpio = limpio[:ini] + " " * (fin - ini) + limpio[fin:]
     montos, previo = [], 0
     for m in _RE_MONTO.finditer(limpio):
-        palabras = re.findall(r"[a-z]+", limpio[previo : m.start()])
-        montos.append(
-            {"monto": _a_numero(m.group(1)), "gasto": any(p in gasto for p in palabras), "dia": None, "ini": m.start(), "fin": m.end()}
-        )
+        gasto = _es_gasto(re.findall(r"[a-z]+", limpio[previo : m.start()]), a)
+        montos.append({"monto": _a_numero(m.group(1)), "gasto": gasto, "dia": None, "ini": m.start(), "fin": m.end()})
         previo = m.end()
     for dia, ini, fin in dias:
         if montos:
@@ -227,11 +235,9 @@ def parametros(texto: str, intent: Intencion, cfg: Config) -> dict[str, Any]:
     a = cfg["asistente"]
     t = _normalizar(texto)
     dias = _dias(t)
-    gasto = set(a["gasto_palabras"])
-    encontrados = _montos(t, dias, gasto)
+    encontrados = _montos(t, dias, a)
     if not encontrados and intent.monto is not None:  # los que extrajo el LLM, validados igual
-        es_gasto = bool(gasto & set(re.findall(r"[a-z]+", t)))
-        encontrados = [{"monto": intent.monto, "gasto": es_gasto, "dia": intent.dia}]
+        encontrados = [{"monto": intent.monto, "gasto": _es_gasto(re.findall(r"[a-z]+", t), a), "dia": intent.dia}]
     for e in encontrados:
         _validar_monto(e["monto"], a)
 
