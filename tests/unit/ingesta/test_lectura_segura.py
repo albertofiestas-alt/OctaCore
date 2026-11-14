@@ -88,7 +88,11 @@ def test_ruta_inexistente_directorio_y_enlace(tmp_path):
         leer(tmp_path, CFG)
     real = _csv(tmp_path, b"a\n1\n")
     enlace = tmp_path / "enlace.csv"
-    enlace.symlink_to(real)
+    try:
+        enlace.symlink_to(real)
+    except (OSError, NotImplementedError):
+        # Windows sin modo desarrollador no deja crear enlaces simbólicos; lo anterior ya se probó.
+        pytest.skip("el sistema no permite crear enlaces simbólicos")
     with pytest.raises(ErrorIngesta):
         leer(enlace, CFG)
 
