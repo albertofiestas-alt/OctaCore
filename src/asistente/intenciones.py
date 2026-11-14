@@ -145,14 +145,23 @@ def _con_llm(texto: str, proveedor: Any, cfg: Config) -> Intencion:
 
 
 def _ajustar_con_palabras_clave(intent: Intencion, texto: str, cfg: Config) -> Intencion:
-    """Respaldo: con confianza ML baja, la primera intención (por prioridad) cuyas palabras aparezcan manda.
-    La confianza del ML no se toca: el flujo decide con ella si pide reformular."""
+    """Respaldo con dos niveles.
+    1) Palabra inequívoca de fuera de alcance (receta, transferir, enviar...): manda con CUALQUIER confianza ML y
+       sube la confianza a la de la regla, para que el flujo rechace en vez de pedir reformular.
+    2) Con confianza ML baja, la primera intención (por prioridad) cuyas palabras aparezcan manda; la confianza
+       del ML no se toca (el flujo decide con ella si pide reformular)."""
     a = cfg["asistente"]
+    t = _normalizar(texto)
+
+    def hay(claves) -> bool:
+        return any(re.search(r"\b" + re.escape(c.strip()) + r"\b", t) for c in claves)
+
+    if hay(a["palabras_fuera_inequivocas"]):
+        return replace(intent, nombre="fuera_de_alcance", confianza=max(intent.confianza, a["confianza_regla_inequivoca"]))
     if intent.confianza >= a["confianza_reglas"]:
         return intent
-    t = _normalizar(texto)
     for nombre, claves in a["palabras_clave"].items():
-        if any(re.search(r"\b" + re.escape(c.strip()) + r"\b", t) for c in claves):
+        if hay(claves):
             return replace(intent, nombre=nombre)
     return intent
 
@@ -177,7 +186,7 @@ def clasificar(texto: str, cfg: Config, proveedor: Any | None = None) -> Intenci
 # --------------------------------------------------------------------------- #
 
 _RE_DIA = re.compile(r"\bdia\s+(\d{1,2})\b|\bel\s+(\d{1,2})\b|\b(hoy)\b")
-_RE_MONTO = re.compile(r"(?<![a-z\d])(?:s/\.?\s*)?(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:[.,]\d{1,2})?)")
+_RE_MONTO = re.compile(r"(?<![a-z\d])(?:s/\.?\s*)?(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:[.,]\d{1,2})?)(?!\d)(?!\s*dias?\b)")
 _RE_MILES = re.compile(r"\d{1,3}(?:,\d{3})+(?:\.\d+)?")
 
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 
 import pytest
 
@@ -160,6 +161,9 @@ def _p(texto, cfg, nombre="que_pasa_si", **kw):
         ("¿Cuánto podría gastar si cobro S/250 el día 3?", [(3, 250.0)], 0.0),  # 'gastar' pero el monto es un cobro
         ("cuanto podria gastar si cobro s/400 el dia 12", [(12, 400.0)], 0.0),
         ("y si gasto s/300 en una compra", [], 300.0),
+        ("Si compro unas zapatillas de S/ 180 mañana, ¿me afecta?", [], 180.0),  # 'compro' es gasto (mañana: ver informe)
+        ("y si le presto 70 a mi hermano hoy", [], 70.0),
+        ("que pasa si se me atrasa el cobro 3 dias", [], 0.0),  # '3 dias' es una duración, no un monto
     ],
 )
 def test_parametros_que_pasa_si(cfg, texto, ingresos, gasto):
@@ -203,7 +207,8 @@ def test_parametros_sobre_todas_las_que_pasa_si_del_csv(cfg):
     filas = pd.read_csv(it._ruta(cfg["asistente"]["csv_preguntas"]))
     for texto in filas[filas.intencion == "que_pasa_si"].texto:
         p = _p(texto, cfg)
-        if any(c.isdigit() for c in texto):
+        sin_dias = re.sub(r"(dia|día|el)\s+\d{1,2}|\d+\s+d[ií]as?", "", texto, flags=re.I)  # esos números son días, no montos
+        if any(c.isdigit() for c in sin_dias):
             assert p["ingresos_extra"] or p["gasto_hoy"] > 0, texto
         t = texto.lower()
         if any(w in t for w in ("cobro", "recibo", "pagan", "gano", "ingreso de", "adelantan", "entra un")) and "si gasto" not in t:

@@ -46,6 +46,11 @@ def test_yape_y_plin_con_confianza_baja_son_fuera_de_alcance(texto):
     assert it._ajustar_con_palabras_clave(it.Intencion("concepto", 0.1), texto, CFG).nombre == "fuera_de_alcance"
 
 
+def test_palabra_inequivoca_con_confianza_ml_baja_rechaza_y_no_pide_reformular():
+    r = it._ajustar_con_palabras_clave(it.Intencion("concepto", 0.05), "dime la receta del ceviche", CFG)
+    assert r.nombre == "fuera_de_alcance" and r.confianza >= CFG["asistente"]["umbral_intencion"]
+
+
 def test_regla_inequivoca_va_en_la_config_no_en_el_codigo():
     assert "receta" in CFG["asistente"]["palabras_fuera_inequivocas"]
 
