@@ -24,6 +24,13 @@ def _s(x: float) -> str:
     return f"S/{x:.0f}" if float(x).is_integer() else f"S/{x:.2f}"
 
 
+def _faltante(del_desglose: Any, del_mensaje: re.Match[str] | None) -> float | None:
+    """El faltante del desglose (fuente de verdad); si no está, el de "faltan S/x" del mensaje."""
+    if isinstance(del_desglose, (int, float)) and not isinstance(del_desglose, bool):
+        return float(del_desglose)
+    return float(del_mensaje.group(1)) if del_mensaje else None
+
+
 def resultados_de(decision, *, escenario=None, simulada=None, parametros=None, pasajes=()) -> dict[str, Any]:
     """Dict serializable con lo que las plantillas pueden decir. No muta sus entradas."""
     d = decision
@@ -40,7 +47,7 @@ def resultados_de(decision, *, escenario=None, simulada=None, parametros=None, p
         "dia_limitante": d.desglose.get("dia_limitante"),
         "pago_limitante": limitante,
         "pagos": pagos,
-        "faltante": float(faltan.group(1)) if faltan else None,
+        "faltante": _faltante(d.desglose.get("faltante"), faltan),
         "propuesta": None if prop is None else {
             "texto": prop.texto, "monto": prop.monto,
             "antes": prop.antes.get("numero_hoy"), "despues": prop.despues.get("numero_hoy"),
@@ -97,12 +104,29 @@ def _escenario_txt(esc) -> str:
     return " y ".join(partes) if partes else "ningún cambio"
 
 
+MAX_CAMBIOS = 3  # pagos que cambian de semáforo que se nombran, para no pasar de max_palabras
+
+
+def _cambios_de_semaforo(antes: list[dict[str, Any]], despues: list[dict[str, Any]]) -> str:
+    """Una frase 'El pago del día 3 por S/300 pasa de No cubierto a Cubierto.' por pago (mismo pago_id) que cambia."""
+    previo = {p.get("pago_id"): p for p in antes}
+    frases = []
+    for p in despues:
+        a = previo.get(p.get("pago_id"))
+        if a is None or a.get("semaforo") == p.get("semaforo") or {a.get("semaforo"), p.get("semaforo")} - ETIQUETA.keys():
+            continue
+        frases.append(f" El pago del día {p['dia']} por {_s(p['monto'])} pasa de {ETIQUETA[a['semaforo']]} "
+                      f"a {ETIQUETA[p['semaforo']]}.")
+    return "".join(frases[:MAX_CAMBIOS])
+
+
 def _que_pasa_si(res):
     esc = res.get("escenario") or {}
     if not res.get("despues"):
         return _bloques(f"Escenario: {_escenario_txt(esc)}. No pude calcular la simulación ahora; tu número de hoy sigue en {_s(res['numero_hoy'])}.",
                         "Sin el cálculo no puedo decirte cómo cambia.", ["Intentar de nuevo más tarde"])
     datos = f"Con {_escenario_txt(esc)}, tu número de hoy pasa de {_s(res['numero_hoy'])} a {_s(res['despues']['numero_hoy'])}."
+    datos += _cambios_de_semaforo(res.get("pagos") or [], res["despues"].get("pagos") or [])
     sig = "Es una simulación con un ingreso que tú indicas como conocido: no se mueve dinero ni cambian tus datos."
     return _bloques(datos, sig, ["Probar otro escenario", "Ver el plan en la pantalla Plan"])
 

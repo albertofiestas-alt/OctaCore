@@ -111,3 +111,31 @@ def test_resultados_de_no_muta_y_es_serializable(decision_verde):
     res = resultados_de(decision_verde, escenario=Escenario(), simulada=decision_verde, pasajes=[PASAJE])
     json.dumps(res)
     assert decision_verde.model_dump() == antes
+
+
+def test_que_pasa_si_con_motor_simular_nombra_el_pago_que_mejora(cfg, estado_caso_orden_pagos, pronostico_caso_orden_pagos):
+    """Prueba clave del plan (sección 8): ingreso extra de 250 el día 2 en el caso de 100 y 300."""
+    from motor import decidir
+    from motor.simular import simular
+
+    antes = decidir(estado_caso_orden_pagos, pronostico_caso_orden_pagos, cfg)
+    esc = Escenario(ingresos_extra=[{"dia": 2, "monto": 250}])
+    despues = simular(estado_caso_orden_pagos, pronostico_caso_orden_pagos, esc, cfg)
+    res = resultados_de(antes, escenario=esc, simulada=despues)
+    texto, _ = plantilla("que_pasa_si", res)
+    assert antes.numero_hoy == 0 < despues.numero_hoy
+    assert f"pasa de S/0 a S/{int(despues.numero_hoy)}" in texto
+    assert "El pago del día 3 por S/300 pasa de No cubierto a" in texto
+    assert cifras(texto) <= permitidas(res)
+
+
+def test_que_pasa_si_sin_cambio_de_semaforo_no_agrega_frases(decision_verde):
+    texto, _ = plantilla("que_pasa_si", resultados_de(decision_verde, escenario=Escenario(gasto_hoy=1), simulada=decision_verde))
+    assert " pasa de Cubierto" not in texto
+
+
+def test_faltante_sale_del_desglose(decision_sin_alcance):
+    d = decision_sin_alcance.model_copy(update={"mensaje_falta": None,
+                                                "desglose": {**decision_sin_alcance.desglose, "faltante": 200}})
+    assert resultados_de(d)["faltante"] == 200.0
+    assert resultados_de(decision_sin_alcance)["faltante"] == 200.0  # fixture sin la clave: sale del mensaje
