@@ -19,14 +19,16 @@ max_ingresos_extra: 3
 dia_por_defecto: 0            # ingreso sin día ("y si me adelantan S/50") = hoy
 
 # Palabras clave de respaldo (sin tildes, minúsculas). Orden = prioridad; la primera intención que coincide gana.
-palabras_clave:
-  fuera_de_alcance: [invertir, inversion, prestamo, credito, dolares, bitcoin, cripto, acciones, clima, tiempo hara, receta, futbol, chiste]
-  que_pasa_si: ["y si ", que pasa si, que pasaria, que ocurriria, simula, si cobro, si recibo, si gasto, si me pagan]
-  propuesta: [propon, sugerencia, recomiendas, recomendacion, que hago para, apartar, separar]
+palabras_clave:                # se buscan como palabra (o frase) completa
+  fuera_de_alcance: [invertir, inversion, inversiones, prestamo, prestamos, credito, creditos, dolares, bitcoin, cripto, criptomoneda, criptomonedas, clima, tiempo hara, receta, futbol, chiste]
+  que_pasa_si: [y si, que pasa si, que pasaria, que ocurriria, simula, simular, si cobro, si recibo, si gasto, si me pagan]
+  propuesta: [propon, proponme, propone, propuesta, sugerencia, sugerencias, recomiendas, recomendacion, recomendaciones, que hago para, apartar, separar]
   concepto: [que es, que significa, que quiere decir, significa]
   estado_pago: [me alcanza, alcanza para, alcanzara, esta cubierto, esta cubierta, en riesgo]
   explicar_numero: [por que, como llegaron, como calcularon, como se calcula, de donde sale]
-gasto_palabras: [gasto, gastar, gasta, compra, comprar, cena, pagar]   # un monto con estas palabras antes es gasto_hoy
+# Un monto es gasto o ingreso según la ÚLTIMA de estas palabras que aparezca antes de él (sin ninguna: ingreso).
+gasto_palabras: [gasto, gastar, gasta, compra, comprar, cena, pagar]
+ingreso_palabras: [cobro, cobrar, recibo, recibir, pagan, entra, entrar, gano, ganar, ingreso, adelantan, depositan, abonan, cae]
 
 # Evaluación del chat (eval/chat.py)
 ruta_ciegos: data/chat/ciego_*.csv
