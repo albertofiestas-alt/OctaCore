@@ -8,6 +8,6 @@ semilla=None usa cfg["semilla_generador"] de config/base.yaml.
 
 from __future__ import annotations
 
-from datos.generador import generar, mes_indice, muestra_de, particion, verificar
+from datos.generador import generar, mes_indice, muestra_de, particion, separar_etiquetas, verificar
 
-__all__ = ["generar", "mes_indice", "muestra_de", "particion", "verificar"]
+__all__ = ["generar", "mes_indice", "muestra_de", "particion", "separar_etiquetas", "verificar"]

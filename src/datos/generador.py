@@ -282,6 +282,15 @@ def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, paramet
     return df, meta
 
 
+def separar_etiquetas(df):
+    """(movimientos SIN etiquetas de referencia, etiquetas indexadas por transaction_id).
+
+    Regla anti fuga: lo primero sale al modelo, al motor y a la interfaz; lo segundo solo a eval/.
+    """
+    etiquetas = df[["transaction_id"] + ETIQUETAS].set_index("transaction_id")
+    return df.drop(columns=ETIQUETAS), etiquetas
+
+
 def mes_indice(fecha) -> int:
     """Mes 1 = enero del ano 1."""
     return (fecha.year - INICIO.year) * 12 + fecha.month
