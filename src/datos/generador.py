@@ -437,6 +437,8 @@ def main(argv=None):
     dfp.to_csv(out / "generado" / "movimientos_perturbado.csv", index=False)
     (out / "generado" / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "generado" / "meta_perturbado.json").write_text(json.dumps(meta_p, indent=2, ensure_ascii=False), encoding="utf-8")
+    part = particion(df, a.semilla) | {"semilla": a.semilla, "hash_datos": meta["hash"]}
+    (out / "generado" / "particion.json").write_text(json.dumps(part, indent=2, ensure_ascii=False), encoding="utf-8")
     mu = muestra_de(df)
     mu.to_csv(out / "muestra" / "movimientos.csv", index=False)
     (out / "muestra" / "meta.json").write_text(json.dumps({"origen": "subconjunto del dataset completo", "personas": sorted(mu["customer_id"].unique().tolist()),
