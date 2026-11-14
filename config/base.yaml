@@ -18,7 +18,7 @@ ventana_dias: 14                          # Ventana del número de hoy
 semilla_generador: 20261114               # Fijo; anotada en el README
 semillas_evaluacion: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
-version_generador: "0.0.0"
+version_generador: "1.1"                 # = config/datos.yaml (prueba en test_realismo)
 version_modelo: "0.0.0"
 
 # Responsible AI (Challenge pack). La ingesta descarta estas columnas y una prueba lo verifica.

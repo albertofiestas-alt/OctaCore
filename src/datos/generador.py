@@ -1,9 +1,17 @@
-"""Generador sintetico del proyecto (dueno: Rafael).
+"""Generador sintetico del proyecto (dueno: Rafael). Version 1.1.
 
 Uso:  python -m datos [--n 400] [--semilla N] [--salida data]   (sin --semilla usa semilla_generador de config/base.yaml)
-Genera data/generado/movimientos.csv, movimientos_perturbado.csv, data/muestra/movimientos.csv y data/REPORTE_DATOS.md.
-Todo parametro marcado [SUPUESTO] se ajusta para que la plausibilidad salga razonable (ver verificar()).
+Genera data/generado/movimientos.csv, movimientos_perturbado.csv, verdad_eventos.csv, data/muestra/ y data/REPORTE_DATOS.md.
+Los parametros de la v1.1 viven en config/datos.yaml; todos son [SUPUESTO] y se ajustan SOLO con las metricas
+de realismo del reporte (medir_realismo), nunca mirando resultados del modelo ni de las reglas.
 Los datos son ficticios: ningun nombre, DNI, telefono ni cuenta reales.
+
+Cambios de la v1.1 (DECISIONES.md):
+  A. El gasto discrecional reacciona al dinero disponible (_gastar); los pagos con fecha no se recortan.
+  B. Horas de ingreso realistas por arquetipo (config/datos.yaml: horas_ingreso).
+  C. PII ficticia en ~0.5 % del texto de comercio (_inyectar_pii); la verdad va a verdad_eventos.csv.
+Todo lo que ya existia en la v1.0 sale del mismo rng y en el mismo orden: mismas personas, arquetipos,
+ingresos y escenarios dificiles. Lo nuevo sale de un segundo rng derivado de la semilla.
 """
 from __future__ import annotations
 
@@ -25,9 +33,10 @@ MESES = 24
 FERIADOS = {(1, 1), (5, 1), (7, 28), (7, 29), (8, 30), (10, 8), (11, 1), (12, 8), (12, 25)}   # [SUPUESTO]
 MEZCLA_BASE = [0.25, 0.25, 0.20, 0.20, 0.10]
 MEZCLA_PERTURBADA = [0.15, 0.15, 0.30, 0.35, 0.05]
-GASTO_SOBRE_INGRESO = 0.84                      # [SUPUESTO] gasto medio sobre ingreso medio
+GASTO_SOBRE_INGRESO = 0.84                      # v1.0; solo se usa para conservar la secuencia del rng
 TASAS = {"duplicado": 0.015, "atipico": 0.005, "faltante": 0.02, "susc_doble": 0.20, "cambio_patron": 0.10}
 INGRESO_INEI = 1887.0                           # referencia citada en la v8; verificar en su fuente antes del pitch
+DEFICIT_SBS = 85.0                              # % con algun mes en deficit; referencia citada, por verificar
 
 COM = {   # comercios FICTICIOS
     "alquiler": ["ArrendadorSur", "InmobiliariaCasaClara", "ArrendadorBarrioAlto"],
@@ -53,6 +62,11 @@ EST = {a: np.array([t.get(m, 1.0) for m in range(1, 13)]) for a, t in EST.items(
 COLUMNAS = ["customer_id", "transaction_id", "fecha_hora", "monto", "moneda", "tipo", "categoria", "comercio",
             "saldo", "ingreso_recurrente", "es_duplicado", "es_atipico", "pago_con_fecha", "arquetipo"]
 ETIQUETAS = ["es_duplicado", "es_atipico", "pago_con_fecha", "arquetipo"]
+# Verdad nueva de la v1.1: solo la usa la evaluacion, nunca el modelo, el motor ni la interfaz.
+COLUMNAS_VERDAD = ["transaction_id", "customer_id", "evento", "valor"]
+# Nombres genericos para correos inventados en un dominio reservado que no existe.
+NOMBRES = ["ana", "luis", "rosa", "jorge", "carmen", "pedro", "lucia", "miguel"]
+APELLIDOS = ["quispe", "flores", "rojas", "torres", "vargas", "diaz"]
 
 
 def _sumar_meses(d: date, n: int) -> date:
@@ -135,27 +149,43 @@ def _persona(i, arq0, rng, cambia):
     }
 
 
-def _simular_persona(pe, cal, rng, p):
+def _comportamiento(rng2, g):
+    """Parametros de gasto de una persona (v1.1). Salen del rng2 para no mover el rng de la v1.0."""
+    def u(rango):
+        return float(rng2.uniform(rango[0], rango[1]))
+    pe = {"u_propension": u((0.0, 1.0)), "colchon": u(g["colchon_objetivo"]), "prevision": u(g["prevision"]),
+          "base_frac": u(g["base_minima"])}
+    pe["saldo0_mult"] = u(g["saldo_inicial"])        # el saldo del dia 1 se fija en _gastar con la reserva de ese dia
+    return pe
+
+
+def _simular_persona(pe, cal, rng, p, rng2, prm):
+    """Filas de una persona. El gasto discrecional sale con monto NaN: lo fija _gastar() con el saldo del momento."""
     nd = cal["n"]
     corte = 365 if pe["cambia"] and nd > 365 else nd              # cambio de patron al iniciar el ano 2
+    pe["corte"] = corte
     ing = _ingresos(pe["arq0"], cal, 0, corte, rng, p, pe["nivel"], pe["salario"])
     if corte < nd:
         ing += _ingresos(pe["arq1"], cal, corte, nd, rng, p, pe["nivel"], pe["salario"])
     media_mensual = sum(m for _, m, _ in ing) / cal["meses"]
     if pe["arq0"] == pe["arq1"] == "asalariado":                  # el gasto se calibra sobre el sueldo base, no sobre las gratificaciones
         media_mensual = pe["salario"] * p["factor_ingreso"]
-    alq =float(np.clip(round(pe["alq_frac"] * media_mensual, -1), 350, 900))
+    alq = float(np.clip(round(pe["alq_frac"] * media_mensual, -1), 350, 900))
     fijos = (alq + pe["luz"] + pe["agua"] + pe["internet"] + pe["celular"]
              + (pe["deuda"][1] if pe["deuda"] else 0) + (pe["susc"][1] if pe["susc"] else 0))
     mu_dia = max(150.0, GASTO_SOBRE_INGRESO * media_mensual - fijos) / 30 * pe["disc_ruido"]
+    # Gasto minimo diario (v1.1): una fraccion de lo que queda tras los pagos fijos, con un piso.
+    pe["base"] = max(prm["gasto"]["piso_base"], pe["base_frac"] * max(0.0, media_mensual - fijos) / 30)
 
     def arq_en(d):
         return pe["arq0"] if d < corte else pe["arq1"]
 
-    filas = []   # (dia, hora, monto, tipo, categoria, comercio, recurrente, pago_con_fecha, arquetipo)
+    horas_ing = prm["horas_ingreso"]
+    filas = []   # (dia, hora, monto, tipo, categoria, comercio, recurrente, pago_con_fecha, arquetipo, discrecional)
     for d, m, rec in ing:
         a = arq_en(d)
-        filas.append((d, 20, m, "ingreso", "ingreso", PAGADOR[a], rec, False, a))
+        h = int(rng2.integers(horas_ing[a][0], horas_ing[a][1]))     # cambio B
+        filas.append((d, h, m, "ingreso", "ingreso", PAGADOR[a], rec, False, a, False))
     for mi in range(cal["meses"]):
         y = INICIO.year + (INICIO.month - 1 + mi) // 12
         mm = (INICIO.month - 1 + mi) % 12 + 1
@@ -166,37 +196,142 @@ def _simular_persona(pe, cal, rng, p):
             return base + min(dom, dm) - 1
 
         a = arq_en(base)
-        filas.append((dia(pe["dom"]["alquiler"]), 9, -alq, "gasto", "alquiler", pe["alquiler_com"], False, True, a))
-        filas.append((dia(pe["dom"]["luz"]), 10, -round(pe["luz"] * max(0.5, 1 + rng.normal(0, 0.15)), 2), "gasto", "servicios", COM["luz"], False, True, a))
-        filas.append((dia(pe["dom"]["agua"]), 10, -round(pe["agua"] * (1 + rng.normal(0, 0.05)), 2), "gasto", "servicios", COM["agua"], False, True, a))
-        filas.append((dia(pe["dom"]["internet"]), 11, -round(pe["internet"], 2), "gasto", "servicios", COM["internet"], False, True, a))
-        filas.append((dia(pe["dom"]["celular"]), 11, -round(pe["celular"], 2), "gasto", "servicios", COM["celular"], False, True, a))
+        filas.append((dia(pe["dom"]["alquiler"]), 9, -alq, "gasto", "alquiler", pe["alquiler_com"], False, True, a, False))
+        filas.append((dia(pe["dom"]["luz"]), 10, -round(pe["luz"] * max(0.5, 1 + rng.normal(0, 0.15)), 2), "gasto", "servicios", COM["luz"], False, True, a, False))
+        filas.append((dia(pe["dom"]["agua"]), 10, -round(pe["agua"] * (1 + rng.normal(0, 0.05)), 2), "gasto", "servicios", COM["agua"], False, True, a, False))
+        filas.append((dia(pe["dom"]["internet"]), 11, -round(pe["internet"], 2), "gasto", "servicios", COM["internet"], False, True, a, False))
+        filas.append((dia(pe["dom"]["celular"]), 11, -round(pe["celular"], 2), "gasto", "servicios", COM["celular"], False, True, a, False))
         if pe["deuda"]:
-            filas.append((dia(pe["deuda"][0]), 12, -pe["deuda"][1], "gasto", "deuda", pe["deuda"][2], False, True, a))
+            filas.append((dia(pe["deuda"][0]), 12, -pe["deuda"][1], "gasto", "deuda", pe["deuda"][2], False, True, a, False))
         if pe["susc"]:
-            filas.append((dia(pe["susc"][0]), 12, -pe["susc"][1], "gasto", "suscripcion", pe["susc"][2], False, True, a))
+            filas.append((dia(pe["susc"][0]), 12, -pe["susc"][1], "gasto", "suscripcion", pe["susc"][2], False, True, a, False))
         if pe["escolar"] and mm == 3:
-            filas.append((dia(int(rng.integers(5, 21))), 13, -round(float(rng.uniform(100, 250)), 2), "gasto", "otros", "LibreriaEscolar", False, False, a))
-    est_gasto = np.ones(12)
-    est_gasto[6], est_gasto[11] = 1.10, 1.30
+            filas.append((dia(int(rng.integers(5, 21))), 13, -round(float(rng.uniform(100, 250)), 2), "gasto", "otros", "LibreriaEscolar", False, False, a, False))
     hay = rng.random(nd) < 0.88
     s = 0.6
-    montos = np.exp(rng.normal(np.log(mu_dia / 0.88) - s * s / 2, s, nd))
+    rng.normal(np.log(mu_dia / 0.88) - s * s / 2, s, nd)          # montos de la v1.0: se sacan para conservar la secuencia del rng
     cats = rng.choice(["alimentacion", "transporte", "otros"], size=nd, p=[0.55, 0.30, 0.15])
     cidx = rng.integers(0, 3, nd)
     horas = rng.integers(8, 22, nd)
     for d in np.flatnonzero(hay):
-        m = montos[d] * est_gasto[cal["mes"][d] - 1]
         c = str(cats[d])
-        filas.append((int(d), int(horas[d]), -round(float(m), 2), "gasto", c, COM[c][int(cidx[d])], False, False, arq_en(int(d))))
+        filas.append((int(d), int(horas[d]), np.nan, "gasto", c, COM[c][int(cidx[d])], False, False, arq_en(int(d)), True))
     return filas
+
+
+def _gastar(df, personas, cal, g):
+    """Cambio A. Recorre los movimientos de cada persona en orden y fija el gasto discrecional con el saldo del momento:
+
+        gasto = (base * estacional * [recorte si saldo <= 0] + propension[arquetipo] * max(0, saldo - reserva)) * ruido * factor_atipico
+        reserva = colchon + prevision * (pagos con fecha + gasto minimo de los proximos dias_prevision dias)
+
+    Los pagos con fecha ya tienen su monto y no se tocan: si no alcanza, el saldo queda negativo.
+    Devuelve el df con monto y saldo (saldo despues de cada movimiento).
+    """
+    monto = df["monto"].to_numpy(dtype=float).copy()
+    disc = df["_disc"].to_numpy(dtype=bool)
+    factor = df["_factor"].to_numpy(dtype=float)
+    ruido = df["_ruido"].to_numpy(dtype=float)
+    dia = df["dia"].to_numpy(dtype=np.int64)
+    pcf = df["pago_con_fecha"].to_numpy(dtype=bool)
+    cids = df["customer_id"].to_numpy()
+    est = np.ones(12)
+    for m, v in g["estacional"].items():
+        est[int(m) - 1] = float(v)
+    est_dia = est[cal["mes"] - 1]
+    nd, h = cal["n"], int(g["dias_prevision"])
+    recorte = float(g["recorte_sin_saldo"])
+    saldo = np.empty(len(df))
+    inicios = np.flatnonzero(np.r_[True, cids[1:] != cids[:-1]])
+    fines = np.r_[inicios[1:], len(df)]
+    dias = np.arange(nd)
+    for s, e in zip(inicios, fines):
+        pe = personas[cids[s]]
+        pagos = np.zeros(nd + h + 2)
+        sel = np.flatnonzero(pcf[s:e]) + s
+        np.add.at(pagos, dia[sel], -monto[sel])
+        pagos[nd:] = pagos[nd - 31:nd - 31 + len(pagos) - nd]       # despues del ultimo dia los pagos siguen (sin borde)
+        acum = np.concatenate([[0.0], np.cumsum(pagos)])
+        base_dia = pe["base"] * est_dia
+        reserva = (pe["colchon"] + pe["prevision"] * (acum[dias + 1 + h] - acum[dias + 1] + base_dia * h)).tolist()
+        base = base_dia.tolist()
+        p0, p1 = (lo + pe["u_propension"] * (hi - lo) for lo, hi in (g["propension"][pe["arq0"]], g["propension"][pe["arq1"]]))
+        prop = np.where(dias < pe["corte"], p0, p1).tolist()
+        # Arranque sin borde: la persona empieza como en regimen, con lo que su propia regla aparta el dia 1
+        # (con colchon fijo el 55 % de los pagos del mes 1 quedaba en negativo frente a ~14 % en regimen).
+        sal = pe["saldo0"] = round(reserva[0] * pe["saldo0_mult"], 2)
+        m_l, d_l, disc_l = monto[s:e].tolist(), dia[s:e].tolist(), disc[s:e].tolist()
+        r_l, f_l = ruido[s:e].tolist(), factor[s:e].tolist()
+        for j in range(e - s):
+            if disc_l[j]:
+                dj = d_l[j]
+                b = base[dj] * (recorte if sal <= 0 else 1.0)
+                gasto = (b + prop[dj] * max(0.0, sal - reserva[dj])) * r_l[j] * f_l[j]
+                m_l[j] = -max(0.5, round(gasto, 2))
+            sal += m_l[j]
+            saldo[s + j] = sal
+        monto[s:e] = m_l
+    df["monto"] = monto
+    df["saldo"] = np.round(saldo, 2)
+    return df
+
+
+def _inyectar_pii(df, rng2, cfg_pii):
+    """Cambio C. Inserta un DNI, telefono o correo FICTICIO en el texto de comercio de ~tasa de las filas.
+
+    Solo en filas que no son pagos con fecha ni suscripciones dobles, con comercio no vacio y fuera de un par
+    original-duplicado (asi ningun otro escenario borra o desincroniza la PII). Devuelve las filas de verdad.
+    """
+    copias = set((df.loc[df["es_duplicado"], "orden"] - 0.5).tolist())
+    en_par = df["es_duplicado"].to_numpy(dtype=bool) | df["orden"].isin(copias).to_numpy()
+    ok = (~df["pago_con_fecha"].to_numpy(dtype=bool) & ~df["_susc_doble"].to_numpy(dtype=bool)
+          & (df["comercio"] != "").to_numpy() & ~en_par)
+    cand = np.flatnonzero(ok)
+    k = min(int(len(df) * cfg_pii["tasa"]), len(cand))
+    sel = np.sort(rng2.choice(cand, size=k, replace=False))
+    tipos = list(cfg_pii["tipos"])
+    pesos = np.array([float(cfg_pii["tipos"][t]) for t in tipos])
+    elegidos = rng2.choice(tipos, size=k, p=pesos / pesos.sum())
+    comercio = df["comercio"].to_numpy(dtype=object).copy()
+    tid, cid = df["transaction_id"].to_numpy(), df["customer_id"].to_numpy()
+    verdad = []
+    for i, t in zip(sel, elegidos):
+        if t == "dni":
+            v = str(int(rng2.integers(10_000_000, 80_000_000)))
+            comercio[i] = f"{comercio[i]} DNI {v}"
+        elif t == "telefono":
+            v = str(int(rng2.integers(900_000_000, 1_000_000_000)))
+            comercio[i] = f"{comercio[i]} Yape {v}"
+        else:
+            v = f"{rng2.choice(NOMBRES)}.{rng2.choice(APELLIDOS)}{int(rng2.integers(10, 100))}@{cfg_pii['dominio_correo']}"
+            comercio[i] = f"{comercio[i]} {v}"
+        verdad.append((tid[i], cid[i], f"pii_{t}", v))
+    df["comercio"] = comercio
+    return verdad
+
+
+def _params_datos():
+    """config/datos.yaml (cfg["datos"]). Sin ese archivo el generador falla claro: no hay valores por defecto."""
+    from contratos.config import DIR_CONFIG, cargar_config
+    try:
+        return cargar_config()["datos"]
+    except Exception as e:
+        raise RuntimeError(f"No se pudo leer {DIR_CONFIG / 'datos.yaml'}: {e}") from e
 
 
 def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, parametros=None):
     """Devuelve (DataFrame con el contrato de datos mas las etiquetas, meta). semilla=None usa cfg['semilla_generador']."""
+    df, meta, _ = generar_con_verdad(n_personas, meses, semilla, perturbado, parametros)
+    return df, meta
+
+
+def generar_con_verdad(n_personas=400, meses=MESES, semilla=None, perturbado=False, parametros=None):
+    """Como generar(), mas la verdad de eventos (PII inyectada, pagos con saldo negativo) para la evaluacion."""
     parametros = parametros or {}
     semilla = _semilla_config() if semilla is None else semilla
-    rng = np.random.default_rng(semilla)
+    prm = parametros.get("datos") or _params_datos()
+    rng = np.random.default_rng(semilla)                # todo lo de la v1.0, en el mismo orden
+    rng2 = np.random.default_rng([semilla, 11])         # lo nuevo de la v1.1
     p = {"vol": 1.5 if perturbado else 1.0, "factor_ingreso": 0.8 if perturbado else 1.0,
          "mezcla": MEZCLA_PERTURBADA if perturbado else MEZCLA_BASE}
     p.update({k: v for k, v in parametros.items() if k in p})
@@ -206,10 +341,11 @@ def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, paramet
     for i in range(n_personas):
         arq0 = ARQUETIPOS[i % 5] if equilibrada else str(rng.choice(ARQUETIPOS, p=p["mezcla"]))
         pe = _persona(i, arq0, rng, rng.random() < TASAS["cambio_patron"])
+        pe.update(_comportamiento(rng2, prm["gasto"]))
         personas[pe["cid"]] = pe
-        filas += [(pe["cid"],) + f for f in _simular_persona(pe, cal, rng, p)]
+        filas += [(pe["cid"],) + f for f in _simular_persona(pe, cal, rng, p, rng2, prm)]
     df = pd.DataFrame(filas, columns=["customer_id", "dia", "hora", "monto", "tipo", "categoria", "comercio",
-                                      "ingreso_recurrente", "pago_con_fecha", "arquetipo"])
+                                      "ingreso_recurrente", "pago_con_fecha", "arquetipo", "_disc"])
     minutos = rng.integers(0, 60, len(df))
     df["fecha_hora"] = (pd.to_datetime(cal["fechas"][df["dia"].values]) + pd.to_timedelta(df["hora"], unit="h")
                         + pd.to_timedelta(minutos, unit="m"))
@@ -219,14 +355,17 @@ def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, paramet
     df["orden"] = np.arange(len(df), dtype=float)
     df = df.drop(columns=["hora"])
 
-    # atipicos: 0.5 % de las filas que NO son pagos con fecha
+    # atipicos: 0.5 % de las filas que NO son pagos con fecha. En el gasto discrecional el factor se aplica en _gastar.
     cand = np.flatnonzero(~df["pago_con_fecha"].values)
     k = int(len(df) * TASAS["atipico"])
     sel = rng.choice(cand, size=k, replace=False)
-    df.loc[df.index[sel], "monto"] = (df["monto"].values[sel] * rng.uniform(5, 10, k)).round(2)
+    df["_factor"] = 1.0
+    df.loc[df.index[sel], "_factor"] = rng.uniform(5, 10, k)
+    fijo = ~df["_disc"].values
+    df.loc[fijo, "monto"] = (df.loc[fijo, "monto"] * df.loc[fijo, "_factor"]).round(2)
     df.loc[df.index[sel], "es_atipico"] = True
 
-    # suscripcion cobrada dos veces: 10 % de las personas con suscripcion, un mes del ano 2
+    # suscripcion cobrada dos veces: 20 % de las personas con suscripcion, un mes del ano 2
     nuevas = []
     for cid in sorted(personas):
         pe = personas[cid]
@@ -245,10 +384,11 @@ def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, paramet
     if nuevas:
         df = pd.concat([df, pd.DataFrame(nuevas)], ignore_index=True)
 
-    # saldo despues de cada movimiento (sin duplicados exactos todavia)
+    # gasto que reacciona al dinero disponible y saldo despues de cada movimiento (sin duplicados exactos todavia)
+    sigma = float(prm["gasto"]["ruido_sigma"])
+    df["_ruido"] = np.exp(rng2.normal(-sigma * sigma / 2, sigma, len(df)))
     df = df.sort_values(["customer_id", "fecha_hora", "orden"], kind="mergesort").reset_index(drop=True)
-    saldo0 = df["customer_id"].map({c: pe["saldo0"] for c, pe in personas.items()})
-    df["saldo"] = (df.groupby("customer_id")["monto"].cumsum() + saldo0).round(2)
+    df = _gastar(df, personas, cal, prm["gasto"])
 
     # duplicados exactos: copia con otro transaction_id (misma fecha, monto, comercio, tipo y saldo)
     elegibles = np.flatnonzero(~df["es_atipico"].values & ~df["_susc_doble"].values)
@@ -267,21 +407,29 @@ def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, paramet
 
     df = df.sort_values(["customer_id", "fecha_hora", "orden"], kind="mergesort").reset_index(drop=True)
     df["transaction_id"] = [f"T{i + 1:07d}" for i in range(len(df))]
+    verdad = _inyectar_pii(df, rng2, prm["pii"])
+    negativos = df[df["pago_con_fecha"] & ~df["es_duplicado"] & (df["saldo"] < 0)]
+    verdad += [(t, c, "pago_con_saldo_negativo", f"{s:.2f}")
+               for t, c, s in zip(negativos["transaction_id"], negativos["customer_id"], negativos["saldo"])]
+    verdad = pd.DataFrame(verdad, columns=COLUMNAS_VERDAD).sort_values("transaction_id", kind="mergesort").reset_index(drop=True)
     df["moneda"] = "PEN"
     df["fecha_hora"] = df["fecha_hora"].dt.strftime("%Y-%m-%d %H:%M:%S")
     df["monto"] = df["monto"].round(2)
     susc_ids = df.loc[df["_susc_doble"], "transaction_id"].tolist()
     df = df[COLUMNAS]
-    # OJO: to_csv() en memoria usa os.linesep, asi que este hash depende del sistema (CRLF en Windows, LF en
-    # Linux/macOS). Se deja asi para no cambiar el hash 30d573b1523a4d24 que usa el equipo; ver docs/datos.md.
+    # OJO: to_csv() en memoria usa os.linesep, asi que "hash" y "hash_verdad" dependen del sistema (CRLF en Windows,
+    # LF en Linux/macOS) aunque los datos sean identicos. Pendiente de decision; ver docs/datos.md.
     contenido = df.to_csv(index=False).encode("utf-8")
-    meta = {"semilla": semilla, "version_generador": "1.0", "perturbado": bool(perturbado), "n_personas": n_personas,
-            "meses": meses, "filas": len(df), "hash": hashlib.sha256(contenido).hexdigest()[:16],
+    pii = verdad[verdad["evento"].str.startswith("pii_")]["evento"].str.removeprefix("pii_").value_counts()
+    meta = {"semilla": semilla, "version_generador": str(prm["version_generador"]), "perturbado": bool(perturbado),
+            "n_personas": n_personas, "meses": meses, "filas": len(df), "hash": hashlib.sha256(contenido).hexdigest()[:16],
+            "hash_verdad": hashlib.sha256(verdad.to_csv(index=False).encode("utf-8")).hexdigest()[:16],
             "parametros": {"vol": p["vol"], "factor_ingreso": p["factor_ingreso"], "mezcla": p["mezcla"], "tasas": TASAS,
-                           "gasto_sobre_ingreso": GASTO_SOBRE_INGRESO},
+                           "datos": json.loads(json.dumps(prm))},
             "cambio_patron": sorted(c for c, pe in personas.items() if pe["cambia"]),
-            "suscripciones_duplicadas": susc_ids}
-    return df, meta
+            "suscripciones_duplicadas": susc_ids,
+            "pii_inyectada": {t: int(pii.get(t, 0)) for t in prm["pii"]["tipos"]}}
+    return df, meta, verdad
 
 
 def separar_etiquetas(df):
@@ -321,8 +469,18 @@ def muestra_de(df, por_arquetipo=4):
 PII = [re.compile(r"(?<!\d)\d{8,9}(?!\d)"), re.compile(r"@")]
 
 
-def verificar(df, meta=None):
-    """Devuelve (lista de fallas, dict de medidas). Una lista vacia significa que pasa todo."""
+def filas_con_pii(texto: pd.Series) -> pd.Series:
+    """True donde el texto tiene un patron de PII (8 o 9 digitos seguidos, o una arroba)."""
+    t = texto.fillna("").astype(str)
+    return t.str.contains(PII[0]) | t.str.contains(PII[1])
+
+
+def verificar(df, meta=None, verdad=None):
+    """Devuelve (lista de fallas, dict de medidas). Una lista vacia significa que pasa todo.
+
+    PII (v1.1): solo puede aparecer en el texto de comercio de las filas declaradas en verdad_eventos
+    (o, sin verdad, en tantas filas como dice meta['pii_inyectada']).
+    """
     fallas, med = [], {}
     if list(df.columns) != COLUMNAS:
         fallas.append("columnas distintas del contrato")
@@ -338,10 +496,20 @@ def verificar(df, meta=None):
     for m in (12, 24):
         if meses.eq(m).sum() == 0:
             fallas.append(f"no hay movimientos en el mes {m} (diciembre)")
-    for col in ("customer_id", "comercio", "categoria"):
-        for pat in PII:
-            if df[col].astype(str).str.contains(pat).any():
-                fallas.append(f"patron de PII en la columna {col}")
+    for col in ("customer_id", "categoria"):
+        if filas_con_pii(df[col]).any():
+            fallas.append(f"patron de PII en la columna {col}")
+    con_pii = filas_con_pii(df["comercio"])
+    med["pii_detectada"] = int(con_pii.sum())
+    if verdad is not None:
+        declaradas = set(verdad.loc[verdad["evento"].str.startswith("pii_"), "transaction_id"])
+        if set(df.loc[con_pii, "transaction_id"]) != declaradas:
+            fallas.append("PII en comercio fuera de las filas declaradas en verdad_eventos (o declarada y ausente)")
+    elif meta and "pii_inyectada" in meta:
+        if med["pii_detectada"] != sum(meta["pii_inyectada"].values()):
+            fallas.append("PII en comercio distinta de la inyectada")
+    elif med["pii_detectada"]:
+        fallas.append("patron de PII en la columna comercio")
     dup = df[df["es_duplicado"]]
     base = df[~df["es_duplicado"]]
     clave = ["customer_id", "fecha_hora", "monto", "tipo"]
@@ -383,29 +551,165 @@ def meta_meses(df):
     return int((f.dt.year.max() - INICIO.year) * 12 + f.dt.month.max())
 
 
-def _reporte(med, fallas, meta, meta_p):
+# --------------------------------------------------------------------------- #
+# Realismo (v1.1). Solo mira los datos; nunca resultados del modelo ni de las reglas.
+# --------------------------------------------------------------------------- #
+
+MESES_SALDO = (1, 6, 12, 18, 24)
+FRANJAS_HORA = {"0-5 h": (0, 6), "6-9 h": (6, 10), "10-13 h": (10, 14), "14-17 h": (14, 18), "18-21 h": (18, 22), "22-23 h": (22, 24)}
+
+
+def medir_realismo(df):
+    """Metricas de realismo por arquetipo (arquetipo de la primera fila) y total. Ignora los duplicados exactos."""
+    d = df[~df["es_duplicado"].astype(bool)].copy()
+    f = pd.to_datetime(d["fecha_hora"])
+    d["mes"] = (f.dt.year - INICIO.year) * 12 + f.dt.month
+    d["fecha"] = f.dt.normalize()
+    d["semana"] = (f.dt.normalize() - pd.Timestamp(INICIO)).dt.days // 7
+    d["hora"] = f.dt.hour
+    gasto, pcf = d["tipo"] == "gasto", d["pago_con_fecha"].astype(bool)
+    n_dias = int((d["fecha"].max() - d["fecha"].min()).days) + 1
+    semanas = np.arange(n_dias // 7)                               # solo semanas completas
+    arq = d.groupby("customer_id")["arquetipo"].first()
+
+    fin_mes = d.groupby(["customer_id", "mes"])["saldo"].last().unstack()
+    fin_dia = d.groupby(["customer_id", "fecha"])["saldo"].last()
+    ing = d[d["tipo"] == "ingreso"]
+    ing_dia = (ing.groupby("customer_id")["monto"].sum() / n_dias).reindex(arq.index).fillna(0.0)
+    dias_ing = fin_dia.groupby("customer_id").median() / ing_dia.where(ing_dia > 0)
+    disc = d[gasto & ~pcf & (d["categoria"] != "suscripcion")]
+    si = ing.groupby(["customer_id", "semana"])["monto"].sum().unstack(fill_value=0.0).reindex(index=arq.index, columns=semanas, fill_value=0.0)
+    sg = (-disc.groupby(["customer_id", "semana"])["monto"].sum()).unstack(fill_value=0.0).reindex(index=arq.index, columns=semanas, fill_value=0.0)
+    corr = pd.Series({c: (np.corrcoef(si.loc[c], sg.loc[c])[0, 1] if si.loc[c].std() > 0 and sg.loc[c].std() > 0 else np.nan)
+                      for c in arq.index})
+    pagos = d[pcf]
+    neg_persona = (pagos["saldo"] < 0).groupby(pagos["customer_id"]).any().reindex(arq.index).fillna(False)
+    neg_pagos = (pagos["saldo"] < 0).groupby(pagos["customer_id"]).mean().reindex(arq.index)
+    mensual = pd.concat([ing.groupby(["customer_id", "mes"])["monto"].sum().rename("ing"),
+                         (-d[gasto].groupby(["customer_id", "mes"])["monto"].sum()).rename("gas")], axis=1).fillna(0.0)
+    ing_mes = mensual.groupby("customer_id")["ing"].sum().reindex(arq.index).fillna(0.0) / max(1, int(d["mes"].max()))
+    y2 = mensual[mensual.index.get_level_values("mes") > 12]
+    deficit = (y2["gas"] > y2["ing"]).groupby("customer_id").any().reindex(arq.index).fillna(False)
+    neg_filas = (d["saldo"] < 0).groupby(d["customer_id"]).mean().reindex(arq.index)
+    a_las_20 = (ing["hora"] == 20).groupby(ing["customer_id"]).mean().reindex(arq.index)
+    hora_med = ing.groupby("customer_id")["hora"].median().reindex(arq.index)
+
+    def r(x, n=1):
+        return None if pd.isna(x) else round(float(x), n)
+
+    def resumen(ids):
+        return {"personas": int(len(ids)),
+                "saldo_mediano_fin_mes": {f"m{m}": (r(fin_mes.loc[ids, m].median(), 0) if m in fin_mes.columns else None)
+                                          for m in MESES_SALDO},
+                "saldo_en_dias_de_ingreso": r(dias_ing.reindex(ids).median()),
+                "corr_semanal_ingreso_gasto": r(corr.reindex(ids).median(), 2),
+                "pct_personas_saldo_negativo_en_pago": r(neg_persona.reindex(ids).mean() * 100),
+                "pct_pagos_con_saldo_negativo": r(neg_pagos.reindex(ids).mean() * 100),
+                "pct_filas_saldo_negativo": r(neg_filas.reindex(ids).mean() * 100),
+                "ingreso_mensual_medio": r(ing_mes.reindex(ids).mean(), 0),
+                "pct_con_mes_en_deficit_ano2": r(deficit.reindex(ids).mean() * 100),
+                "pct_ingresos_a_las_20h": r(a_las_20.reindex(ids).mean() * 100),
+                "hora_mediana_ingreso": r(hora_med.reindex(ids).median(), 0)}
+
+    horas = {k: r(((ing["hora"] >= a) & (ing["hora"] < b)).mean() * 100) for k, (a, b) in FRANJAS_HORA.items()}
+    return {"total": resumen(arq.index), "por_arquetipo": {a: resumen(arq[arq == a].index) for a in ARQUETIPOS if (arq == a).any()},
+            "horas_ingreso": horas, "pii_detectada": int(filas_con_pii(df["comercio"]).sum())}
+
+
+def _fmt(x, pre="", suf="", dec=None):
+    if x is None:
+        return "s/d"
+    dec = (0 if float(x).is_integer() else 1) if dec is None else dec
+    return f"{pre}{x:,.{dec}f}{suf}"
+
+
+def _reporte(med, real, real_mu, antes, fallas, meta, meta_p):
+    t, ta = real["total"], (antes or {}).get("completo", {}).get("total")
     l = ["# Reporte de calidad de los datos sinteticos", "",
-         f"Generado con semilla {meta['semilla']}, version {meta['version_generador']}, hash {meta['hash']}.", "",
+         f"Generado con semilla {meta['semilla']}, version {meta['version_generador']}, hash {meta['hash']} "
+         f"(verdad de eventos: hash {meta['hash_verdad']}).", "",
          "## Resultado de las comprobaciones", ""]
-    l += [f"- FALLA: {x}" for x in fallas] or ["- Todas las comprobaciones pasan (contrato, ids unicos, signos, diciembre en los meses 12 y 24, duplicados con original, sin patrones de PII)."]
-    l += ["", "## Medidas", "", f"- Personas: {med['personas']}; filas: {med['filas']}; periodo: {med['desde']} a {med['hasta']}",
+    l += [f"- FALLA: {x}" for x in fallas] or ["- Todas las comprobaciones pasan (contrato, ids unicos, signos, diciembre en los meses 12 y 24, "
+                                               "duplicados con original, PII solo en las filas declaradas en verdad_eventos.csv)."]
+    l += ["", "## Antes (v1.0) y despues (v1.1): las 400 personas", "",
+          "El usuario objetivo vive al dia y sin colchon: el saldo debe rondar valores bajos, subir al cobrar y bajar antes del "
+          "siguiente ingreso, sin tendencia creciente. Las referencias externas son orientativas, no objetivos.", "",
+          "| Medida | v1.0 | v1.1 | Que se espera |", "|---|---|---|---|"]
+
+    def fila(nombre, clave, esperado, pre="", suf="", sub=None, dec=None):
+        a = (ta or {}).get(clave) if sub is None else ((ta or {}).get(clave) or {}).get(sub)
+        b = t.get(clave) if sub is None else t[clave][sub]
+        l.append(f"| {nombre} | {_fmt(a, pre, suf, dec) if ta else 's/d'} | {_fmt(b, pre, suf, dec)} | {esperado} |")
+
+    for m in MESES_SALDO:
+        fila(f"Saldo mediano a fin del mes {m}", "saldo_mediano_fin_mes", "sin tendencia creciente" if m == 24 else "", "S/", sub=f"m{m}")
+    fila("Saldo mediano en dias de ingreso tipico", "saldo_en_dias_de_ingreso", "bajo (pocos dias)")
+    fila("Correlacion semanal ingreso vs gasto discrecional (mediana por persona)", "corr_semanal_ingreso_gasto", "claramente positiva", dec=2)
+    fila("% de personas con saldo negativo al menos una vez tras un pago con fecha", "pct_personas_saldo_negativo_en_pago",
+         "mayor que 0: es el evento que el producto intenta evitar", suf=" %")
+    fila("% de pagos con fecha que dejan el saldo negativo (media por persona)", "pct_pagos_con_saldo_negativo", "", suf=" %")
+    fila("% de filas con saldo negativo (media por persona)", "pct_filas_saldo_negativo", "", suf=" %")
+    fila("Ingreso mensual medio", "ingreso_mensual_medio", f"referencia INEI S/{INGRESO_INEI:,.0f} [por verificar en su fuente]", "S/")
+    fila("% de personas con algun mes en deficit (ano 2)", "pct_con_mes_en_deficit_ano2", f"referencia SBS {DEFICIT_SBS:.0f} % [por verificar en su fuente]", suf=" %")
+    fila("% de ingresos a las 20:00", "pct_ingresos_a_las_20h", "bajo: horas repartidas segun el arquetipo", suf=" %")
+    pa = (antes or {}).get("completo", {}).get("pii_detectada")
+    l.append(f"| Filas con PII en comercio | {pa if pa is not None else 's/d'} | {real['pii_detectada']} | ~0.5 % de las filas, todas ficticias |")
+
+    if real_mu is not None:
+        mu_a = (antes or {}).get("muestra", {}).get("total", {}).get("saldo_mediano_fin_mes", {})
+        mu_b = real_mu["total"]["saldo_mediano_fin_mes"]
+        l += ["", "Muestra publicada (las mismas 20 personas): saldo mediano a fin de mes, v1.0 -> v1.1: "
+              + "; ".join(f"mes {m}: {_fmt(mu_a.get(f'm{m}'), 'S/')} -> {_fmt(mu_b[f'm{m}'], 'S/')}" for m in MESES_SALDO) + "."]
+
+    l += ["", "## Por arquetipo (v1.1; entre parentesis la v1.0)", "",
+          "| Arquetipo | Personas | Saldo mediano fin de mes 1 / 6 / 12 / 18 / 24 | Dias de ingreso | Corr. ingreso-gasto | "
+          "% personas con saldo negativo tras un pago | Ingreso mensual medio | % con mes en deficit (ano 2) | Hora mediana del ingreso |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    pa_arq = (antes or {}).get("completo", {}).get("por_arquetipo", {})
+    for a, v in real["por_arquetipo"].items():
+        w = pa_arq.get(a, {})
+
+        def c(clave, pre="", suf="", dec=None):
+            return f"{_fmt(v[clave], pre, suf, dec)} ({_fmt(w.get(clave), pre, suf, dec)})" if w else _fmt(v[clave], pre, suf, dec)
+        saldos = " / ".join(_fmt(v["saldo_mediano_fin_mes"][f"m{m}"], "S/") for m in MESES_SALDO)
+        saldos_a = " / ".join(_fmt(w.get("saldo_mediano_fin_mes", {}).get(f"m{m}"), "S/") for m in MESES_SALDO) if w else ""
+        l.append(f"| {a} | {v['personas']} | {saldos}" + (f" ({saldos_a})" if w else "") + f" | {c('saldo_en_dias_de_ingreso')} | "
+                 f"{c('corr_semanal_ingreso_gasto', dec=2)} |{c('pct_personas_saldo_negativo_en_pago', suf=' %')} | "
+                 f"{c('ingreso_mensual_medio', 'S/')} | {c('pct_con_mes_en_deficit_ano2', suf=' %')} | {c('hora_mediana_ingreso', suf=' h')} |")
+
+    ha = (antes or {}).get("completo", {}).get("horas_ingreso", {})
+    l += ["", "## Hora de los ingresos (% de los ingresos)", "", "| Franja | v1.0 | v1.1 |", "|---|---|---|"]
+    l += [f"| {k} | {_fmt(ha.get(k), suf=' %')} | {_fmt(v, suf=' %')} |" for k, v in real["horas_ingreso"].items()]
+    l += ["", "Ventas y viajes repartidos en el dia; sueldos en la manana; comisiones y honorarios en horario de oficina "
+          "(config/datos.yaml: horas_ingreso)."]
+
+    pii = meta["pii_inyectada"]
+    l += ["", "## PII ficticia inyectada", "",
+          f"- {sum(pii.values())} filas ({sum(pii.values()) / meta['filas'] * 100:.2f} %): " + ", ".join(f"{k} {v}" for k, v in pii.items()) + ".",
+          "- Va dentro del texto de comercio, nunca en pagos con fecha ni en pares original-duplicado. DNI y telefono son "
+          "numeros al azar sin vinculo con nadie; los correos usan un dominio reservado que no existe.",
+          "- La verdad (que fila y que patron) esta en data/generado/verdad_eventos.csv, junto con los pagos con fecha que dejan "
+          "el saldo negativo. Ese archivo solo lo usa la evaluacion."]
+
+    l += ["", "## Escenarios dificiles y medidas generales", "",
+          f"- Personas: {med['personas']}; filas: {med['filas']}; periodo: {med['desde']} a {med['hasta']}",
           f"- Ingreso mensual medio por persona: S/{med['ingreso_mensual_medio']} (mediana S/{med['ingreso_mensual_mediana']}); "
           f"razon contra la cifra de referencia del INEI (S/{INGRESO_INEI:.0f}, por verificar en su fuente): {med['razon_vs_inei']}",
-          f"- Personas con al menos un mes en deficit en el ano 2: {med['pct_personas_con_mes_en_deficit_ano2']} % "
-          "(la encuesta de la SBS citada habla de 85 %, por verificar; es una referencia, no un objetivo duro)",
           f"- Duplicados exactos: {med['duplicados']}; atipicos: {med['atipicos']}; suscripciones cobradas dos veces: {med['suscripciones_duplicadas']}; "
           f"sin categoria: {med['faltantes_categoria']}; sin comercio: {med['faltantes_comercio']}",
-          f"- Personas que cambian de arquetipo al iniciar el ano 2: {len(meta['cambio_patron'])}", "", "## Por arquetipo (arquetipo de la primera fila)", "",
-          "| Arquetipo | Personas | Ingreso mensual medio | % con mes en deficit |", "|---|---|---|---|"]
-    for a, v in med["por_arquetipo"].items():
-        l.append(f"| {a} | {v['personas']} | S/{v['ingreso_mensual_medio']} | {v['pct_con_deficit']} % |")
+          f"- Personas que cambian de arquetipo al iniciar el ano 2: {len(meta['cambio_patron'])}"]
     if meta_p:
         l += ["", f"Generador perturbado (volatilidad x1.5, ingreso x0.8, otra mezcla): semilla {meta_p['semilla']}, hash {meta_p['hash']}, filas {meta_p['filas']}."]
-    l += ["", "Todos los parametros son [SUPUESTO]. Los datos son ficticios y demuestran el metodo, no la precision en el mundo real."]
+    l += ["", "## Como se calibro", "",
+          "Todos los parametros nuevos estan en config/datos.yaml y son [SUPUESTO]. Se ajustaron solo con las medidas de este reporte "
+          "(saldo, dias de ingreso, correlacion, horas, referencias INEI y SBS); nunca mirando resultados del modelo ni de las reglas, "
+          "porque eso seria fabricar evidencia a favor del modelo.", "",
+          "Los datos son ficticios y demuestran el metodo, no la precision en el mundo real."]
     return "\n".join(l) + "\n"
 
 
 RAIZ = Path(__file__).resolve().parents[2]
+MEDIDAS_V1_0 = RAIZ / "data" / "medidas_v1_0.json"     # foto fija de la v1.0 para la tabla antes/despues
 
 
 def _semilla_config() -> int:
@@ -440,25 +744,34 @@ def main(argv=None):
     (out / "generado").mkdir(parents=True, exist_ok=True)
     (out / "muestra").mkdir(parents=True, exist_ok=True)
     t0 = time.time()
-    df, meta = generar(a.n, MESES, a.semilla)
-    dfp, meta_p = generar(a.n, MESES, a.semilla + 1000, perturbado=True)
-    fallas, med = verificar(df, meta)
-    fp, _ = verificar(dfp, meta_p)
+    df, meta, verdad = generar_con_verdad(a.n, MESES, a.semilla)
+    dfp, meta_p, verdad_p = generar_con_verdad(a.n, MESES, a.semilla + 1000, perturbado=True)
+    fallas, med = verificar(df, meta, verdad)
+    fp, _ = verificar(dfp, meta_p, verdad_p)
     _escribir_csv(df, out / "generado" / "movimientos.csv")
     _escribir_csv(dfp, out / "generado" / "movimientos_perturbado.csv")
+    _escribir_csv(verdad, out / "generado" / "verdad_eventos.csv")
+    _escribir_csv(verdad_p, out / "generado" / "verdad_eventos_perturbado.csv")
     _escribir_texto(out / "generado" / "meta.json", json.dumps(meta, indent=2, ensure_ascii=False))
     _escribir_texto(out / "generado" / "meta_perturbado.json", json.dumps(meta_p, indent=2, ensure_ascii=False))
     part = particion(df, a.semilla) | {"semilla": a.semilla, "hash_datos": meta["hash"]}
     _escribir_texto(out / "generado" / "particion.json", json.dumps(part, indent=2, ensure_ascii=False))
     mu = muestra_de(df)
+    ids_mu = sorted(mu["customer_id"].unique().tolist())
     _escribir_csv(mu, out / "muestra" / "movimientos.csv")
-    _escribir_texto(out / "muestra" / "meta.json", json.dumps({"origen": "subconjunto del dataset completo", "personas": sorted(mu["customer_id"].unique().tolist()),
-                                                           "semilla": meta["semilla"], "hash_completo": meta["hash"]}, indent=2))
-    _escribir_texto(out / "REPORTE_DATOS.md", _reporte(med, fallas + [f"(perturbado) {x}" for x in fp], meta, meta_p))
+    _escribir_csv(verdad[verdad["customer_id"].isin(ids_mu)], out / "muestra" / "verdad_eventos.csv")
+    _escribir_texto(out / "muestra" / "meta.json", json.dumps({"origen": "subconjunto del dataset completo", "personas": ids_mu,
+                                                              "semilla": meta["semilla"], "version_generador": meta["version_generador"],
+                                                              "hash_completo": meta["hash"]}, indent=2))
+    real, real_mu = medir_realismo(df), medir_realismo(mu)
+    antes = json.loads(MEDIDAS_V1_0.read_text(encoding="utf-8")) if MEDIDAS_V1_0.exists() else None
+    _escribir_texto(out / "REPORTE_DATOS.md", _reporte(med, real, real_mu, antes, fallas + [f"(perturbado) {x}" for x in fp],
+                                                       meta, meta_p))
     from datos.chat import generar_preguntas        # preguntas de entrenamiento del asistente (opcion C)
     chat = generar_preguntas(out / "chat", a.semilla)
     print(json.dumps({"chat": chat, "filas": med["filas"], "personas": med["personas"], "fallas": fallas + fp, "hash": meta["hash"],
                       "ingreso_medio": med["ingreso_mensual_medio"], "pct_deficit_ano2": med["pct_personas_con_mes_en_deficit_ano2"],
+                      "realismo": real["total"], "pii": meta["pii_inyectada"],
                       "muestra_filas": len(mu), "segundos": round(time.time() - t0)}, ensure_ascii=False))
 
 

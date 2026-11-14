@@ -53,7 +53,11 @@ def test_filas_limpias_cumplen_movimiento(muestra):
         Movimiento.model_validate(fila)
 
 
-def test_sin_datos_personales(muestra):
-    """Identificadores ficticios: sin DNI (8 dígitos) ni teléfonos (9 dígitos) en texto libre."""
+def test_sin_datos_personales_fuera_de_lo_declarado(muestra):
+    """v1.1: el generador inyecta PII FICTICIA (DNI, teléfono, correo) en ~0.5 % del texto de comercio
+    para que la ingesta la enmascare. Solo puede estar en las filas declaradas en verdad_eventos.csv."""
+    ruta = MUESTRA.parent / "verdad_eventos.csv"
+    declaradas = set(pd.read_csv(ruta, dtype=str)["transaction_id"]) if ruta.exists() else set()
     texto = muestra["comercio"].fillna("").astype(str)
-    assert not texto.str.contains(r"\b\d{8,9}\b", regex=True).any()
+    con_pii = texto.str.contains(r"\b\d{8,9}\b", regex=True) | texto.str.contains("@", regex=False)
+    assert set(muestra.loc[con_pii, "transaction_id"]) <= declaradas

@@ -25,6 +25,23 @@ def test_cumple_el_contrato_y_las_comprobaciones(datos):
     assert fallas == []
 
 
+def test_contrato_columnas_tipos_moneda_y_signos(datos):
+    from contratos import Movimiento
+    from datos.generador import COLUMNAS
+
+    df, _ = datos
+    assert list(df.columns) == COLUMNAS
+    assert pd.api.types.is_float_dtype(df["monto"]) and pd.api.types.is_float_dtype(df["saldo"])
+    for col in ("ingreso_recurrente", "es_duplicado", "es_atipico", "pago_con_fecha"):
+        assert pd.api.types.is_bool_dtype(df[col]), col
+    assert pd.to_datetime(df["fecha_hora"], format="%Y-%m-%d %H:%M:%S").notna().all()
+    assert set(df["moneda"]) == {"PEN"}
+    assert (df.loc[df["tipo"] == "ingreso", "monto"] > 0).all() and (df.loc[df["tipo"] == "gasto", "monto"] < 0).all()
+    limpias = df[~df["es_duplicado"] & (df["categoria"] != "") & (df["comercio"] != "")].sample(300, random_state=0)
+    for fila in limpias[list(COLUMNAS_MOVIMIENTO)].to_dict("records"):
+        Movimiento.model_validate(fila)
+
+
 def test_misma_semilla_mismo_hash_y_otra_semilla_otro():
     a = generar(N, 24, semilla=7)[1]["hash"]
     assert a == generar(N, 24, semilla=7)[1]["hash"]
