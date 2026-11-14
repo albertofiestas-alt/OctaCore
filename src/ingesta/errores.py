@@ -12,5 +12,5 @@ class ErrorIngesta(Exception):
 
     def __init__(self, mensaje_usuario: str, detalle: str = "") -> None:
         super().__init__(mensaje_usuario)
-        self.mensaje_usuario = mensaje_usuario  # qué corregir, en palabras simples
+        self.mensaje_usuario = mensaje_usuario
         self.detalle = detalle

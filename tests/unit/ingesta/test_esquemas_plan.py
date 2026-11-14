@@ -183,7 +183,8 @@ def test_dni_de_9_digitos_no_es_dni(cfg):
 
 
 def test_config_de_ingesta_tiene_los_valores_del_plan(cfg):
-    assert dict(cfg["ingesta"]) == {
+    # Se exigen las seis claves del plan; otros límites (max_filas, max_columnas) son libres.
+    esperado = {
         "max_mb": 50,
         "mad_k": 5,
         "tol_monto": 0.10,
@@ -191,6 +192,7 @@ def test_config_de_ingesta_tiene_los_valores_del_plan(cfg):
         "min_ocurrencias": 3,
         "ventana_suscripcion_dias": 30,
     }
+    assert {k: cfg["ingesta"].get(k) for k in esperado} == esperado
 
 
 # --------------------------------------------------------------------------- #
@@ -221,3 +223,47 @@ def test_historia_con_etiqueta_es_rechazada_por_fuga(etiqueta):
     df[etiqueta] = False
     with pytest.raises(HistoriaInvalida):
         validar_historia(df)
+
+
+# --------------------------------------------------------------------------- #
+# Diccionario de datos: una sola definición coherente con base.yaml y los contratos
+# --------------------------------------------------------------------------- #
+
+
+def test_diccionario_sensibles_coincide_con_base_yaml(cfg):
+    from ingesta import diccionario
+
+    en_dic = {c for c, e in cfg["ingesta"]["diccionario"].items() if e["rol"] == "sensible"}
+    assert en_dic == set(cfg["variables_sensibles"])
+    assert diccionario.sensibles(cfg) == set(cfg["variables_sensibles"])
+
+
+def test_diccionario_etiquetas_coinciden_con_el_contrato(cfg):
+    from ingesta import diccionario
+
+    assert set(diccionario.etiquetas(cfg)) == set(ETIQUETAS_REFERENCIA)
+
+
+def test_diccionario_obligatorias_y_columnas_coinciden_con_el_esquema(cfg):
+    from ingesta import diccionario
+    from ingesta.esquema import OBLIGATORIAS
+
+    assert diccionario.obligatorias(cfg) == list(OBLIGATORIAS)
+    datos = {c for c, e in cfg["ingesta"]["diccionario"].items() if e["rol"] in ("identificador", "dato")}
+    assert datos == set(COLUMNAS_MOVIMIENTO) | {"ingreso_recurrente"}
+
+
+def test_diccionario_marca_cada_columna_con_un_rol_valido(cfg):
+    roles = {e["rol"] for e in cfg["ingesta"]["diccionario"].values()}
+    assert roles <= {"identificador", "dato", "etiqueta", "sensible"}
+
+
+def test_columna_sensible_solo_en_el_diccionario_tambien_se_descarta(cfg):
+    import pandas as pd
+
+    from ingesta.esquema import descartar_sensibles
+
+    # Una columna marcada sensible solo en el diccionario se descarta aunque base.yaml no la liste.
+    cfg2 = {"variables_sensibles": [], "ingesta": {"diccionario": {"religion": {"rol": "sensible"}}}}
+    limpio, fuera = descartar_sensibles(pd.DataFrame({"religion": ["x"], "monto": ["1"]}), cfg2)
+    assert fuera == ["religion"] and list(limpio.columns) == ["monto"]

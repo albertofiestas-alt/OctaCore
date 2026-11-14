@@ -9,3 +9,31 @@ min_ocurrencias: 3            # pago con fecha: ocurrencias mínimas
 ventana_suscripcion_dias: 30  # suscripción duplicada: dos cobros iguales dentro de esta ventana
 max_filas: 1000000            # lectura segura: filas máximas del CSV
 max_columnas: 100             # lectura segura: columnas máximas del CSV
+
+# Diccionario de datos de la ingesta: fuente de verdad de qué es cada columna.
+# rol: identificador | dato | etiqueta (solo evaluación) | sensible (se descarta al entrar).
+# Una columna sensible nunca viaja en los movimientos; las etiquetas tampoco (anti fuga).
+# La lista variables_sensibles de config/base.yaml se mantiene como piso de seguridad:
+# la ingesta descarta la unión de ambas y una prueba exige que coincidan.
+diccionario:
+  customer_id:        {rol: identificador, tipo: texto,    obligatoria: true,  descripcion: "Identificador ficticio de la persona (P0001)"}
+  transaction_id:     {rol: identificador, tipo: texto,    obligatoria: true,  descripcion: "Identificador único del movimiento"}
+  fecha_hora:         {rol: dato,          tipo: fecha,    obligatoria: true,  descripcion: "Fecha y hora del movimiento"}
+  monto:              {rol: dato,          tipo: decimal,  obligatoria: true,  descripcion: "Soles; ingreso positivo, gasto negativo"}
+  moneda:             {rol: dato,          tipo: texto,    obligatoria: true,  descripcion: "Solo PEN"}
+  tipo:               {rol: dato,          tipo: texto,    obligatoria: true,  descripcion: "ingreso o gasto"}
+  categoria:          {rol: dato,          tipo: texto,    obligatoria: true,  descripcion: "Categoría del gasto o ingreso"}
+  comercio:           {rol: dato,          tipo: texto,    obligatoria: true,  descripcion: "Comercio o fuente del movimiento"}
+  saldo:              {rol: dato,          tipo: decimal,  obligatoria: false, descripcion: "Saldo posterior al movimiento"}
+  ingreso_recurrente: {rol: dato,          tipo: booleano, obligatoria: false, descripcion: "Opcional del generador"}
+  es_duplicado:       {rol: etiqueta,      tipo: booleano, obligatoria: false, descripcion: "Verdad conocida; solo evaluación"}
+  es_atipico:         {rol: etiqueta,      tipo: booleano, obligatoria: false, descripcion: "Verdad conocida; solo evaluación"}
+  pago_con_fecha:     {rol: etiqueta,      tipo: booleano, obligatoria: false, descripcion: "Verdad conocida; solo evaluación"}
+  arquetipo:          {rol: etiqueta,      tipo: texto,    obligatoria: false, descripcion: "Verdad conocida; solo evaluación"}
+  edad:               {rol: sensible,      tipo: entero,   obligatoria: false, descripcion: "Variable sensible: se descarta"}
+  genero:             {rol: sensible,      tipo: texto,    obligatoria: false, descripcion: "Variable sensible: se descarta"}
+  ubicacion:          {rol: sensible,      tipo: texto,    obligatoria: false, descripcion: "Variable sensible: se descarta"}
+  distrito:           {rol: sensible,      tipo: texto,    obligatoria: false, descripcion: "Variable sensible: se descarta"}
+  nombre:             {rol: sensible,      tipo: texto,    obligatoria: false, descripcion: "Variable sensible: se descarta"}
+  dni:                {rol: sensible,      tipo: texto,    obligatoria: false, descripcion: "Variable sensible: se descarta"}
+  telefono:           {rol: sensible,      tipo: texto,    obligatoria: false, descripcion: "Variable sensible: se descarta"}
