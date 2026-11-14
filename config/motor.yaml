@@ -1,0 +1,15 @@
+# config/motor.yaml  (dueño: Sebastián). Se lee como cfg["motor"].
+# Los parámetros comunes (horizontes_dias, cuantil_conservador, umbral_historia_semanas)
+# viven en config/base.yaml y se leen en la raíz de cfg.
+
+# Confianza: ancho relativo a 14 días = (P80 - P5) / max(P50, 1).
+#   baja  si semanas_historia < umbral_historia_semanas o ancho > ancho_bajo
+#   alta  si ancho < ancho_alto y hay historia suficiente
+#   media en los demás casos
+# Valores del pre-registro de Gino (config/preregistro.yaml, commit 005fb50), fijados antes de ver resultados.
+umbrales_confianza:
+  ancho_alto: 0.5
+  ancho_bajo: 1.2
+
+# Cuantil con el que se busca una propuesta que aguante una semana muy mala.
+cuantil_propuesta: 0.05
