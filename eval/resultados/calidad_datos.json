@@ -1,0 +1,4917 @@
+{
+  "fuente": "data/generado/movimientos.csv",
+  "generador_version": "1.1",
+  "generador_hash": "736316b2c4ad9b5c",
+  "personas": 400,
+  "filas_entrada": 464948,
+  "filas_salida": 458077,
+  "filas_rechazadas": 0,
+  "rechazos": {},
+  "duplicados_eliminados": 6871,
+  "duplicados_en_entrada": {
+    "transaction_id_repetido": 0,
+    "filas_identicas": 0
+  },
+  "atipicos": 41278,
+  "faltantes": {
+    "customer_id": 0,
+    "transaction_id": 0,
+    "fecha_hora": 0,
+    "monto": 0,
+    "moneda": 0,
+    "tipo": 0,
+    "categoria": 4649,
+    "comercio": 4649,
+    "saldo": 0,
+    "categoria_desconocida": 146273,
+    "categoria_imputada_por_comercio": 3178
+  },
+  "categorias_imputadas": {
+    "categoria_vacia": 4649,
+    "categoria_imputada_por_comercio": 3178,
+    "categoria_por_defecto": 147744,
+    "categoria_desconocida": 146273,
+    "desconocidas_por_valor": {
+      "ingreso": 146273
+    }
+  },
+  "pii_enmascarado": 2324,
+  "columnas_sensibles_descartadas": [],
+  "suscripciones_duplicadas": [
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 40.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 4
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 27
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 7
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 24
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 6
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 25
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 9
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 21
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 8
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 23
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 5
+    },
+    {
+      "monto": 15.0,
+      "dias_entre_cobros": 25
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 4
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 26
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 5
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 25
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 28.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 4
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 27
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 27.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 7
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 24
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 3
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 35.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 20.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 6
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 25
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 25.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 31.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 9
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 21
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 8
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 23
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 23.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 26.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 21.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 29.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 16.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 24.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 3
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 33.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 17.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 22.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 10
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 20
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 39.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 4
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 26
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 37.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 32.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 38.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 30.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 19.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 34.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 18.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 28
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    },
+    {
+      "monto": 36.0,
+      "dias_entre_cobros": 30
+    }
+  ],
+  "suscripciones_duplicadas_contexto": {
+    "avisos": 1210,
+    "avisos_a_28_o_30_dias": 1178,
+    "dobles_sembrados_por_el_generador": 17
+  },
+  "pagos_inferidos": {
+    "total": 2256,
+    "por_categoria": {
+      "alquiler": 401,
+      "deuda": 169,
+      "servicios": 1571,
+      "suscripcion": 115
+    }
+  },
+  "pagos_inferidos_calidad": {
+    "protocolo": "ingesta.cargar causal mes a mes (meses 13 a 24), pares (persona, comercio, categoria) contra pago_con_fecha",
+    "personas": 100,
+    "precision": 0.9791,
+    "recall": 0.9734,
+    "recall_por_categoria": {
+      "alquiler": 0.9907,
+      "deuda": 0.9917,
+      "nan": 0.0,
+      "servicios": 0.9786,
+      "suscripcion": 0.9746
+    },
+    "antes_del_pr4": {
+      "precision": 0.9784,
+      "recall": 0.9622
+    },
+    "cambio_tras_el_pr4": {
+      "precision": 0.0007,
+      "recall": 0.0112
+    }
+  }
+}
