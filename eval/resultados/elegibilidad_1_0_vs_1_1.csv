@@ -1,0 +1,5 @@
+generador,combinacion,califican,tasa_global_pct,brecha,alerta,razon_tasas,arq_en_cero,incentivo_califican_menor_gasto,personas_que_cambian
+1.0,1,20/400,5.0,0.145,False,0.0,3,79/400 (19.8 %),59
+1.0,1+2+4+6,43/400,10.8,0.277,True,0.0,3,106/400 (26.5 %),63
+1.1,1,19/400,4.8,0.145,False,0.0,3,79/400 (19.8 %),60
+1.1,1+2+4+6,42/400,10.5,0.265,True,0.0,3,106/400 (26.5 %),64
