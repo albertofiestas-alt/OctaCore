@@ -198,3 +198,52 @@ def test_8_redondeo_conservador(estado, pron):
         assert d.numero_hoy == math.floor(minimo) or abs(minimo - round(minimo)) < TOL
     else:
         assert d.numero_hoy == 0
+
+
+# --------------------------------------------------------------------------- #
+# Simulación (opción C): motor.simular
+# --------------------------------------------------------------------------- #
+
+from contratos import Escenario, IngresoExtra  # noqa: E402
+from motor.simular import simular  # noqa: E402
+
+
+@st.composite
+def escenarios(draw) -> Escenario:
+    ingresos = draw(
+        st.lists(st.builds(IngresoExtra, dia=st.integers(0, 14), monto=_flotante(0, 10000)), max_size=3)
+    )
+    return Escenario(ingresos_extra=tuple(ingresos), gasto_hoy=draw(_flotante(0, 10000)))
+
+
+@AJUSTES
+@given(estados(), pronosticos())
+def test_s1_escenario_vacio_es_identico_a_decidir(estado, pron):
+    assert simular(estado, pron, Escenario(), CFG) == decidir(estado, pron, CFG)
+
+
+@AJUSTES
+@given(estados(), pronosticos(), escenarios(), st.integers(0, 14), _flotante(0, 10000))
+def test_s2_un_ingreso_extra_mas_no_baja_el_numero(estado, pron, esc, dia, monto):
+    if len(esc.ingresos_extra) >= 3:
+        esc = esc.model_copy(update={"ingresos_extra": esc.ingresos_extra[:2]})
+    con_mas = esc.model_copy(update={"ingresos_extra": (*esc.ingresos_extra, IngresoExtra(dia=dia, monto=monto))})
+    assert simular(estado, pron, con_mas, CFG).numero_hoy >= simular(estado, pron, esc, CFG).numero_hoy
+
+
+@AJUSTES
+@given(estados(), pronosticos(), escenarios(), _flotante(0, 3000))
+def test_s3_gastar_mas_hoy_no_sube_el_numero(estado, pron, esc, mas):
+    gasta_mas = esc.model_copy(update={"gasto_hoy": min(10000.0, esc.gasto_hoy + mas)})
+    assert simular(estado, pron, gasta_mas, CFG).numero_hoy <= simular(estado, pron, esc, CFG).numero_hoy
+
+
+@AJUSTES
+@given(estados(), pronosticos(), escenarios())
+def test_s4_simulacion_completa_y_sin_cifras_inventadas(estado, pron, esc):
+    d = simular(estado, pron, esc, CFG)
+    assert d.numero_hoy >= 0
+    assert d.supuestos and d.evidencia and d.limites
+    assert textos_sin_origen(estado, d) == []
+    for prop in d.propuestas:
+        assert prop.propuesta_id.endswith(":simulada") or (not esc.ingresos_extra and not esc.gasto_hoy)

@@ -53,13 +53,30 @@ def supuestos(estado: EstadoPersona, evidencia: dict[str, Any]) -> list[str]:
     """Sección 4, tarea 1. Nunca vacía; cada cifra sale del estado o de la evidencia."""
     n_pagos = evidencia.get("pagos_detectados", len(estado.pagos))
     semanas = evidencia.get("semanas_historia", estado.semanas_historia)
-    return [
+    salida = [
         "Gastas cada día lo que indica el número de hoy.",
         f"Los pagos con fecha son los {n_pagos} detectados en tu historial.",
         f"El ingreso futuro se parece al de las últimas {semanas} semanas.",
         "No se consideran gastos imprevistos.",
         "El escenario P20 es una semana mala y el P5 una semana muy mala.",
     ]
+    return salida + _supuestos_simulacion(evidencia.get("escenario"))
+
+
+def _supuestos_simulacion(escenario: dict[str, Any] | None) -> list[str]:
+    """Opción C: qué se simuló, con las cifras de evidencia["escenario"]. Nada si no es una simulación."""
+    if not escenario:
+        return []
+    salida = []
+    if escenario.get("gasto_hoy"):
+        salida.append(f"Simulación: gastas S/{_soles(escenario['gasto_hoy'])} hoy.")
+    for ingreso in escenario.get("ingresos_extra", []):
+        salida.append(
+            f"Simulación: recibes un ingreso extra seguro de S/{_soles(ingreso['monto'])} el día {ingreso['dia']}."
+        )
+    if not salida:
+        salida.append("Simulación sin cambios respecto a tu situación actual.")
+    return salida
 
 
 def limites(evidencia: dict[str, Any], cfg: Any) -> list[str]:
