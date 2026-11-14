@@ -1,0 +1,40 @@
+UKKU — QA VISUAL INDEPENDIENTE DE INTERFAZ
+14 noviembre 2026
+
+Alcance: revisión de código SwiftUI y capturas en UkkuApp/evidencias-premium. Solo lectura; este informe no modifica la interfaz. No se usó CUA ni el simulador para evitar competir con Claude. No se evaluó el video de referencia ni la animación real del personaje.
+
+CRITERIOS
+1. Una jerarquía clara: importe protagonista, saludo/estado/insight subordinados.
+2. Densidad útil: próximo pago y acceso a movimientos visibles sin un recorrido largo.
+3. Contención: sin copy técnico innecesario, avisos dominantes o acciones duplicadas.
+4. Consistencia y legibilidad en las cuatro pestañas, importes largos y texto grande.
+5. Personaje coherente: conservar la identidad original y reservar expresividad para momentos útiles.
+
+OBSERVADO Y CORREGIDO
+- Inicio: la versión 01 de 14:23–26 conserva el oso original. La cifra es la única magnitud dominante; estado y «Ver cálculo» están agrupados dentro del hero. La reserva y el próximo pago son secundarios. Se ven varios movimientos en la misma pantalla. Pasa jerarquía y densidad.
+- Navegación: la primera captura 01 de 14:11 tenía un CTA relleno detrás de la barra de pestañas y una banda azul fuerte. La nueva versión traslada «Agregar» a la cabecera de Movimientos; desaparece la banda. Corregido.
+- Copy: se retiró «calculado, sin IA» del enlace principal de Inicio. La procedencia se explica en la propuesta. El banner de conexión en Plan + Ukku es compacto y el envío vacío aparece deshabilitado.
+- Plan + Ukku: la captura 02 de 14:24 incluye una sola escena del oso original con calendario como estado inicial. Es una aplicación coherente del personaje y no llena cada fila con ilustraciones.
+- Propuesta: captura 05 de 14:25 muestra importe, fecha, impacto y CTA claramente jerarquizados; «Editar» es secundario. El encabezado desplazado ya no se superpone a reloj y batería, a diferencia de la versión de 14:12. Corregido.
+- Actividad: título y creación están en cabecera; filas más contenidas y progreso propio de metas/presupuestos. La información ya no compite con un CTA de ancho completo.
+- Ajustes: menos bloques explicativos y mejor agrupación; opciones técnicas pasan al nivel de demostración. Mantiene controles nativos y estilo consistente.
+- Importe largo: captura 11 pasa el hero a una columna sin recortar el importe. No se confunde con los montos secundarios.
+- Texto grande: capturas 12 y 13 de 14:24 no recortan importes o controles principales. Los chips horizontales se desplazan; que el siguiente chip aparezca parcialmente es el comportamiento esperado.
+
+PULIDOS ENVIADOS A CLAUDE, AÚN SIN REVISIÓN FINAL EN CAPTURA NUEVA
+- Estado sin datos (10): aparecen dos osos en la misma pantalla —el hero y otra escena con recibo—, además de otro bloque de movimientos vacío. Preferir una sola escena de vacío y un CTA, para conservar la contención. Esto no es un fallo funcional, pero resta elegancia.
+- Texto grande Inicio (12): «Pagos cubiertos» se divide en dos líneas mientras «Ver cálculo» ocupa un gran bloque a la derecha. Pasar el pie a VStack con alineación izquierda a tamaños grandes mejoraría el equilibrio.
+- Texto grande Plan (13): el banner «Sin IA conectada / Conectar IA» permanece legible, pero conviene distribuirlo verticalmente en tamaños grandes.
+- Repetir capturas de los tres casos tras las últimas correcciones de Claude. Las observaciones no deben declararse resueltas basándose solo en que el código cambió.
+
+PENDIENTE DE LA INTRO Y MOVIMIENTO FINAL
+- La intro debe durar aproximadamente 3 s, reproducirse solo en arranque frío y no reaparecer al cambiar de pestaña ni al volver de foreground.
+- El gesto de quitar/reponer sombrero debe conservar las facciones y marcas del oso original. Este QA no acepta un reemplazo vectorial que cambie el personaje.
+- Comprobar silueta, manos, sombrero, expresiones y encuadre en inicio, anticipación, gesto y pose final. Un simple desplazamiento o escala de una imagen no equivale al gesto solicitado.
+- La salida de la intro debe aterrizar de forma limpia en Inicio, sin flash, salto de escala, duplicación del oso o bloqueo de controles.
+- Reduce Motion debe evitar el gesto amplio y mostrar una pose final o transición breve accesible.
+- Los momentos de personaje pueden aparecer en Inicio, planificación vacía y confirmación de logros. No poner una mascota en cada movimiento o fila de plan.
+- Revisar un video de la app final, además de capturas; una imagen estática no acredita fluidez, timing, transiciones o ausencia de saltos.
+
+DICTAMEN
+El rediseño muestra una mejora clara frente a las capturas anteriores y pasa los criterios principales de jerarquía, densidad y consistencia en tamaño normal. Quedan tres pulidos de estados vacíos/texto grande y la validación real de la intro y animación final. No se declara «resultado premium final validado» hasta revisar esa ejecución.

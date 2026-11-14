@@ -1,0 +1,51 @@
+/* UKKU — sistema de implementación propio basado en la dirección elegida.
+   Electric/Serene Blue: referencias BBVA. El resto son decisiones Ukku. */
+:root {
+  --ukku-blue: #001391;
+  --ukku-sky: #85C8FF;
+  --ukku-white: #FFFFFF;
+  --ukku-ink: #000519;
+  --ukku-surface: #F4F8FF;
+  --ukku-muted: #506078;
+  --ukku-success: #17613D;
+  --ukku-warning: #855400;
+  --ukku-danger: #B3261E;
+  --ukku-font-ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ukku-font-editorial: Georgia, "Times New Roman", serif;
+  --ukku-space-1: 4px;
+  --ukku-space-2: 8px;
+  --ukku-space-3: 16px;
+  --ukku-space-4: 24px;
+  --ukku-space-5: 32px;
+  --ukku-space-6: 48px;
+  --ukku-radius-control: 12px;
+  --ukku-radius-card: 16px;
+}
+.ukku { color: var(--ukku-ink); background: var(--ukku-surface); font: 400 1rem/1.5 var(--ukku-font-ui); }
+.ukku *, .ukku *::before, .ukku *::after { box-sizing: border-box; }
+.ukku-main { width: min(100%, 720px); margin-inline: auto; padding: var(--ukku-space-4); }
+.ukku-logo { display: block; width: 220px; max-width: 100%; height: auto; }
+.ukku-editorial { font: 700 clamp(2rem, 6vw, 4rem)/1.1 var(--ukku-font-editorial); letter-spacing: -.03em; }
+.ukku-title { font-size: 1.5rem; line-height: 1.25; }
+.ukku-card { background: var(--ukku-white); border-radius: var(--ukku-radius-card); padding: var(--ukku-space-4); margin-block: var(--ukku-space-3); }
+.ukku-available { background: var(--ukku-sky); color: var(--ukku-blue); }
+.ukku-amount { display: block; font-size: clamp(2.5rem, 10vw, 3.5rem); font-weight: 750; line-height: 1.2; font-variant-numeric: tabular-nums; margin-block: 8px; }
+.ukku-muted { color: var(--ukku-muted); }
+.ukku-button { font: 600 1rem/1.3 var(--ukku-font-ui); min-height: 48px; padding: 12px 24px; border: 2px solid var(--ukku-blue); border-radius: var(--ukku-radius-control); background: var(--ukku-blue); color: var(--ukku-white); cursor: pointer; }
+.ukku-button-secondary { background: var(--ukku-white); color: var(--ukku-blue); }
+.ukku-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ukku-button:disabled { cursor: default; border-color: var(--ukku-muted); background: var(--ukku-surface); color: var(--ukku-muted); }
+.ukku a { color: var(--ukku-blue); text-underline-offset: 3px; }
+.ukku :focus-visible { outline: 3px solid var(--ukku-blue); outline-offset: 4px; box-shadow: 0 0 0 4px var(--ukku-white); }
+.ukku-field { display: grid; gap: 8px; margin-block: 16px; }
+.ukku-field input { min-height: 48px; border: 1px solid var(--ukku-muted); border-radius: 8px; padding: 12px; color: var(--ukku-ink); background: var(--ukku-white); font: inherit; width: 100%; }
+.ukku-status { display: flex; gap: 8px; align-items: baseline; font-weight: 600; }
+.ukku-status-success { color: var(--ukku-success); }
+.ukku-status-warning { color: var(--ukku-warning); }
+.ukku-status-danger { color: var(--ukku-danger); }
+.ukku-rule { border: 0; border-top: 1px solid var(--ukku-muted); margin-block: 24px; }
+@media (prefers-reduced-motion: reduce) { .ukku *, .ukku *::before, .ukku *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }
+
+.ukku a.ukku-button { display: inline-flex; align-items: center; justify-content: center; color: var(--ukku-white); text-decoration: none; margin-block: 4px; }
+.ukku a.ukku-button-secondary { color: var(--ukku-blue); }
+.ukku a.ukku-button:hover { text-decoration: underline; }

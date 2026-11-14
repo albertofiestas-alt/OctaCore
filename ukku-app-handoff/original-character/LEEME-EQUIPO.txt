@@ -1,0 +1,40 @@
+UKKU · PERSONAJE ORIGINAL Y MOVIMIENTO
+
+Maestro: referencia/logo-maestro.png es el logo aprobado por Afi. La cara, las manchas blancas,
+el sombrero azul y la cinta celeste definen el personaje. No sustituirlo por el rig vectorial anterior.
+
+Biblioteca
+- capas/: cuerpo sin sombrero, sombrero y brazo/mano para composición y animación.
+- estados/: bien, atento, revisar y pensando. Expresiones derivadas del maestro con ImageGen.
+- escenas/: meta lograda, planificación, movimientos vacíos y privacidad.
+- renderizados/: fotogramas y previsualizaciones de los clips, cuando estén exportados.
+- CATALOGO.html: revisar imágenes y reproducir clips. Abrir en un navegador.
+- inventario.json: tamaños y archivos disponibles.
+
+Integración
+Claude maqueta la app SwiftUI e integra los recursos. Codex genera las imágenes, compone y renderiza
+las animaciones. El contrato acordado está en NECESIDADES-CLAUDE.txt. Los recursos de ejecución
+se instalan en UkkuApp/Personaje, dentro del bundle; no requieren servidor ni conexión.
+
+Lenguaje de movimiento
+El gesto de entrada tiene anticipación, contacto de la mano con el ala del sombrero, retiro,
+saludo y colocación. El resto de la interfaz responde con movimientos pequeños y breves.
+Los bucles de reposo deben cerrar sin saltos. Nunca usar una vibración de todo el PNG como sustituto
+del saludo. Los estados de riesgo acompañan con calma: no culpa, llanto ni alarmas teatrales.
+La app pausa los clips fuera de primer plano y respeta Reducir movimiento del sistema y de Ajustes.
+
+Uso contextual
+Inicio: estado de pagos y halo suave verde/ámbar/rojo, con texto e icono redundantes.
+Plan + Ukku: compañero de planificación; contexto claro antes de confirmar acciones.
+Actividad: progreso y celebración breve después de guardar, no por tocar cualquier botón.
+Ajustes: privacidad y preferencias; animación discreta.
+
+Identidad
+Azul #001391, celeste #85C8FF, blanco #FFFFFF, tinta #000519.
+Tipografía del sistema iOS; foco en una cifra principal, filas legibles y espacios amplios.
+Inspiración: feedback contextual y continuidad del personaje como en Duolingo, sin copiar a Duo.
+
+Archivos fuente
+Las imágenes son PNG raster transparentes, no originales vectoriales. Los prompts están conservados
+para iteración. La composición animada y sus renders son editables mediante el renderer incluido.
+El material de video de YouTube no pudo visualizarse; esta dirección responde a la descripción de Afi.

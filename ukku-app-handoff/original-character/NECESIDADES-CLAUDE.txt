@@ -1,0 +1,59 @@
+NECESIDADES DE CLAUDE PARA INTEGRAR A UKKU (personaje original)
+Sábado 14-nov-2026. Estado: el rig vectorial y las tres caras derivadas (ukku-bien/atento/revisar) están
+RETIRADOS de la app. Hoy la app muestra solo el oso recortado de referencia/logo-maestro.png, quieto.
+La app no dibuja, no deforma y no anima al personaje: solo reproduce los fotogramas que entregues.
+
+DÓNDE DEJAR LOS ARCHIVOS
+  UkkuApp/Personaje/<nombre-del-clip>/manifest.json
+  UkkuApp/Personaje/<nombre-del-clip>/0000.png, 0001.png, 0002.png ...
+La carpeta Personaje se copia tal cual al bundle. Después de añadir clips: herramientas/compilar_y_lanzar.sh
+No hace falta tocar Swift ni Assets.xcassets. Si un clip falta, la app usa el PNG maestro quieto.
+
+FORMATO DE CADA FOTOGRAMA
+  - PNG RGBA con fondo transparente, sRGB, sin premultiplicar. Sin sombra ni halo (el halo lo pone la app).
+  - Lienzo CUADRADO e IDÉNTICO en todos los fotogramas y en todos los clips: 480 x 480 px.
+  - Mismo encuadre que UkkuApp/Sources/Assets.xcassets/ukku-maestro.imageset/ukku-maestro.png
+    (692 x 692: oso centrado en horizontal y apoyado en el borde inferior). Para pasar a 480 basta escalar
+    ese lienzo. Así no hay salto entre el PNG quieto y el primer fotograma.
+  - Si un gesto necesita más aire (sombrero levantado, brazo saludando), reduce la escala del oso en TODO
+    el clip y avísalo en el manifest con "escala": 0.8 ; no cambies el tamaño del lienzo.
+  - Nombres numerados con 4 dígitos desde 0000, sin huecos.
+  - Peso: ideal <= 60 KB por fotograma. Máximo 96 fotogramas por clip.
+
+manifest.json
+  { "fps": 24, "loop": true }
+  fps: 12 a 30. loop: true para reposos; false para saludo y celebra (la app se queda en el último fotograma).
+
+CLIPS QUE BUSCA LA APP (nombres exactos)
+  saludo            loop false. 2 a 3 s. Se quita el sombrero, saluda, se lo vuelve a poner. Se reproduce una vez
+                    al abrir la app, a 220 pt sobre fondo blanco, y luego aparece Inicio. Primer y último fotograma
+                    deben coincidir con la pose del maestro.
+  reposo            loop true. 3 a 4 s. Reposo general (respiración, parpadeo). Se usa en el hero de Inicio a 108 pt.
+                    Primer y último fotograma iguales para que el bucle no salte.
+  reposo-bien       opcional, loop true. Reposo cuando los pagos están cubiertos.
+  reposo-atento     opcional, loop true. Algunos pagos dependen de ingresos por confirmar.
+  reposo-revisar    opcional, loop true. Hay pagos sin cubrir: comprensivo, sin lágrimas ni vergüenza.
+  reposo-sin-datos  opcional, loop true.
+                    Si falta el clip del estado, la app usa «reposo»; si falta «reposo», el PNG maestro.
+  celebra           opcional, loop false. ~1 s. Gesto breve al guardar un plan; se muestra a 56 pt en el chat.
+
+SI PREFIERES ENTREGAR CAPAS EN VEZ DE FOTOGRAMAS
+  Puedo componerlas yo, pero entonces la animación la decido yo y el encargo dice que la haces tú. Si aun así
+  las quieres en la app: capas/<parte>.png (cuerpo, cabeza, sombrero, brazo, párpados) todas en el lienzo
+  480 x 480 ya colocadas en su sitio, más capas/pivotes.json con el punto de giro de cada parte en px.
+  Prefiero fotogramas ya renderizados.
+
+ALTERNATIVA DE VIDEO
+  HEVC con canal alfa (.mov) también sirve y pesa menos, pero hoy el reproductor solo lee PNG. Si lo necesitas,
+  avísame y añado el reproductor de video.
+
+LO QUE YA HACE LA APP
+  - Pausa el clip cuando la app sale de primer plano.
+  - Con «Reducir movimiento» (del sistema o de Ajustes) no reproduce ningún clip: muestra el PNG maestro.
+  - El estado (bien/atento/revisar/sin datos) lo decide el cálculo de pagos, nunca el texto del chat.
+  - El estado siempre aparece también como texto y símbolo.
+  - Argumento de lanzamiento --sin-saludo para saltar la bienvenida en pruebas.
+
+LO QUE NECESITO SABER DE TI
+  - Qué clips entregas y cuándo, para grabar el video final con ellos.
+  - Si alguno usa "escala" distinta de 1.

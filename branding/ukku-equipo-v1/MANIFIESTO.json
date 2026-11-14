@@ -1,0 +1,66 @@
+{
+  "fecha": "2026-11-14",
+  "identidad_elegida": "Ukku azul v2",
+  "archivos": [
+    {
+      "archivo": "GUIA-DE-MARCA.html",
+      "bytes": 17561,
+      "sha256": "05c835b03f80365b01ed93fa36edc2db6ec4005699daa294b0de002b9f92e656"
+    },
+    {
+      "archivo": "LEEME-EQUIPO.txt",
+      "bytes": 3730,
+      "sha256": "ac46b2286d43d7c5e1dd0c0ae6bb2373bd3503778eb6592b0ec5bd02a609828f"
+    },
+    {
+      "archivo": "VERIFICACION.txt",
+      "bytes": 761,
+      "sha256": "4da82d60dee51a1479c62fcc255cb257277390362e770be69c09c955218b4b12"
+    },
+    {
+      "archivo": "activos/ukku-identidad-elegida.png",
+      "bytes": 1298860,
+      "sha256": "d345aefc222d7e61c30c74b7080a8d647d6ded7cfbc008ebe9b5f836f12a68ee"
+    },
+    {
+      "archivo": "activos/ukku-logo-horizontal.png",
+      "bytes": 805608,
+      "sha256": "90aaebe73aa39f32e2e148e2a3dec50b0a076577126c9e81c80c5d1a0238b425"
+    },
+    {
+      "archivo": "implementacion/muestra-componentes.html",
+      "bytes": 1776,
+      "sha256": "c3ae4860613074036e1180b21688033117a263e13e8a2c77bae6ae0bacd30c6a"
+    },
+    {
+      "archivo": "implementacion/streamlit-config.toml",
+      "bytes": 303,
+      "sha256": "fefc8b03ff06b2b75f7c2bef3699f1c3695dab193a2ee22d3de2d0dd3eb744d9"
+    },
+    {
+      "archivo": "implementacion/textos.es.json",
+      "bytes": 1768,
+      "sha256": "2bce05bf51e37ea5b52adbbf73bfcaac2d7be379c2b4a07ae83153b561707847"
+    },
+    {
+      "archivo": "implementacion/tokens.json",
+      "bytes": 2127,
+      "sha256": "656be4d4a2385cfecb00e7257e3357f7d130f5c237b46ed0e3f25863a47ead77"
+    },
+    {
+      "archivo": "implementacion/ukku.css",
+      "bytes": 3452,
+      "sha256": "22c8a0e2db88067e1406549a4ef8f6216296d5192229470a60fd8b147bbab725"
+    },
+    {
+      "archivo": "referencias/investigacion.txt",
+      "bytes": 3117,
+      "sha256": "6d5249cffe8938eca4eec4fe3c9817203a3f588812b2292ca7c5d69f9208d14c"
+    },
+    {
+      "archivo": "referencias/prompts-origen.txt",
+      "bytes": 1220,
+      "sha256": "c67db2b3d1c77aee2f1a9772652b7291deb2bb26c36392481aeb1ae39243f08f"
+    }
+  ]
+}

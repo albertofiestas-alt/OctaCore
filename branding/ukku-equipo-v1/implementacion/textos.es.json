@@ -1,0 +1,14 @@
+{
+  "marca": {"nombre": "Ukku", "pronunciacion": "ú-ku", "lema": "Tu plata, con un plan.", "frase_secundaria": "Mira tus pagos. Decide tu día."},
+  "navegacion": ["Hoy", "Por qué", "Plan", "Carga", "Evaluación"],
+  "hoy": {"bienvenida": "Hola, soy Ukku", "monto": "Disponible estimado para hoy", "explicacion": "Esta estimación considera tus próximos pagos y los ingresos previstos.", "accion": "Ver mi plan", "detalle": "Entender el cálculo", "cero": "El disponible estimado para hoy es S/ 0. Revisa los pagos que requieren atención."},
+  "por_que": {"titulo": "Así calculamos tu disponible", "ingresos": "Ingresos previstos", "reservas": "Reservas para próximos pagos", "limites": "Qué puede cambiar esta estimación"},
+  "plan": {"titulo": "Tus próximos pagos", "accion": "Revisar propuesta", "confirmacion": "Confirmar esta opción"},
+  "carga": {"titulo": "Cargar movimientos", "ayuda": "Usa el formato indicado para revisar tus movimientos.", "accion": "Revisar archivo", "procesando": "Estamos revisando el archivo.", "error": "No pudimos leer el archivo. Revisa el formato y vuelve a intentarlo."},
+  "evaluacion": {"titulo": "Cómo se comparan los métodos", "nota": "Resultados de una simulación con datos ficticios. No representan precisión en situaciones reales."},
+  "estados": {"verde": "✓ Cubierto", "ambar": "! Depende de lo que entre", "rojo": "✕ No cubierto"},
+  "sin_historia": "Todavía falta información para estimar tu disponible. Carga tus movimientos para continuar.",
+  "error_servicio": "No pudimos actualizar la estimación. Intenta nuevamente.",
+  "datos_ejemplo": "Datos de ejemplo",
+  "aviso": "Orientación educativa basada en una simulación con datos ficticios. No es asesoría financiera ni ejecuta operaciones."
+}

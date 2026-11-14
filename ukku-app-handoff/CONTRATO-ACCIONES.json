@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "alcance": "Acciones internas del prototipo; no operaciones bancarias externas",
+  "propuesta": {
+    "id": "uuid",
+    "tool": "create_plan",
+    "arguments": {"title": "Reservar para alquiler", "amount_minor": 10000, "currency": "PEN", "due_date": "2026-11-20", "category_id": "housing", "recurrence": "none"},
+    "source": "llm",
+    "requires_confirmation": true,
+    "context_version": 1,
+    "status": "proposed"
+  },
+  "herramientas": [
+    {"name": "get_financial_context", "effect": "read", "required": []},
+    {"name": "create_plan", "effect": "write", "required": ["title", "amount_minor", "currency", "due_date", "category_id", "recurrence"]},
+    {"name": "set_category_budget", "effect": "write", "required": ["category_id", "amount_minor", "currency", "cycle_id"]},
+    {"name": "create_savings_goal", "effect": "write", "required": ["title", "target_minor", "currency", "target_date"]},
+    {"name": "create_reminder", "effect": "write", "required": ["title", "local_datetime", "timezone"]},
+    {"name": "record_demo_transaction", "effect": "write", "required": ["account_id", "amount_minor_signed", "currency", "category_id", "date", "merchant"]},
+    {"name": "pause_plan", "effect": "write", "required": ["plan_id"]},
+    {"name": "reschedule_plan", "effect": "write", "required": ["plan_id", "due_date"]}
+  ],
+  "validacion": [
+    "Allowlist de herramientas; rechazar nombres o argumentos extra no permitidos.",
+    "Definir esquemas JSON estrictos por herramienta al implementar; required no sustituye validación de tipos.",
+    "Importes en céntimos; positivos salvo amount_minor_signed del movimiento; moneda admitida y categoría/cuenta existente.",
+    "Fechas ISO válidas y zona America/Lima por defecto.",
+    "El backend calcula impacto y comprueba versión del contexto al confirmar; si cambió, volver a previsualizar.",
+    "Un ID de propuesta solo se aplica una vez, incluso con doble toque, timeout o reintento.",
+    "Persistir resultado y audit event solo después de una escritura confirmada.",
+    "No aceptar texto del LLM como código, shell, URL de ejecución ni instrucción a recursos arbitrarios."
+  ],
+  "resultado": {"proposal_id": "uuid", "status": "applied", "entity_id": "uuid", "executed_at": "ISO8601", "summary": "Plan creado"},
+  "estado_llm_sin_credencial": {"connected": false, "user_message": "Conecta un proveedor de IA para conversar con Ukku.", "manual_actions_available": true}
+}

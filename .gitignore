@@ -26,3 +26,15 @@ logs/
 .idea/
 .DS_Store
 Thumbs.db
+
+# iOS: productos y estado local de Xcode
+DerivedData/
+.build/
+xcuserdata/
+*.xcuserstate
+*.ipa
+*.xcarchive/
+
+# Entregables empaquetados: se versionan las fuentes y los recursos descomprimidos
+*.zip
+.claude/

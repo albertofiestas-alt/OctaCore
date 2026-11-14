@@ -1,0 +1,10 @@
+Herramienta: ImageGen integrada. Estado: propuesta v2. Edición de logo Ukku v1 y aplicación en lámina.
+
+LOGO
+Use case: precise-object-edit / logo-brand.
+Edit the supplied transparent "ukku" spectacled bear mascot horizontal logo. Keep EXACT composition, silhouette, bear anatomy, species fur patches, eye expression, little smile, tilted top hat, and exact lowercase ukku lettering shapes. This is a controlled colorway refresh to BBVA's 2025 blue palette, not a new character.
+Replace plum wordmark and plum top hat with solid BBVA Electric Blue #001391. Replace lime hatband with BBVA Serene Blue #85C8FF. Replace dark brown bear fur, pupils, nose, mouth and facial dark details with near-black blue #000519. Replace all cream eye patches and muzzle with clean white #FFFFFF. White markings are fur patches, never spectacles. Keep subtle separation between hat and head. Make all fills FLAT SOLID, crisp smooth vector-like edges, no gradients, textures or shadows. No purple, lime, brown or cream remain.
+ONE horizontal logo on truly transparent background with generous margins. No extra text, no tagline, no bank logo, no new symbols, no background or checkerboard. The wordmark remains "ukku".
+
+LAMINA
+undefined

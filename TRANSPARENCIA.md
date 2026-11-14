@@ -2,6 +2,10 @@
 
 Qué decidió cada persona, qué hizo una herramienta de IA y cómo se verificó cada resultado.
 
+## Entrega nativa e identidad de Ukku (Alberto/Afi, 14-nov-2026)
+
+Alberto/Afi definió y aprobó la dirección del personaje y las cuatro pantallas. Codex generó los recursos raster con ImageGen y renderizó el saludo por capas, el parpadeo y los efectos de celebración. Claude (Fable 5.2 en la sesión de desarrollo) implementó la app SwiftUI e integró esos recursos. Se verificaron compilación y flujos en el simulador, con una grabación real y límites documentados en [UkkuApp/evidencias-premium/INFORME.md](UkkuApp/evidencias-premium/INFORME.md). La IA embebida no tiene credencial real y la app aún no consulta el servicio OctaCore. Ver [la entrega](docs/ukku-ios-entrega.md).
+
 | Fecha y hora | Quién | Qué | Herramienta de IA | Cómo se verificó |
 |---|---|---|---|---|
 | 14-nov 10:30 | Anderson | Estructura del repositorio, contratos del Anexo A, config, fixtures, `tareas.py`, pruebas de contrato | Claude Code generó el código a partir de la propuesta v5 con instrucciones de Anderson | `python tareas.py test` en verde; Anderson revisó los contratos contra el Anexo A |

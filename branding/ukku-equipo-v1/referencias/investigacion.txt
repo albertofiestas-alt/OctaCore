@@ -1,0 +1,35 @@
+INVESTIGACIÓN DE IDENTIDAD — CONSULTA: 14 NOV 2026
+
+1. BBVA Creative: New Brand
+https://www.bbvacreative.com/new-brand/
+Fuente primaria del equipo creativo. Documenta líneas limpias, accesibilidad, emoción, Tiempos BBVA, iconos sencillos, microilustraciones funcionales y una voz más clara y cercana.
+Aplicación propia: jerarquía sencilla, pocos recursos decorativos y Ukku como guía de acciones concretas. No reproducir ilustraciones del banco como si fueran propias.
+
+2. BBVA: identidad de marca, 26 mayo 2025
+https://www.bbva.com/es/innovacion/bbva-estrena-una-nueva-identidad-de-marca-mas-optimista-y-empatica/
+Fuente primaria corporativa. Explica el tono empático y comprensible y el despliegue iniciado en la app de España el 20 mayo 2025. No demuestra que todos los canales y países usen exactamente los mismos componentes.
+Aplicación propia: lenguaje que explica estimaciones y evita promesas exageradas.
+
+3. BBVA, publicación de la cuenta corporativa en LinkedIn
+https://es.linkedin.com/posts/bbva_nuestra-nueva-identidad-activity-7331982559184060416-uL_e
+Fuente primaria de BBVA que identifica expresamente Electric Blue #001391.
+Aplicación: azul principal del logo, títulos y botones.
+
+4. BBVA, La Base Awards: guía de diseño 2026, página 6 del PDF (índice de página 5)
+https://www.bbva.com/wp-content/uploads/2026/04/La-Base-Awards-BBVA-Guia-de-diseno.pdf
+Fuente primaria publicada en bbva.com. Identifica Serene Blue #85C8FF entre los fondos de tarjetas de débito. Es una guía para ese concurso, no el manual global completo de identidad. Sus condiciones del concurso no se trasladan como requisitos de este hackathon.
+Aplicación: celeste de acompañamiento y cinta del sombrero; el reparto de colores en Ukku es una decisión propia.
+
+5. W3C: contraste mínimo
+https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum
+Fuente normativa primaria explicativa. Establece 4,5:1 para texto normal, con excepciones, y 3:1 para texto grande.
+Aplicación propia: exigir al menos 4,5:1 en las parejas de texto que se entregan; mantener palabras y símbolos en los estados. Los contrastes calculados no acreditan por sí solos conformidad WCAG completa.
+
+ALCANCE DE LA INVESTIGACIÓN
+Se verificaron fuentes públicas primarias. No se obtuvo un manual global autorizado, una licencia de Tiempos BBVA ni una autorización de co-branding. No se presenta la mascota como un personaje oficial de BBVA.
+
+DECISIONES PROPIAS ELEGIDAS PARA UKKU
+Nombre y oso; sombrero; lettering; lema; serif Georgia como aproximación de presentación; interfaz con fuente del sistema; tinta #000519; superficie #F4F8FF; gris #506078; estados #17613D, #855400 y #B3261E; medidas de espaciado, radios y tamaños. Aunque algún valor pueda coincidir con otras guías, aquí se documenta como elección de implementación y no como especificación oficial verificada.
+
+APROBACIÓN Y PROCEDENCIA
+El usuario eligió la lámina de identidad azul v2 al compartir una captura. La captura no se usó para redibujar el logo. El kit conserva los originales generados previamente; los prompts están en prompts-origen.txt.

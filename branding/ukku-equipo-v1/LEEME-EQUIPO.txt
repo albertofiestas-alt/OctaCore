@@ -1,0 +1,54 @@
+UKKU — ENTREGA AL EQUIPO — 14 NOVIEMBRE 2026
+
+DECISIÓN ELEGIDA POR EL USUARIO
+Usar la identidad azul de la captura compartida: oso de anteojos con sombrero de copa, logo horizontal ukku, Electric Blue + Serene Blue + blanco. Las tres exploraciones posteriores (Mirada, Cómplice y Sello) no son la dirección elegida.
+
+EMPEZAR AQUÍ
+1. Abrir GUIA-DE-MARCA.html en cualquier navegador. Funciona sin internet; las fuentes de referencia abren enlaces externos.
+2. Diseño y frontend: usar activos/ukku-logo-horizontal.png e implementacion/ukku.css.
+3. Streamlit: copiar manualmente implementacion/streamlit-config.toml a .streamlit/config.toml del proyecto y adaptar los componentes al tema. No está instalado automáticamente.
+4. Textos: usar implementacion/textos.es.json. Ningún monto de ejemplo debe conectarse como resultado real.
+5. Abrir implementacion/muestra-componentes.html para ver botones, estados y tarjeta de disponible.
+
+RESUMEN PARA COMPARTIR
+Nombre: Ukku. Pronunciación: ú-ku.
+Lema: Tu plata, con un plan.
+Frase secundaria: Mira tus pagos. Decide tu día.
+Qué hace: ayuda a personas con ingresos variables a estimar cuánto pueden gastar hoy teniendo en cuenta sus próximos pagos.
+Personalidad: clara, cercana, ingeniosa y serena.
+Mascota: oso de anteojos con manchas blancas de pelaje y sombrero azul con cinta celeste.
+Colores principales: #001391, #85C8FF, #FFFFFF.
+Titulares de presentación: Georgia, Times New Roman, serif como aproximación disponible según dispositivo.
+Interfaz: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif.
+La tipografía Tiempos BBVA se menciona como referencia oficial: no se distribuye ni se presupone licencia de uso.
+
+REPARTO SUGERIDO SEGÚN LA GUÍA DEL REPOSITORIO
+Jesús: aplicar la identidad en Hoy y Plan; navegación consistente.
+Alberto: Por qué, Carga y Evaluación; consistencia visual y comprensión.
+Anderson: valores reales, fallos y estados del servicio; registro y aviso.
+Rafael y Gino: métricas y explicaciones comprobables para Evaluación.
+Todo el equipo: usar los mismos nombres de pantallas, estados y colores.
+Este reparto organiza el traspaso; no envía instrucciones ni mensajes a otras personas.
+
+ANTES DE LA DEMO
+[ ] No mezclar identidades OctaCore, ciruela/lima ni logos exploratorios.
+[ ] Mantener las firmas y contratos del repositorio; cambiar la marca visible no requiere renombrar paquetes.
+[ ] Mostrar «Datos de ejemplo» cuando corresponda.
+[ ] Revisar sin historia, importe cero, error de carga y servicio no disponible.
+[ ] Probar las cinco pantallas a 360 y 390 px y con zoom del 200%.
+[ ] Tabulación, foco visible y etiquetas de campos.
+[ ] Comprobar que la cifra y los pagos vienen del servicio.
+[ ] No afirmar vinculación oficial del banco que no esté acreditada.
+
+ESTADO DE LOS ARCHIVOS
+Dirección visual: elegida por el usuario en esta conversación.
+Logo: PNG raster original generado, RGBA con transparencia; se conserva sin redibujar.
+Lámina: aplicación conceptual; no es captura de una app terminada.
+CSS, TOML, JSON y ejemplos: especificaciones de implementación listas para integrar, sin cambios al producto.
+Pendiente: maestro vectorial, símbolo aislado exacto, versiones a una tinta/negativo y pruebas reales en dispositivos.
+No extraer iconos ni logos de la captura o de la lámina: usar el archivo original horizontal y preparar las variantes desde ese original.
+No se incluye una comprobación registral del nombre ni archivos de fuentes de terceros.
+
+FUENTES
+Las URLs, hallazgos y diferencias entre referencias oficiales y decisiones de Ukku están en referencias/investigacion.txt.
+No se distribuyen manuales internos ni se afirma que esta guía sea el manual oficial completo de BBVA.

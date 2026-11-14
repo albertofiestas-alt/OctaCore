@@ -3,6 +3,11 @@
 > Orientación educativa basada en una simulación con datos ficticios. No es asesoría financiera ni ejecuta operaciones.
 
 Hackathon de Ingeniería BBVA · AI Financial Life · 14 y 15 de noviembre de 2026.
+
+## App iOS e identidad de Ukku
+
+La entrega nativa SwiftUI, el personaje aprobado, sus animaciones y la identidad visual están documentados en [docs/ukku-ios-entrega.md](docs/ukku-ios-entrega.md). El código de la app está en [UkkuApp/](UkkuApp/), separado de la interfaz Python del equipo. Esta app es una demo con cálculo y persistencia locales; todavía no está conectada al servicio OctaCore ni a una API de IA con credencial real.
+
 El documento fuente es la propuesta **v9** ([asignaciones/Resumen_propuesta_hackathon_BBVA_v9.docx](asignaciones/Resumen_propuesta_hackathon_BBVA_v9.docx)). Si algo contradice a la v9, manda la v9. Los cambios los aprueba Gino y se anotan en [DECISIONES.md](DECISIONES.md).
 
 ## Lectura de asignaciones

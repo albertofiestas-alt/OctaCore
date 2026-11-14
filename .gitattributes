@@ -1,5 +1,9 @@
 # LF en todas las laptops: evita diffs falsos y hashes distintos entre Windows y macOS/Linux.
 * text=auto eol=lf
 *.png binary
+*.gif binary
+*.mp4 binary
+*.mov binary
+*.heic binary
 *.jpg binary
 *.parquet binary

@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Inventario y catálogo local. Solo lee medios, nunca modifica imágenes."""
+from pathlib import Path
+import json, hashlib, html, mimetypes, datetime
+from PIL import Image
+ROOT=Path(__file__).resolve().parent
+OUT={'creado':datetime.datetime.now(datetime.timezone.utc).isoformat(),'criterio':'Personaje raster derivado del logo maestro. Excluye el rig vectorial anterior.','archivos':[],'clips':[]}
+for p in sorted(ROOT.rglob('*')):
+    if not p.is_file() or p.suffix.lower() not in ('.png','.gif','.mp4','.mov','.webm'):continue
+    r=p.relative_to(ROOT).as_posix()
+    d={'ruta':r,'bytes':p.stat().st_size,'mime':mimetypes.guess_type(p.name)[0],'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
+    if p.suffix.lower() in ('.png','.gif'):
+        with Image.open(p) as im:
+            d.update(ancho=im.width,alto=im.height,modo=im.mode,fotogramas=getattr(im,'n_frames',1),canal_alfa=('A' in im.getbands() or 'transparency' in im.info))
+            if d['canal_alfa']:
+                a=im.convert('RGBA').getchannel('A'); d.update(alfa_min=a.getextrema()[0],alfa_max=a.getextrema()[1],transparencia_real=a.getextrema()[0]<255,bbox_alfa_mayor_32=a.point(lambda v:255 if v>32 else 0).getbbox())
+    OUT['archivos'].append(d)
+for p in sorted(ROOT.rglob('manifest.json')):
+    frames=sorted(p.parent.glob('[0-9][0-9][0-9][0-9].png'))
+    if frames:
+        m=json.loads(p.read_text()); OUT['clips'].append({'nombre':p.parent.name,'manifest':p.relative_to(ROOT).as_posix(),'fps':m.get('fps',24),'loop':m.get('loop',False),'escala':m.get('escala',1),'frames':[f.relative_to(ROOT).as_posix() for f in frames]})
+(ROOT/'inventario.json').write_text(json.dumps(OUT,ensure_ascii=False,indent=2)+'\n')
+def esc(s):return html.escape(str(s),quote=True)
+def card(d):
+    r=d['ruta']; name=Path(r).stem.replace('-',' ').replace('_',' ')
+
+    if Path(r).suffix.lower() in ('.mp4','.mov','.webm','.gif'):name+=' · vista '+Path(r).suffix[1:].upper()
+    meta=f"{d.get('ancho','?')} × {d.get('alto','?')} · {d['bytes']/1024:.0f} KB" if 'ancho'in d else f"{d['bytes']/1024/1024:.1f} MB"
+    alpha=' · alfa real' if d.get('transparencia_real') else ''
+    media=f'<video controls playsinline preload="metadata" src="{esc(r)}"></video>' if d['mime'] and d['mime'].startswith('video') else f'<img loading="lazy" src="{esc(r)}" alt="{esc(name)}">'
+    return f'<article class="card"><div class="stage">{media}</div><div class="info"><h3>{esc(name)}</h3><p>{esc(meta+alpha)}</p><a href="{esc(r)}" download>Descargar archivo ↗</a></div></article>'
+sections=[]
+for title,prefix,desc in [('Referencia','referencia/','Logo maestro que fija la apariencia del personaje.'),('Capas','capas/','Piezas raster independientes para componer gestos.'),('Expresiones','estados/','Estados que acompañan el contexto financiero.'),('Escenas','escenas/','Ilustraciones para los momentos de la experiencia.')]:
+    files=[d for d in OUT['archivos'] if d['ruta'].startswith(prefix)]
+    if files:sections.append(f'<section><div class="section-head"><h2>{title}</h2><p>{desc}</p></div><div class="grid">'+''.join(map(card,files))+'</div></section>')
+cliphtml=[]
+for i,c in enumerate(OUT['clips']):
+    motion_note=' · expresión estática' if c['nombre'] in ('reposo-atento','reposo-revisar') else ''
+    cliphtml.append(f'<article class="card"><div class="stage"><img id="clip-{i}" src="{esc(c["frames"][0])}" alt="Animación {esc(c["nombre"])}"></div><div class="info"><h3>{esc(c["nombre"])}</h3><p>{len(c["frames"])} fotogramas · {c["fps"]} fps · {len(c["frames"])/c["fps"]:.2f} s · {"bucle" if c["loop"] else "una vez"}{motion_note}</p><div class="controls"><button data-clip="{i}">Reproducir</button><button class="reset" data-reset="{i}">Reiniciar</button><a href="{esc(c["manifest"])}">Manifest ↗</a></div></div></article>')
+previews=[d for d in OUT['archivos'] if Path(d['ruta']).suffix.lower() in ('.mp4','.mov','.webm','.gif')]
+if cliphtml or previews:sections.append('<section><div class="section-head"><h2>Animaciones</h2><p>Reproducción manual. Los fotogramas transparentes son los archivos para integrar en iOS.</p></div><div class="grid">'+''.join(cliphtml)+''.join(map(card,previews))+'</div></section>')
+sources=[p for p in sorted(ROOT.glob('*.txt'))]+sorted((ROOT/'animacion').glob('*.swift'))
+src=''.join(f'<a href="{esc(p.relative_to(ROOT).as_posix())}">{esc(p.stem.replace("-"," "))} ↗</a>' for p in sources)
+css='''*{box-sizing:border-box}body{margin:0;background:#f5f8fc;color:#080e22;font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1200px;margin:auto;padding:48px 28px 80px}header{padding:24px 0 36px;border-bottom:1px solid #dce4ef}.eyebrow{color:#001391;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}h1{font-size:clamp(40px,6vw,72px);line-height:1.05;letter-spacing:-.055em;margin:16px 0}header p{max-width:640px;font-size:18px;color:#566078}.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:24px}button,.pill{border:1px solid #d2daea;background:white;color:#001391;padding:10px 16px;border-radius:99px;font:inherit;font-weight:600;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #85c8ff;outline-offset:4px}a{color:#001391;text-decoration:none}a:hover{text-decoration:underline}section{margin-top:48px}.section-head{margin-bottom:20px}.section-head h2{font-size:27px;letter-spacing:-.035em;margin:0}.section-head p{color:#647089;margin:5px 0}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}.card{overflow:hidden;background:white;border:1px solid #e0e7f0;border-radius:22px}.stage{aspect-ratio:1;display:grid;place-items:center;padding:18px;background-color:white;background-image:linear-gradient(45deg,#eff3f8 25%,transparent 25%),linear-gradient(-45deg,#eff3f8 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#eff3f8 75%),linear-gradient(-45deg,transparent 75%,#eff3f8 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}.white .stage{background-image:none}.stage img,.stage video{width:100%;height:100%;max-height:100%;object-fit:contain;min-width:0;min-height:0}.info{padding:18px 20px 22px}.info h3{font-size:18px;text-transform:capitalize;margin:0 0 5px}.info p{font-size:13px;color:#647089;margin:0 0 14px}.info a{font-size:13px;font-weight:600}.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.controls button{font-size:12px;padding:7px 11px}.controls .reset{border-color:transparent}footer{margin-top:48px;padding-top:24px;border-top:1px solid #dce4ef;color:#647089;font-size:13px}footer nav{display:flex;gap:16px;flex-wrap:wrap;margin:18px 0}footer p{max-width:760px}'''
+js='''const clips=CLIPS;const states=clips.map(()=>({playing:false,index:0,last:0}));document.querySelector('#background').onclick=()=>{document.body.classList.toggle('white');document.querySelector('#background').setAttribute('aria-pressed',document.body.classList.contains('white'));};document.querySelectorAll('[data-clip]').forEach(b=>b.onclick=()=>{let i=+b.dataset.clip,s=states[i];s.playing=!s.playing;s.last=0;if(s.playing&&!s.preloaded){s.preloaded=true;s.cache=clips[i].frames.map(src=>{const im=new Image();im.src=src;return im;});}b.textContent=s.playing?'Pausar':'Reproducir';if(s.index>=clips[i].frames.length-1){s.index=0;document.querySelector('#clip-'+i).src=clips[i].frames[0];}});document.querySelectorAll('[data-reset]').forEach(b=>b.onclick=()=>{let i=+b.dataset.reset;states[i]={playing:false,index:0,last:0};document.querySelector('#clip-'+i).src=clips[i].frames[0];document.querySelector('[data-clip="'+i+'"]').textContent='Reproducir';});function tick(t){clips.forEach((c,i)=>{let s=states[i];if(!s.playing)return;if(!s.last)s.last=t;if(t-s.last>=1000/c.fps){s.index++;s.last=t;if(s.index>=c.frames.length){if(c.loop)s.index=0;else{s.index=c.frames.length-1;s.playing=false;document.querySelector('[data-clip="'+i+'"]').textContent='Reproducir';}}document.querySelector('#clip-'+i).src=c.frames[s.index];}});requestAnimationFrame(tick);}requestAnimationFrame(tick);document.addEventListener('visibilitychange',()=>{if(document.hidden)states.forEach((s,i)=>{s.playing=false;document.querySelector('[data-clip="'+i+'"]').textContent='Reproducir';});});'''.replace('CLIPS',json.dumps(OUT['clips'],ensure_ascii=False).replace('</','<\\/'))
+page=f'''<!doctype html><html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ukku · Personaje original</title><style>{css}</style><main><header><div class="eyebrow">Ukku / Biblioteca del personaje</div><h1>El oso original.<br>En cada momento.</h1><p>Capas, expresiones, escenas y movimiento derivados de la referencia aprobada, reunidos para diseño y desarrollo.</p><div class="tools"><button id="background" aria-pressed="false">Alternar fondo blanco</button><a class="pill" href="inventario.json">Inventario técnico ↗</a></div></header>{''.join(sections)}<footer><strong>Fuentes y entrega</strong><nav>{src}</nav><p>La referencia maestra fija la identidad. Este catálogo incluye exclusivamente los archivos presentes en esta carpeta; el rig vectorial anterior queda excluido. Las dimensiones, peso y transparencia de cada imagen se registran leyendo el archivo real en inventario.json.</p><p>Los clips arrancan pausados para respetar las preferencias de movimiento. Ejecutar generar_catalogo.py regenera el catálogo sin modificar medios.</p></footer></main><script>{js}</script></html>'''
+(ROOT/'CATALOGO.html').write_text(page)
+print(json.dumps({'imagenes_y_videos':len(OUT['archivos']),'clips':len(OUT['clips']),'catalogo':str(ROOT/'CATALOGO.html')},ensure_ascii=False))

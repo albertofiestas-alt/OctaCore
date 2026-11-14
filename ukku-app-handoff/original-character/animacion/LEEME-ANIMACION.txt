@@ -1,0 +1,31 @@
+UKKU ORIGINAL — ENTREGA DE ANIMACIÓN RASTER POR CODEX
+
+Se retiró el rig vectorial reinterpretado. Está conservado en premium-motion/archivo-vector-retirado y NO debe integrarse.
+
+MAESTRO
+UkkuApp/Sources/Assets.xcassets/ukku-maestro.imageset/ukku-maestro.png, imagen original recortada de 692×692. No se redibujó su rostro. El saludo usa las capas ImageGen body-nohat, hat y arm-paw derivadas del maestro; se componen durante el gesto y vuelve al maestro exacto al inicio/final.
+
+ENTREGA FINAL
+Los fotogramas están en original-character/renderizados/ y copiados idénticos a UkkuApp/Personaje/.
+- saludo: 72 PNG / 24 fps / 3 s / no loop / escala 0.65. Aproximación de pata al ala, elevación diagonal de sombrero, pausa, inclinación breve de cabeza, reposición y vuelta al maestro.
+- reposo: 72 PNG / 24 fps / 3 s / loop. Maestro intacto salvo máscaras transitorias de párpados sobre los ojos a 1.88–2.14 s. No es una imagen flotando.
+- reposo-bien: copia exacta de reposo; el estado normal usa el rostro maestro con parpadeo.
+- reposo-sin-datos: copia exacta de reposo; el semáforo neutral lo añade la app.
+- reposo-atento y reposo-revisar: expresiones raster derivadas por ImageGen del maestro. Se entregan como expresiones estáticas en secuencia continua, sin inventar acting ni mover toda la imagen.
+- celebra: 24 PNG / 24 fps / 1 s / no loop / escala 0.8. Personaje exacto estático acompañado de un check y tres rayos independientes, con aparición/desaparición breve. No es una nueva cara.
+
+CALIDAD Y LIMITACIONES
+Se revisaron primer fotograma, contacto, pico de retiro del sombrero, retorno, párpados cerrados, estado y celebración. No se afirma que las capas derivadas sean píxel-idénticas al maestro. El rostro del maestro se preserva en los bookends y en el reposo normal.
+El brazo está detrás del rostro para que no cubra sus ojos. La pata mantiene tamaño fijo; se adapta solo el antebrazo entre hombro y agarre.
+Todos los clips usan 480×480 RGBA sRGB y numeración contigua. Los bucles tienen primer y último PNG idénticos byte a byte. Ninguno supera 96 fotogramas.
+El peso por PNG supera en algunos casos el ideal de 60 KB por la textura del maestro; se conserva la transparencia y nitidez. No se aplicó cuantización destructiva.
+
+INTEGRACIÓN
+Claude solo reproduce los PNG. No redibuja, retoca ni genera el personaje. Con Reducir movimiento se mantiene la imagen maestra estática. El player pausa al salir de foreground. El halo y texto de estado son parte de la app, no de los sprites.
+
+REPRODUCIBILIDAD
+RenderOriginal.swift usa AppKit/CoreGraphics para recortar únicamente cuadros alfa de capas, transformar partes, componer y codificar PNG. No genera ilustración por código. Ejecutar desde la raíz del workspace:
+swiftc ukku-app-handoff/original-character/animacion/RenderOriginal.swift -o /tmp/ukku-original-render
+/tmp/ukku-original-render
+
+Las previews MP4/GIF y el catálogo los genera el agente de catálogo a partir de estos PNG. Las vistas previas con fondo blanco no sustituyen los PNG transparentes de integración.

@@ -1,0 +1,9 @@
+# Copiar a .streamlit/config.toml al integrar. Dirección Ukku elegida.
+# Solo usa opciones básicas del tema. Aplicar el resto en los componentes.
+[theme]
+base = "light"
+primaryColor = "#001391"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F4F8FF"
+textColor = "#000519"
+font = "sans serif"

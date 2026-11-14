@@ -1,0 +1,14 @@
+VERIFICACIÓN DE ENTREGA
+
+- Logo original elegido conservado sin cambios: igualdad SHA-256 comprobada.
+- PNG RGBA con transparencia disponible.
+- Enlaces locales de los HTML comprobados.
+- JSON y TOML analizados sin errores.
+- Siete parejas de color para texto superan 4,5:1; resultados en tokens.json.
+- Integridad del ZIP y lista de archivos comprobadas.
+
+LÍMITES
+- No se completó una revisión visual renderizada del manual: el navegador de automatización no estaba disponible y el navegador headless no pudo iniciarse.
+- No se ha aplicado el tema al producto ni probado Streamlit.
+- No se han probado dispositivos reales, zoom, teclado o lector de pantalla.
+- El logo es raster; no hay maestro vectorial ni variantes independientes exactas del símbolo.
