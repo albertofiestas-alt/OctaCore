@@ -1,6 +1,6 @@
 # Reporte de calidad de los datos sinteticos
 
-Generado con semilla 20261114, version 1.0, hash 30d573b1523a4d24. Tiempo: 26 s.
+Generado con semilla 20261114, version 1.0, hash 30d573b1523a4d24.
 
 ## Resultado de las comprobaciones
 
