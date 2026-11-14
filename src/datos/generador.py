@@ -1,6 +1,6 @@
 """Generador sintetico del proyecto (dueno: Rafael).
 
-Uso:  python -m src.datos.generador [--n 400] [--semilla 12345] [--salida data]
+Uso:  python -m datos [--n 400] [--semilla N] [--salida data]   (sin --semilla usa semilla_generador de config/base.yaml)
 Genera data/generado/movimientos.csv, movimientos_perturbado.csv, data/muestra/movimientos.csv y data/REPORTE_DATOS.md.
 Todo parametro marcado [SUPUESTO] se ajusta para que la plausibilidad salga razonable (ver verificar()).
 Los datos son ficticios: ningun nombre, DNI, telefono ni cuenta reales.
@@ -398,12 +398,15 @@ RAIZ = Path(__file__).resolve().parents[2]
 
 
 def _semilla_config() -> int:
-    """La semilla vive en config/config.yaml (semilla_generador). Si no se puede leer, usa la misma del archivo."""
+    """La semilla vive en config/base.yaml (semilla_generador). Si no se puede leer, falla: nunca hay semilla por defecto."""
+    from contratos.config import RUTA_CONFIG, cargar_config
     try:
-        from contratos.config import cargar_config
-        return int(cargar_config().semilla_generador)
-    except Exception:
-        return 20261114
+        return int(cargar_config()["semilla_generador"])
+    except Exception as e:
+        raise RuntimeError(
+            f"No se pudo leer semilla_generador de {RUTA_CONFIG}: {e}. "
+            "Corrige la configuración o pasa la semilla explícita (generar(..., semilla=...))."
+        ) from e
 
 
 def main(argv=None):
