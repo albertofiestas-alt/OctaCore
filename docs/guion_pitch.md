@@ -8,7 +8,7 @@
 | 0:40 a 1:40 | 2. Solución | Un número de hoy, un semáforo y un porqué |
 | 1:40 a 3:00 | 3. Evidencia | Pre-registramos, medimos y el modelo no ganó: usamos regla2 y lo decimos |
 | 3:00 a 3:30 | 4. Responsabilidad | Sin IA generativa en el núcleo, cifras verificables, datos sintéticos |
-| 3:30 a 4:20 | 5. Lo que aprendimos | Dos hallazgos incómodos, dichos antes de que pregunten |
+| 3:30 a 4:20 | 5. Lo que aprendimos | Tres hallazgos incómodos, dichos antes de que pregunten |
 | 4:20 a 5:00 | 6. Roadmap y cierre | Metas de ahorro y señal de elegibilidad revisada por una persona |
 
 ## 1. Problema (0:40)
@@ -26,7 +26,8 @@
 - **Pre-registramos antes de evaluar:** regla de adopción (mejora mínima 2,0 S/día a igual % de pagos descubiertos), cuantil 0,20, 20 semillas. Commit `005fb50`, 14-nov 11:58:29.
 - **La escalera sí sirvió:** regla2 baja los pagos descubiertos de 6,87 % (regla1) a 2,69 % con casi el mismo gasto (84,91 → 83,75 S/día) [respaldo] (`DECISIONES.md` #23, rama `feat/gino-eval-frontera`, `b4dc7d7`).
 - **El modelo NO superó a regla2.** Al mismo cuantil, con 20 pares de semillas: **+0,43 pp de descubiertos [IC95 0,31; 0,56]** y **+0,31 S/día [0,27; 0,36]** [respaldo] (`eval/resultados/pares.csv`, `63d75db`). Se mueve a lo largo de la frontera, no la supera; la mejora a igual % de descubiertos fue −0,68 (prueba) y +0,06 (perturbado) frente al umbral de 2,0 [respaldo] (#23). **No se adopta: usamos regla2 y lo decimos.**
-- **Asistente, dos conjuntos ciegos de 42 preguntas, solo intención, modo 1:** 31/42 = **74 % [IC 59 a 85]** (el primero, que después pasó a desarrollo: `DECISIONES.md` #27) y 34/42 = **81 % [67 a 90]** (el segundo; `data/chat/ciego2_preguntas.csv`, `7f978c4`, rama `feat/gino-asistente-v2`). Los intervalos se solapan: no probamos que mejoró. Umbral de confianza 0,30 fijado antes (#24).
+- **Se repitió con el generador 1.1** (el gasto reacciona al saldo, `DECISIONES.md` #26): regla2 al P20 8,68 % de descubiertos con S/ 34,12 por día; modelo 9,51 % con S/ 34,37; gasto fijo 36,15 %; mejora −0,79 (prueba) y −0,16 (perturbado) frente al umbral de 2,0: no adopta [respaldo] (`eval/resultados/frontera_v11.csv` y `adopcion_v11.json`, rama `feat/gino-eval-frontera`, `536eca8`). Tampoco adopta con la ingesta oficial sobre el 1.0, sin el parche de abajo (`adopcion_v10_ingesta.json`: −0,10 y −0,13) [respaldo]. Pares IC95 del 1.1: **[por citar]**.
+- **Asistente, dos conjuntos ciegos de 42 preguntas, solo intención, modo 1:** 31/42 = **74 % [IC 59 a 85]** (el primero, que después pasó a desarrollo) y 34/42 = **81 % [67 a 90]** (el segundo, medido después de mejorar). Los intervalos se solapan: no probamos que mejoró. Umbral de confianza 0,30 fijado antes (`DECISIONES.md` #24 y #27). Detalle: `docs/resultados_chat.md`, `eval/resultados/chat_ciego1.csv` y `chat_ciego2.csv`.
 
 ## 4. Responsabilidad (0:30)
 - **Sin IA generativa en el núcleo** (`DECISIONES.md` #20): el porqué lo redactan plantillas con las cifras del motor; la capa generativa está apagada.
@@ -35,8 +36,9 @@
 - **Límites que decimos nosotros:** no hay datos reales de BBVA; la guardia de entrada del asistente aún no está implementada; el semáforo de las evaluaciones sale del respaldo [respaldo].
 
 ## 5. Lo que aprendimos (0:50)
-1. **El semáforo sin el calendario del sueldo marca rojo a quien gasta todo lo permitido** (diagnóstico de Pedro; **[origen por citar: no encontré el archivo en el repositorio]**). Coherente con lo que vimos: ningún asalariado calificó a "verde 6 meses" [respaldo] (`elegibilidad_tasas.csv`).
-2. **Una señal de elegibilidad por "verde sostenido" premia la austeridad.** Con 25 % menos de gasto, quienes califican suben de 5,0 % a 19,8 % (20 → 79 de 400) [respaldo] (`eval/resultados/elegibilidad_incentivo.csv`, rama `feat/gino-criterios-elegibilidad`, `6f12d6d`). Los técnicos quedan en 0 % antes y después. La métrica de brecha (0,145, bajo el umbral 0,20) no lo captura porque casi nadie califica; lo declaramos.
+1. **El semáforo sin el calendario del sueldo marca rojo a quien gasta todo lo permitido.** Los asalariados pasan una mediana de 63,5 días al año en rojo; sin gastar el número de hoy, 0 días rojos y 365 verdes. Causa: el número usa P20, el verde exige cubrir con P5 y no hay calendario de sueldo [respaldo, generador 1.0; hay que repetirlo con el 1.1] (`docs/diagnostico_asalariados_rojo.md`, `a3d4e05`, rama `feat/gino-eval-frontera`).
+2. **Una señal de elegibilidad por "verde sostenido" premia la austeridad.** Con 25 % menos de gasto, quienes califican suben de 5,0 % a 19,8 % (20 → 79 de 400) con el generador 1.0 y de 4,8 % a 19,8 % (19 → 79) con el 1.1 [respaldo] (`eval/resultados/elegibilidad_1_0_vs_1_1.csv`, `DECISIONES.md` #35, rama `feat/gino-elegibilidad-v11`). Solo conductores y vendedoras califican; 3 de 5 arquetipos quedan en 0 %. La brecha absoluta (0,145, bajo el umbral 0,20) no lo marca; la razón de tasas (0,0) sí, y lo declaramos.
+3. **Medir encontró un error nuestro en la ingesta:** marcaba como atípico todo el alquiler y la deuda, así que el producto no veía el alquiler. Con el parche, el recall de pagos inferidos pasa de 42,2 % a 96,2 % y la precisión de 97,6 % a 97,8 % (datos sintéticos; `DECISIONES.md` #31, commit `2647fd7`, `eval/_medir_pagos_inferidos.py`; **visto de Mathias pendiente**).
 
 ## 6. Roadmap y cierre (0:40)
 - **Metas de ahorro** (ejemplo: un departamento) con el mismo motor de ingresos: la meta como un pago futuro con fecha **[propuesto, por medir]**.
