@@ -1,19 +1,17 @@
 """Capa 2: motor de decisión (número de hoy por fecha de pago, semáforo, confianza, propuestas).
 
-Dueño: Sebastián. Esqueleto V0 (Anexo E): reemplaza el cuerpo, NO la firma.
-Función pura: no lee archivos ni la hora. El servicio pone respaldo y registro_id.
+Dueño: Sebastián. La firma de decidir es fija (contratos/firmas.py): se reemplaza el cuerpo, nunca la firma.
+Función pura: no lee archivos ni la hora. El servicio pone respaldo y registro_id
+(con_registro_id copia el id que generó el servicio a la Decision y a su desglose).
+
+Archivos:
+    decidir.py      fórmula por fecha de pago, semáforo, confianza, propuesta, desglose y evidencia
+    plantillas.py   supuestos, límites, explicación y textos de propuesta (toda cifra sale del desglose)
+    verificador.py  comprueba que cada cifra de los textos tenga origen en el estado, desglose o evidencia
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from motor.decidir import con_registro_id, decidir
 
-if TYPE_CHECKING:
-    from contratos import Config, Decision, EstadoPersona, Pronostico
-
-
-def decidir(estado: EstadoPersona, pronostico: Pronostico, cfg: Config) -> Decision:
-    raise NotImplementedError("motor con el caso del orden de pagos: 12:30 (Sebastián)")
-
-
-__all__ = ["decidir"]
+__all__ = ["con_registro_id", "decidir"]
