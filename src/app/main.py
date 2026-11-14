@@ -10,7 +10,8 @@ import streamlit as st  # noqa: E402
 from app import componentes as c  # noqa: E402
 
 c.pagina("Inicio")
-st.title("¿Cuánto puedo gastar hoy sin fallar a un pago con fecha?")
+st.title("Ukku")
+st.subheader("¿Cuánto puedo gastar hoy sin fallar a un pago con fecha?")
 c.banner_ejemplo()
 st.write("Elige una pantalla:")
 st.page_link("pages/1_Hoy.py", label="Hoy: tu número y tus pagos")

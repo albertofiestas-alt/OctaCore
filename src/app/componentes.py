@@ -63,7 +63,7 @@ def selector() -> tuple[str, object]:
 
 
 def pagina(titulo: str) -> None:
-    st.set_page_config(page_title=f"OctaCore · {titulo}", layout="centered")
+    st.set_page_config(page_title=f"Ukku · {titulo}", layout="centered")
     tema.aplicar()
 
 
