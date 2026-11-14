@@ -1,0 +1,50 @@
+# Parámetros del generador sintético (dueño: Rafael). Se leen como cfg["datos"].
+# Todos son [SUPUESTO]. Se ajustan SOLO para que las métricas de realismo de
+# data/REPORTE_DATOS.md parezcan reales; NUNCA mirando resultados del modelo ni de las reglas.
+
+version_generador: "1.1"
+
+# Cambio A: el gasto discrecional (alimentacion, transporte, otros) reacciona al dinero disponible.
+#   gasto = (base_minima + propension * max(0, saldo - reserva)) * ruido
+#   reserva = colchon_objetivo + prevision * (pagos con fecha + gasto mínimo de los próximos dias_prevision días)
+# Los pagos con fecha NO se recortan: si no alcanza, el saldo queda negativo ese día.
+gasto:
+  # [SUPUESTO] fracción del exceso que se gasta en cada compra. Por arquetipo: quien cobra a diario gasta a diario;
+  # quien cobra cada una o dos semanas reparte el dinero hasta el siguiente cobro. Cada persona cae en el mismo
+  # punto relativo del rango (si cambia de arquetipo en el año 2, cambia de rango).
+  propension:
+    conductor: [0.30, 0.60]
+    vendedora: [0.30, 0.60]
+    comisionista: [0.12, 0.30]
+    tecnico: [0.06, 0.15]
+    asalariado: [0.06, 0.15]
+  colchon_objetivo: [50, 300]       # [SUPUESTO] soles (por persona)
+  prevision: [0.3, 1.0]             # [SUPUESTO] fracción de lo próximo (pagos + gasto mínimo) que la persona aparta (por persona)
+  dias_prevision: 14                # [SUPUESTO]
+  base_minima: [0.30, 0.60]         # [SUPUESTO] fracción del disponible diario (ingreso - pagos fijos) / 30 (por persona)
+  piso_base: 4                      # [SUPUESTO] soles por día de gasto mínimo
+  recorte_sin_saldo: 0.6            # [SUPUESTO] con saldo <= 0 el gasto mínimo baja a esta fracción
+  ruido_sigma: 0.5                  # [SUPUESTO] ruido lognormal de media 1
+  estacional: {7: 1.10, 12: 1.30}   # [SUPUESTO] gasto mínimo extra en Fiestas Patrias y Navidad (ya estaba en la v1.0)
+  saldo_inicial: [1.0, 1.5]         # [SUPUESTO] saldo del día 1 en múltiplos de la reserva de ese día (arranque en régimen)
+
+# Cambio B: hora del ingreso por arquetipo, uniforme en [desde, hasta).
+horas_ingreso:
+  conductor: [6, 23]                # viajes repartidos en el día
+  vendedora: [7, 21]                # ventas repartidas en el día
+  tecnico: [9, 18]                  # honorarios en horario de oficina
+  comisionista: [9, 18]             # comisiones en horario de oficina
+  asalariado: [6, 10]               # sueldo en la mañana
+
+# Cambio C: PII ficticia dentro del texto de comercio. La verdad va a data/generado/verdad_eventos.csv.
+pii:
+  tasa: 0.005                       # fracción de las filas
+  tipos: {dni: 0.4, telefono: 0.4, correo: 0.2}
+  dominio_correo: correo-ficticio.example   # dominio reservado (RFC 2606): no existe
+
+# Comprobaciones de realismo (pruebas en tests/unit/datos/test_realismo.py).
+comprobaciones:
+  max_razon_saldo_m24_m6: 1.5       # [SUPUESTO] el saldo mediano del mes 24 no supera N veces el del mes 6
+  max_dias_de_ingreso: 15           # [SUPUESTO] saldo mediano en días de ingreso típico: "pocos días"
+  min_corr_ingreso_gasto: 0.2       # [SUPUESTO] correlación semanal ingreso vs gasto discrecional "claramente positiva"
+  max_pct_ingresos_misma_hora: 20   # [SUPUESTO] ningún reloj fijo (la v1.0 tenía 100 % a las 20:00)

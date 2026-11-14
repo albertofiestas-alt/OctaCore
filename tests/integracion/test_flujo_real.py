@@ -2,7 +2,8 @@
 
 archivo -> ingesta -> regla 2 -> motor -> servicio -> Decision registrada y auditable.
 
-Ingesta, reglas y motor ya son reales: se quitó la marca xfail(strict=True) (control 1 listo).
+Estuvo marcado xfail(strict=True) mientras ingesta, reglas y motor eran esqueletos.
+El 14-nov, con ingesta (PR #2) y motor (PR #3) en main, empezó a pasar: control 1 listo.
 """
 
 from __future__ import annotations

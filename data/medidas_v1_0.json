@@ -1,0 +1,260 @@
+{
+  "version_generador": "1.0",
+  "semilla": 20261114,
+  "hash": "30d573b1523a4d24",
+  "nota": "Foto fija de la v1.0 (semilla 20261114) medida con medir_realismo() de la v1.1. Solo para la tabla antes/despues.",
+  "completo": {
+    "total": {
+      "personas": 400,
+      "saldo_mediano_fin_mes": {
+        "m1": 1118.0,
+        "m6": 2389.0,
+        "m12": 4200.0,
+        "m18": 5988.0,
+        "m24": 7804.0
+      },
+      "saldo_en_dias_de_ingreso": 65.2,
+      "corr_semanal_ingreso_gasto": 0.02,
+      "pct_personas_saldo_negativo_en_pago": 43.8,
+      "pct_pagos_con_saldo_negativo": 5.5,
+      "pct_filas_saldo_negativo": 4.9,
+      "ingreso_mensual_medio": 1944.0,
+      "pct_con_mes_en_deficit_ano2": 81.0,
+      "pct_ingresos_a_las_20h": 100.0,
+      "hora_mediana_ingreso": 20.0
+    },
+    "por_arquetipo": {
+      "conductor": {
+        "personas": 86,
+        "saldo_mediano_fin_mes": {
+          "m1": 1055.0,
+          "m6": 2043.0,
+          "m12": 4103.0,
+          "m18": 5369.0,
+          "m24": 7492.0
+        },
+        "saldo_en_dias_de_ingreso": 63.1,
+        "corr_semanal_ingreso_gasto": 0.05,
+        "pct_personas_saldo_negativo_en_pago": 27.9,
+        "pct_pagos_con_saldo_negativo": 2.7,
+        "pct_filas_saldo_negativo": 2.2,
+        "ingreso_mensual_medio": 1988.0,
+        "pct_con_mes_en_deficit_ano2": 72.1,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "vendedora": {
+        "personas": 111,
+        "saldo_mediano_fin_mes": {
+          "m1": 1133.0,
+          "m6": 2648.0,
+          "m12": 4703.0,
+          "m18": 6536.0,
+          "m24": 8517.0
+        },
+        "saldo_en_dias_de_ingreso": 65.5,
+        "corr_semanal_ingreso_gasto": 0.04,
+        "pct_personas_saldo_negativo_en_pago": 21.6,
+        "pct_pagos_con_saldo_negativo": 1.1,
+        "pct_filas_saldo_negativo": 0.8,
+        "ingreso_mensual_medio": 2083.0,
+        "pct_con_mes_en_deficit_ano2": 80.2,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "tecnico": {
+        "personas": 83,
+        "saldo_mediano_fin_mes": {
+          "m1": 1083.0,
+          "m6": 2677.0,
+          "m12": 3538.0,
+          "m18": 5931.0,
+          "m24": 6808.0
+        },
+        "saldo_en_dias_de_ingreso": 60.8,
+        "corr_semanal_ingreso_gasto": -0.03,
+        "pct_personas_saldo_negativo_en_pago": 73.5,
+        "pct_pagos_con_saldo_negativo": 11.1,
+        "pct_filas_saldo_negativo": 10.2,
+        "ingreso_mensual_medio": 1986.0,
+        "pct_con_mes_en_deficit_ano2": 100.0,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "comisionista": {
+        "personas": 79,
+        "saldo_mediano_fin_mes": {
+          "m1": 1121.0,
+          "m6": 2286.0,
+          "m12": 3214.0,
+          "m18": 4352.0,
+          "m24": 6244.0
+        },
+        "saldo_en_dias_de_ingreso": 56.0,
+        "corr_semanal_ingreso_gasto": -0.04,
+        "pct_personas_saldo_negativo_en_pago": 59.5,
+        "pct_pagos_con_saldo_negativo": 10.6,
+        "pct_filas_saldo_negativo": 9.7,
+        "ingreso_mensual_medio": 1653.0,
+        "pct_con_mes_en_deficit_ano2": 91.1,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "asalariado": {
+        "personas": 41,
+        "saldo_mediano_fin_mes": {
+          "m1": 1217.0,
+          "m6": 2216.0,
+          "m12": 7170.0,
+          "m18": 8211.0,
+          "m24": 13238.0
+        },
+        "saldo_en_dias_de_ingreso": 102.8,
+        "corr_semanal_ingreso_gasto": 0.03,
+        "pct_personas_saldo_negativo_en_pago": 46.3,
+        "pct_pagos_con_saldo_negativo": 2.4,
+        "pct_filas_saldo_negativo": 1.9,
+        "ingreso_mensual_medio": 1954.0,
+        "pct_con_mes_en_deficit_ano2": 43.9,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      }
+    },
+    "horas_ingreso": {
+      "0-5 h": 0.0,
+      "6-9 h": 0.0,
+      "10-13 h": 0.0,
+      "14-17 h": 0.0,
+      "18-21 h": 100.0,
+      "22-23 h": 0.0
+    },
+    "pii_detectada": 0
+  },
+  "muestra": {
+    "total": {
+      "personas": 20,
+      "saldo_mediano_fin_mes": {
+        "m1": 1374.0,
+        "m6": 2646.0,
+        "m12": 4919.0,
+        "m18": 6959.0,
+        "m24": 8794.0
+      },
+      "saldo_en_dias_de_ingreso": 84.6,
+      "corr_semanal_ingreso_gasto": 0.04,
+      "pct_personas_saldo_negativo_en_pago": 25.0,
+      "pct_pagos_con_saldo_negativo": 1.0,
+      "pct_filas_saldo_negativo": 0.9,
+      "ingreso_mensual_medio": 1861.0,
+      "pct_con_mes_en_deficit_ano2": 80.0,
+      "pct_ingresos_a_las_20h": 100.0,
+      "hora_mediana_ingreso": 20.0
+    },
+    "por_arquetipo": {
+      "conductor": {
+        "personas": 4,
+        "saldo_mediano_fin_mes": {
+          "m1": 1297.0,
+          "m6": 2243.0,
+          "m12": 4676.0,
+          "m18": 6249.0,
+          "m24": 8637.0
+        },
+        "saldo_en_dias_de_ingreso": 84.6,
+        "corr_semanal_ingreso_gasto": 0.16,
+        "pct_personas_saldo_negativo_en_pago": 0.0,
+        "pct_pagos_con_saldo_negativo": 0.0,
+        "pct_filas_saldo_negativo": 0.0,
+        "ingreso_mensual_medio": 2043.0,
+        "pct_con_mes_en_deficit_ano2": 75.0,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "vendedora": {
+        "personas": 4,
+        "saldo_mediano_fin_mes": {
+          "m1": 1124.0,
+          "m6": 2738.0,
+          "m12": 4839.0,
+          "m18": 6712.0,
+          "m24": 7679.0
+        },
+        "saldo_en_dias_de_ingreso": 59.4,
+        "corr_semanal_ingreso_gasto": 0.1,
+        "pct_personas_saldo_negativo_en_pago": 25.0,
+        "pct_pagos_con_saldo_negativo": 0.8,
+        "pct_filas_saldo_negativo": 0.9,
+        "ingreso_mensual_medio": 2261.0,
+        "pct_con_mes_en_deficit_ano2": 100.0,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "tecnico": {
+        "personas": 4,
+        "saldo_mediano_fin_mes": {
+          "m1": 1226.0,
+          "m6": 4802.0,
+          "m12": 5733.0,
+          "m18": 6225.0,
+          "m24": 10837.0
+        },
+        "saldo_en_dias_de_ingreso": 79.3,
+        "corr_semanal_ingreso_gasto": -0.08,
+        "pct_personas_saldo_negativo_en_pago": 50.0,
+        "pct_pagos_con_saldo_negativo": 3.0,
+        "pct_filas_saldo_negativo": 2.9,
+        "ingreso_mensual_medio": 1965.0,
+        "pct_con_mes_en_deficit_ano2": 100.0,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "comisionista": {
+        "personas": 4,
+        "saldo_mediano_fin_mes": {
+          "m1": 1112.0,
+          "m6": 1889.0,
+          "m12": 4220.0,
+          "m18": 6130.0,
+          "m24": 6755.0
+        },
+        "saldo_en_dias_de_ingreso": 78.3,
+        "corr_semanal_ingreso_gasto": -0.08,
+        "pct_personas_saldo_negativo_en_pago": 25.0,
+        "pct_pagos_con_saldo_negativo": 0.2,
+        "pct_filas_saldo_negativo": 0.2,
+        "ingreso_mensual_medio": 1356.0,
+        "pct_con_mes_en_deficit_ano2": 100.0,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      },
+      "asalariado": {
+        "personas": 4,
+        "saldo_mediano_fin_mes": {
+          "m1": 1525.0,
+          "m6": 2790.0,
+          "m12": 7235.0,
+          "m18": 10368.0,
+          "m24": 14516.0
+        },
+        "saldo_en_dias_de_ingreso": 116.3,
+        "corr_semanal_ingreso_gasto": 0.11,
+        "pct_personas_saldo_negativo_en_pago": 25.0,
+        "pct_pagos_con_saldo_negativo": 0.8,
+        "pct_filas_saldo_negativo": 0.5,
+        "ingreso_mensual_medio": 1682.0,
+        "pct_con_mes_en_deficit_ano2": 25.0,
+        "pct_ingresos_a_las_20h": 100.0,
+        "hora_mediana_ingreso": 20.0
+      }
+    },
+    "horas_ingreso": {
+      "0-5 h": 0.0,
+      "6-9 h": 0.0,
+      "10-13 h": 0.0,
+      "14-17 h": 0.0,
+      "18-21 h": 100.0,
+      "22-23 h": 0.0
+    },
+    "pii_detectada": 0
+  }
+}
