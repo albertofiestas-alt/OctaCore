@@ -1,6 +1,6 @@
 """Corre los pares de semillas en paralelo (joblib). Lanzador de Gino; pares.py y resumir son de Bartolome.
 
-Uso:  PYTHONPATH=src python eval/_pares_paralelo.py [n_semillas=20] [n_procesos=8]
+Uso:  PYTHONPATH=src python eval/_pares_paralelo.py [n_semillas=20] [n_procesos=8] [sufijo=""]   (p. ej. sufijo _v11)
 
 Mide cada semilla 1..n con eval.pares._medir_semilla (un proceso por semilla), guarda la medición de cada una en
 eval/resultados/pares_mediciones.csv apenas llega (si algo falla no se pierde lo hecho) y al final llama a pares.pares(n)
@@ -35,11 +35,14 @@ def _medir(semilla: int, eval_dir: Path) -> dict:
     return _cargar_pares(eval_dir)._medir_semilla(semilla)
 
 
-def correr(n_semillas: int = 20, n_procesos: int = 8) -> dict:
+def correr(n_semillas: int = 20, n_procesos: int = 8, sufijo: str = "") -> dict:
+    """`sufijo` ("_v11") se agrega a los nombres de salida para no pisar resultados de otra versión de datos."""
     pares = _cargar_pares(EVAL)
-    RUTA_MEDICIONES.parent.mkdir(parents=True, exist_ok=True)
+    ruta_mediciones = RUTA_MEDICIONES.with_name(f"{RUTA_MEDICIONES.stem}{sufijo}{RUTA_MEDICIONES.suffix}")
+    pares.RUTA_SALIDA = pares.RUTA_SALIDA.with_name(f"{pares.RUTA_SALIDA.stem}{sufijo}{pares.RUTA_SALIDA.suffix}")
+    ruta_mediciones.parent.mkdir(parents=True, exist_ok=True)
     medidas: dict[int, dict] = {}
-    with RUTA_MEDICIONES.open("w", encoding="utf-8", newline="") as f:
+    with ruta_mediciones.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=COLUMNAS)
         w.writeheader()
         tareas = (delayed(_medir)(s, EVAL) for s in range(1, n_semillas + 1))
@@ -55,4 +58,5 @@ def correr(n_semillas: int = 20, n_procesos: int = 8) -> dict:
 if __name__ == "__main__":
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 20
     p = int(sys.argv[2]) if len(sys.argv) > 2 else 8
-    print(correr(n, p), flush=True)
+    sufijo = sys.argv[3] if len(sys.argv) > 3 else ""
+    print(correr(n, p, sufijo), flush=True)

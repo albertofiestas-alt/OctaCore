@@ -317,7 +317,7 @@ def _trabajo_persona(historia, etiquetas):
     return normal, menor
 
 
-def generar_series(df: pd.DataFrame, n_procesos: int = 8, destino=None) -> tuple[pd.DataFrame, pd.DataFrame]:
+def generar_series(df: pd.DataFrame, n_procesos: int = 8, destino=None, sufijo: str = "") -> tuple[pd.DataFrame, pd.DataFrame]:
     """Series de todas las personas de `df` (con etiquetas y fecha_hora datetime) en paralelo; escribe serie_diaria.csv
     y serie_menor_gasto.csv en `destino` (por defecto eval/resultados). Falla si hay (customer_id, fecha) repetidos."""
     from pathlib import Path
@@ -334,7 +334,7 @@ def generar_series(df: pd.DataFrame, n_procesos: int = 8, destino=None) -> tuple
     pares = Parallel(n_jobs=n_procesos)(delayed(_trabajo_persona)(h, e) for h, e in personas)
     normal = pd.concat([p[0] for p in pares], ignore_index=True)
     menor = pd.concat([p[1] for p in pares], ignore_index=True)
-    for nombre, serie in (("serie_diaria.csv", normal), ("serie_menor_gasto.csv", menor)):
+    for nombre, serie in ((f"serie_diaria{sufijo}.csv", normal), (f"serie_menor_gasto{sufijo}.csv", menor)):
         if serie.duplicated(["customer_id", "fecha"]).any():
             raise ValueError(f"{nombre}: hay filas repetidas por persona y día")
         destino.mkdir(parents=True, exist_ok=True)
@@ -349,7 +349,8 @@ if __name__ == "__main__":
     warnings.simplefilter("ignore")
     ruta = sys.argv[1] if len(sys.argv) > 1 else "data/generado/generado/movimientos.csv"
     procesos = int(sys.argv[2]) if len(sys.argv) > 2 else 8
+    sufijo = sys.argv[3] if len(sys.argv) > 3 else ""  # p. ej. _v11 para no pisar las series de otra versión de datos
     datos = pd.read_csv(ruta, parse_dates=["fecha_hora"])
-    n, m = generar_series(datos, procesos)
+    n, m = generar_series(datos, procesos, sufijo=sufijo)
     print(f"serie_diaria.csv {len(n)} filas; serie_menor_gasto.csv {len(m)} filas; "
           f"personas {n['customer_id'].nunique()}", flush=True)
