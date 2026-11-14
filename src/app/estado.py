@@ -7,8 +7,10 @@ el aviso 'DATOS DE EJEMPLO' (es_ejemplo()).
 
 from __future__ import annotations
 
+import json
 import os
 from datetime import date
+from pathlib import Path
 
 import streamlit as st
 
@@ -38,7 +40,21 @@ def _llamar(nombre: str, *args):
     return getattr(servicio_falso, nombre)(*args)
 
 
-def consultar(persona, fecha, metodo="modelo"):
+def resultados_dir() -> Path:
+    """eval/resultados (UKKU_RESULTADOS lo reemplaza, para pruebas)."""
+    return Path(os.environ.get("UKKU_RESULTADOS") or Path(__file__).resolve().parents[2] / "eval" / "resultados")
+
+
+def adopcion() -> dict | None:
+    """Veredicto pre-registrado de adopción del modelo, o None si no se puede leer."""
+    try:
+        return json.loads((resultados_dir() / "adopcion.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+# Por diseño el producto usa regla2: el modelo de ML no superó a la regla (adopcion.json).
+def consultar(persona, fecha, metodo="regla2"):
     return _llamar("consultar", persona, fecha, metodo)
 
 
