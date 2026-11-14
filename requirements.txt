@@ -1,0 +1,13 @@
+# Versiones fijadas (sección 8). Python 3.11. Cambiar una versión = entrada en DECISIONES.md.
+pydantic==2.13.4
+PyYAML==6.0.3
+pandas==2.3.3
+numpy==2.4.1
+scikit-learn==1.8.0
+lightgbm==4.6.0
+streamlit==1.66.1
+
+# Pruebas
+pytest==9.1.1
+pytest-cov==7.0.0
+hypothesis==6.169.4

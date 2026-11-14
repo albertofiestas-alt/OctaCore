@@ -1,0 +1,32 @@
+# Entorno
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+
+# Secretos: nunca al repositorio
+.env
+.env.*
+!.env.example
+
+# Datos generados y registros (se reproducen con make datos / make demo)
+data/generado/*
+!data/generado/.gitkeep
+registros/*
+!registros/.gitkeep
+
+# Documentos de trabajo del equipo (tienen nombres reales)
+*.docx
+*.pdf
+~$*
+
+# Editores y SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
