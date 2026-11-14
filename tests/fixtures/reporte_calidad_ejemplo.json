@@ -1,0 +1,16 @@
+{
+  "filas_entrada": 14,
+  "filas_salida": 13,
+  "duplicados_eliminados": 1,
+  "faltantes": {"categoria": 1, "comercio": 0},
+  "atipicos": 1,
+  "suscripciones_duplicadas": [
+    {"customer_id": "P0002", "comercio": "StreamFicticio", "monto": 29.9, "fechas": ["2025-10-03", "2025-10-04"]}
+  ],
+  "pagos_inferidos": [
+    {"customer_id": "P0001", "comercio": "Inmobiliaria Ficticia", "categoria": "alquiler", "monto": 300.0, "dia_mes": 17, "ocurrencias": 3}
+  ],
+  "pii_enmascarado": 2,
+  "columnas_sensibles_descartadas": ["edad"],
+  "rechazos": {"fecha_invalida": 0}
+}

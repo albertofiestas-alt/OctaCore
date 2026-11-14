@@ -1,7 +1,10 @@
-"""Contratos entre módulos (Anexo A de la v5).
+"""Contratos entre módulos (Anexo A de la v7 y Anexo 4 de los planes individuales).
 
 Cualquier cambio en este archivo necesita la aprobación de Anderson y de Gino
 y se anota en DECISIONES.md. La prueba tests/contract/ falla si un campo cambia.
+
+Donde la v7 y los planes difieren se eligió la forma compatible con ambos
+(ver DECISIONES.md, entradas 9 a 17).
 """
 
 from __future__ import annotations
@@ -20,6 +23,7 @@ Semaforo = Literal["verde", "ambar", "rojo"]
 Confianza = Literal["alta", "media", "baja"]
 Metodo = Literal["regla1", "regla2", "modelo"]
 Accion = Literal["aprobar", "rechazar"]
+FuenteExplicacion = Literal["plantilla", "generativa"]
 Horizonte = Literal[3, 7, 14]
 
 HORIZONTES: tuple[int, ...] = (3, 7, 14)
@@ -39,7 +43,8 @@ COLUMNAS_MOVIMIENTO: tuple[str, ...] = (
     "comercio",
     "saldo",
 )
-COLUMNAS_OPCIONALES: tuple[str, ...] = ("ingreso_recurrente",)
+# ingreso_recurrente: opcional del generador. atipico_detectado: la agrega la ingesta (Anexo 5).
+COLUMNAS_OPCIONALES: tuple[str, ...] = ("ingreso_recurrente", "atipico_detectado")
 ETIQUETAS_REFERENCIA: tuple[str, ...] = (
     "es_duplicado",
     "es_atipico",
@@ -58,7 +63,7 @@ CATEGORIAS: tuple[str, ...] = (
 
 
 class _Contrato(BaseModel):
-    """Base: rechaza campos desconocidos y valores no finitos."""
+    """Base: inmutable, rechaza campos desconocidos y valores no finitos."""
 
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False, frozen=True)
 
@@ -91,14 +96,16 @@ class Movimiento(_Contrato):
 
 class PagoInferido(_Contrato):
     """Pago con fecha inferido por la ingesta (mismo comercio, monto parecido,
-    día del mes repetido). El servicio lo convierte en PagoConFecha para una
-    fecha de corte. [propuesto: Anexo A solo decía 'list']"""
+    día del mes repetido). La ingesta puede devolverlo como dict con estas
+    mismas claves; el servicio lo convierte en PagoConFecha con
+    ingesta.proximos_pagos para una fecha de corte."""
 
     customer_id: str = Field(min_length=1)
     comercio: str
     categoria: str
     monto: float = Field(ge=0, description="Monto típico en soles, en positivo")
     dia_mes: int = Field(ge=1, le=31)
+    ocurrencias: int | None = Field(default=None, ge=1)
 
 
 class ReporteCalidad(_Contrato):
@@ -109,6 +116,9 @@ class ReporteCalidad(_Contrato):
     atipicos: int = Field(ge=0)
     suscripciones_duplicadas: list[dict[str, Any]] = Field(default_factory=list)
     pagos_inferidos: list[PagoInferido] = Field(default_factory=list)
+    pii_enmascarado: int = Field(default=0, ge=0)
+    columnas_sensibles_descartadas: list[str] = Field(default_factory=list)
+    rechazos: dict[str, int] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def _filas(self) -> ReporteCalidad:
@@ -134,14 +144,17 @@ class EstadoPersona(_Contrato):
     fecha_corte: date
     saldo: float
     pagos: list[PagoConFecha] = Field(default_factory=list)
-    colchon: float = Field(ge=0)
+    colchon: float = Field(default=0.0, ge=0)
+    semanas_historia: int = Field(default=0, ge=0)
 
 
 class Cuantiles(_Contrato):
-    p5: float
-    p20: float
-    p50: float
-    p80: float
+    """Ingreso acumulado: nunca negativo y ordenado (Anexo C: se rechazan negativos)."""
+
+    p5: float = Field(ge=0)
+    p20: float = Field(ge=0)
+    p50: float = Field(ge=0)
+    p80: float = Field(ge=0)
 
     @model_validator(mode="after")
     def _ordenados(self) -> Cuantiles:
@@ -177,8 +190,14 @@ class Pronostico(_Contrato):
 
 class DecisionPago(_Contrato):
     pago_id: str = Field(min_length=1)
+    dia: int = Field(ge=0)
+    monto: float = Field(ge=0)
     permitido: float
     semaforo: Semaforo
+
+
+# Nombre que usan los planes individuales (Anexo 4). Es la misma clase.
+PagoDecision = DecisionPago
 
 
 class Propuesta(_Contrato):
@@ -192,22 +211,32 @@ class Propuesta(_Contrato):
 
 
 class Decision(_Contrato):
+    # Acepta entero (soles redondeados hacia abajo, como en el plan del motor) o decimal.
     numero_hoy: float = Field(ge=0)
     por_pago: list[DecisionPago] = Field(default_factory=list)
     confianza: Confianza
     desglose: dict[str, Any] = Field(default_factory=dict)
     limites: list[str] = Field(default_factory=list)
+    supuestos: list[str] = Field(default_factory=list)
+    evidencia: dict[str, Any] = Field(default_factory=dict)
     propuestas: list[Propuesta] = Field(default_factory=list)
+    respaldo: bool = False
+    registro_id: str = ""
+    mensaje_falta: str | None = None
+    explicacion: str = ""
+    explicacion_fuente: FuenteExplicacion = "plantilla"
 
 
 class Registro(_Contrato):
-    """Una línea JSON por recomendación, para poder reproducirla."""
+    """Una línea JSON por recomendación, para poder reproducirla y auditarla."""
 
+    registro_id: str = Field(min_length=1)
     entradas: dict[str, Any]
     version_generador: str
     version_modelo: str
     semilla: int
     hash_config: str = Field(min_length=1)
+    decision: dict[str, Any] | None = None
 
 
 __all__ = [
@@ -221,12 +250,14 @@ __all__ = [
     "DecisionPago",
     "ETIQUETAS_REFERENCIA",
     "EstadoPersona",
+    "FuenteExplicacion",
     "HORIZONTES",
     "Horizonte",
     "Metodo",
     "Movimiento",
     "NOMBRES_CUANTILES",
     "PagoConFecha",
+    "PagoDecision",
     "PagoInferido",
     "Pronostico",
     "Propuesta",

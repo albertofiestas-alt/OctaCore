@@ -1,0 +1,42 @@
+{
+  "numero_hoy": 0,
+  "por_pago": [
+    {"pago_id": "servicios-02", "dia": 2, "monto": 60.0, "permitido": 70.0, "semaforo": "verde"},
+    {"pago_id": "alquiler-09", "dia": 9, "monto": 600.0, "permitido": -15.56, "semaforo": "rojo"}
+  ],
+  "confianza": "baja",
+  "desglose": {
+    "saldo": 200.0,
+    "colchon": 0.0,
+    "cuantil": "p20",
+    "puntos_de_control": [
+      {"dia": 2, "ingreso_conservador": 0.0, "pagos_acumulados": 60.0, "permitido": 70.0},
+      {"dia": 9, "ingreso_conservador": 320.0, "pagos_acumulados": 660.0, "permitido": -15.56},
+      {"dia": 14, "ingreso_conservador": 700.0, "pagos_acumulados": 660.0, "permitido": 17.14}
+    ],
+    "dia_limitante": 9
+  },
+  "limites": [
+    "Es una orientación educativa y no sustituye asesoría financiera.",
+    "No promete resultados.",
+    "El futuro puede diferir del pronóstico."
+  ],
+  "supuestos": [
+    "Gastas cada día lo que indica el número de hoy.",
+    "Los pagos con fecha son los 2 detectados en tu historial.",
+    "El ingreso futuro se parece al de las últimas 10 semanas.",
+    "No se consideran gastos imprevistos.",
+    "El escenario P20 es una semana mala y el P5 una semana muy mala."
+  ],
+  "evidencia": {
+    "semanas_historia": 10,
+    "ingresos_observados": 15,
+    "rango_14d": {"p5": 150.0, "p20": 700.0, "p50": 900.0, "p80": 1400.0}
+  },
+  "propuestas": [],
+  "respaldo": false,
+  "registro_id": "",
+  "mensaje_falta": "no alcanza para el pago del dia 9: faltan S/140",
+  "explicacion": "Hoy no conviene gastar: el alquiler de S/600 vence en 9 días y, con lo que se espera que entre, faltan S/140.",
+  "explicacion_fuente": "plantilla"
+}

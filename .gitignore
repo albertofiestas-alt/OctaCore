@@ -14,16 +14,12 @@ htmlcov/
 .env.*
 !.env.example
 
-# Datos generados y registros (se reproducen con make datos / make demo)
+# Datos generados, registros y salud (se reproducen con make datos / make demo)
 data/generado/*
 !data/generado/.gitkeep
 registros/*
+logs/
 !registros/.gitkeep
-
-# Documentos de trabajo del equipo (tienen nombres reales)
-*.docx
-*.pdf
-~$*
 
 # Editores y SO
 .vscode/

@@ -5,7 +5,7 @@
 | Biblioteca | Versión | Licencia | Uso |
 |---|---|---|---|
 | pydantic | 2.13.4 | MIT | Contratos entre módulos |
-| PyYAML | 6.0.3 | MIT | Lectura de config.yaml |
+| PyYAML | 6.0.3 | MIT | Lectura de config/*.yaml |
 | pandas | 2.3.3 | BSD-3-Clause | Movimientos e historia |
 | NumPy | 2.4.1 | BSD-3-Clause | Cálculo numérico |
 | scikit-learn | 1.8.0 | BSD-3-Clause | Plan B del modelo (GradientBoostingRegressor) |

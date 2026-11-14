@@ -1,0 +1,12 @@
+{
+  "customer_id": "P0002",
+  "fecha_corte": "2025-11-14",
+  "saldo": 400.0,
+  "pagos": [
+    {"pago_id": "P0002:Luz Ficticia:2025-11-19", "dia": 5, "monto": 80.0, "categoria": "servicios"},
+    {"pago_id": "P0002:Internet Ficticio:2025-11-23", "dia": 9, "monto": 60.0, "categoria": "servicios"},
+    {"pago_id": "P0002:Financiera Ficticia:2025-11-28", "dia": 14, "monto": 350.0, "categoria": "deuda"}
+  ],
+  "colchon": 50.0,
+  "semanas_historia": 20
+}

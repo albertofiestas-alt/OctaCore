@@ -1,0 +1,41 @@
+{
+  "numero_hoy": 8,
+  "por_pago": [
+    {"pago_id": "P0003:Inmobiliaria Ficticia:2025-11-20", "dia": 6, "monto": 250.0, "permitido": 8.33, "semaforo": "ambar"}
+  ],
+  "confianza": "baja",
+  "desglose": {
+    "saldo": 300.0,
+    "colchon": 0.0,
+    "cuantil": "p20",
+    "puntos_de_control": [
+      {"dia": 6, "ingreso_conservador": 0.0, "pagos_acumulados": 250.0, "permitido": 8.33},
+      {"dia": 14, "ingreso_conservador": 120.0, "pagos_acumulados": 250.0, "permitido": 12.14}
+    ],
+    "dia_limitante": 6
+  },
+  "limites": [
+    "Es una orientación educativa y no sustituye asesoría financiera.",
+    "No promete resultados.",
+    "El futuro puede diferir del pronóstico.",
+    "Hay menos de 4 semanas de historia: solo se muestra el número de hoy, sin propuestas."
+  ],
+  "supuestos": [
+    "Gastas cada día lo que indica el número de hoy.",
+    "Los pagos con fecha son los 1 detectados en tu historial.",
+    "El ingreso futuro se parece al de las últimas 2 semanas.",
+    "No se consideran gastos imprevistos.",
+    "El escenario P20 es una semana mala y el P5 una semana muy mala."
+  ],
+  "evidencia": {
+    "semanas_historia": 2,
+    "ingresos_observados": 3,
+    "rango_14d": {"p5": 0.0, "p20": 120.0, "p50": 300.0, "p80": 700.0}
+  },
+  "propuestas": [],
+  "respaldo": true,
+  "registro_id": "",
+  "mensaje_falta": null,
+  "explicacion": "Hoy puedes gastar hasta S/8. Con solo 2 semanas de historia la confianza es baja.",
+  "explicacion_fuente": "plantilla"
+}

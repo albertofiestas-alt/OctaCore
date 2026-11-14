@@ -1,0 +1,53 @@
+{
+  "numero_hoy": 20,
+  "por_pago": [
+    {"pago_id": "P0002:Luz Ficticia:2025-11-19", "dia": 5, "monto": 80.0, "permitido": 66.0, "semaforo": "verde"},
+    {"pago_id": "P0002:Internet Ficticio:2025-11-23", "dia": 9, "monto": 60.0, "permitido": 45.56, "semaforo": "verde"},
+    {"pago_id": "P0002:Financiera Ficticia:2025-11-28", "dia": 14, "monto": 350.0, "permitido": 20.0, "semaforo": "verde"}
+  ],
+  "confianza": "media",
+  "desglose": {
+    "saldo": 400.0,
+    "colchon": 50.0,
+    "cuantil": "p20",
+    "puntos_de_control": [
+      {"dia": 5, "ingreso_conservador": 60.0, "pagos_acumulados": 80.0, "permitido": 66.0},
+      {"dia": 9, "ingreso_conservador": 200.0, "pagos_acumulados": 140.0, "permitido": 45.56},
+      {"dia": 14, "ingreso_conservador": 420.0, "pagos_acumulados": 490.0, "permitido": 20.0}
+    ],
+    "dia_limitante": 14
+  },
+  "limites": [
+    "Es una orientación educativa y no sustituye asesoría financiera.",
+    "No promete resultados.",
+    "El futuro puede diferir del pronóstico."
+  ],
+  "supuestos": [
+    "Gastas cada día lo que indica el número de hoy.",
+    "Los pagos con fecha son los 3 detectados en tu historial.",
+    "El ingreso futuro se parece al de las últimas 20 semanas.",
+    "No se consideran gastos imprevistos.",
+    "El escenario P20 es una semana mala y el P5 una semana muy mala."
+  ],
+  "evidencia": {
+    "semanas_historia": 20,
+    "ingresos_observados": 40,
+    "rango_14d": {"p5": 250.0, "p20": 420.0, "p50": 600.0, "p80": 820.0}
+  },
+  "propuestas": [
+    {
+      "propuesta_id": "P0002-2025-11-14-1",
+      "texto": "Gasta hasta S/7 por día y aparta S/13 por día para la cuota del día 14.",
+      "monto": 13.0,
+      "pago_id": "P0002:Financiera Ficticia:2025-11-28",
+      "antes": {"numero_hoy": 20, "cubierto_en_p5": false},
+      "despues": {"numero_hoy": 7, "cubierto_en_p5": true},
+      "confianza": "media"
+    }
+  ],
+  "respaldo": false,
+  "registro_id": "",
+  "mensaje_falta": null,
+  "explicacion": "Hoy puedes gastar hasta S/20. Tus 3 pagos de los próximos 14 días quedan cubiertos; el que más limita es la cuota de S/350 del día 14.",
+  "explicacion_fuente": "plantilla"
+}

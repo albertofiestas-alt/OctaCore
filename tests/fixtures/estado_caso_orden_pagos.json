@@ -1,0 +1,10 @@
+{
+  "customer_id": "P0001",
+  "fecha_corte": "2025-03-01",
+  "saldo": 100,
+  "colchon": 0,
+  "semanas_historia": 12,
+  "pagos": [
+    {"pago_id": "alquiler-03", "dia": 3, "monto": 300, "categoria": "alquiler"}
+  ]
+}

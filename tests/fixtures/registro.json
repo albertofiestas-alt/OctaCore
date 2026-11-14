@@ -1,0 +1,17 @@
+{
+  "registro_id": "R-000000000001",
+  "entradas": {
+    "customer_id": "P0002",
+    "fecha": "2025-11-14",
+    "metodo_pedido": "modelo",
+    "metodo_usado": "regla2",
+    "motivos_respaldo": ["modelo: FileNotFoundError: no hay modelo entrenado"],
+    "origen": "data/muestra/movimientos.csv",
+    "hash_historia": "0000000000000000"
+  },
+  "version_generador": "0.0.0",
+  "version_modelo": "0.0.0",
+  "semilla": 20261114,
+  "hash_config": "0000000000000000",
+  "decision": null
+}

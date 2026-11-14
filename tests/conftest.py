@@ -1,8 +1,10 @@
-"""Fixtures compartidas. Cualquier prueba puede pedirlas por nombre.
+"""Fixtures compartidas (dueño: Anderson). Cualquier prueba puede pedirlas por nombre.
 
-Ejemplo:
-    def test_algo(decision_tipica):
-        assert decision_tipica.numero_hoy >= 0
+    def test_algo(decision_verde):
+        assert decision_verde.numero_hoy >= 0
+
+Los archivos están en tests/fixtures/ con los nombres que usan los planes. También
+se pueden leer directo: Decision.model_validate_json(Path("tests/fixtures/decision_verde.json").read_text("utf-8")).
 """
 
 from __future__ import annotations
@@ -24,11 +26,19 @@ from contratos import (
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
-CONTRATOS = FIXTURES / "contratos"
 
 
 def leer_json(nombre: str) -> dict:
-    return json.loads((CONTRATOS / nombre).read_text(encoding="utf-8"))
+    return json.loads((FIXTURES / nombre).read_text(encoding="utf-8"))
+
+
+def _fixture(clase, archivo: str):
+    @pytest.fixture
+    def _f():
+        return clase.model_validate(leer_json(archivo))
+
+    _f.__doc__ = f"{clase.__name__} de tests/fixtures/{archivo}"
+    return _f
 
 
 @pytest.fixture
@@ -36,51 +46,31 @@ def cfg():
     return cargar_config()
 
 
-# Caso del orden de pagos (sección 5): saldo 100, pago 300 el día 3, ingreso 400 el día 10.
-@pytest.fixture
-def estado_orden_pagos() -> EstadoPersona:
-    return EstadoPersona.model_validate(leer_json("estado_orden_pagos.json"))
+# Caso del orden de pagos (sección 5): saldo 100, pago 300 el día 3, ingreso el día 10.
+# Resultado esperado del motor: numero_hoy 0 y "faltan S/200" (decision_sin_alcance).
+estado_caso_orden_pagos = _fixture(EstadoPersona, "estado_caso_orden_pagos.json")
+pronostico_caso_orden_pagos = _fixture(Pronostico, "pronostico_caso_orden_pagos.json")
 
+# Caso típico (P0002): número 20, pagos en verde y una propuesta (decision_verde).
+estado_tipico = _fixture(EstadoPersona, "estado_tipico.json")
+pronostico_tipico = _fixture(Pronostico, "pronostico_tipico.json")
 
-@pytest.fixture
-def pronostico_orden_pagos() -> Pronostico:
-    return Pronostico.model_validate(leer_json("pronostico_orden_pagos.json"))
+# Decisiones para maquetar la interfaz (servicio_falso de Jesús).
+decision_verde = _fixture(Decision, "decision_verde.json")
+decision_rojo = _fixture(Decision, "decision_rojo.json")
+decision_confianza_baja = _fixture(Decision, "decision_confianza_baja.json")
+decision_sin_alcance = _fixture(Decision, "decision_sin_alcance.json")
 
+reporte_calidad_ejemplo = _fixture(ReporteCalidad, "reporte_calidad_ejemplo.json")
+registro = _fixture(Registro, "registro.json")
 
-@pytest.fixture
-def decision_orden_pagos() -> Decision:
-    return Decision.model_validate(leer_json("decision_orden_pagos.json"))
-
-
-# Caso típico con propuesta, para maquetas de la interfaz.
-@pytest.fixture
-def estado_tipico() -> EstadoPersona:
-    return EstadoPersona.model_validate(leer_json("estado_tipico.json"))
-
-
-@pytest.fixture
-def pronostico_tipico() -> Pronostico:
-    return Pronostico.model_validate(leer_json("pronostico_tipico.json"))
-
-
-@pytest.fixture
-def decision_tipica() -> Decision:
-    return Decision.model_validate(leer_json("decision_tipica.json"))
-
-
-@pytest.fixture
-def decision_sin_historia() -> Decision:
-    return Decision.model_validate(leer_json("decision_sin_historia.json"))
-
-
-@pytest.fixture
-def reporte_calidad() -> ReporteCalidad:
-    return ReporteCalidad.model_validate(leer_json("reporte_calidad.json"))
-
-
-@pytest.fixture
-def registro() -> Registro:
-    return Registro.model_validate(leer_json("registro.json"))
+# Nombres anteriores (guía de arranque de la v5). Siguen funcionando.
+estado_orden_pagos = estado_caso_orden_pagos
+pronostico_orden_pagos = pronostico_caso_orden_pagos
+decision_orden_pagos = decision_sin_alcance
+decision_tipica = decision_verde
+decision_sin_historia = decision_confianza_baja
+reporte_calidad = reporte_calidad_ejemplo
 
 
 @pytest.fixture

@@ -1,0 +1,76 @@
+# Una carpeta, un dueño (Anexo E). GitHub pide la revisión del dueño en cada pull request.
+# Completa cada @usuario con el usuario REAL de GitHub y quita el "#" de la línea.
+# Mientras una línea esté comentada, esa carpeta no tiene dueño automático.
+# Recuerda: el revisor cruzado lo asigna el autor (README, tabla de asignaciones).
+
+# Anderson: contratos, servicio, pruebas de integración, entorno y documentación de ejecución
+# /src/contratos/            @USUARIO_ANDERSON @USUARIO_GINO
+# /src/servicio/             @USUARIO_ANDERSON
+# /src/__init__.py           @USUARIO_ANDERSON
+# /tests/contract/           @USUARIO_ANDERSON
+# /tests/integracion/        @USUARIO_ANDERSON
+# /tests/e2e/                @USUARIO_ANDERSON
+# /tests/fixtures/           @USUARIO_ANDERSON
+# /tests/conftest.py         @USUARIO_ANDERSON
+# /config/base.yaml          @USUARIO_ANDERSON
+# /requirements.txt          @USUARIO_ANDERSON
+# /Makefile                  @USUARIO_ANDERSON
+# /tareas.py                 @USUARIO_ANDERSON
+# /pyproject.toml            @USUARIO_ANDERSON
+# /.github/                  @USUARIO_ANDERSON
+# /scripts/                  @USUARIO_ANDERSON
+# /README.md                 @USUARIO_ANDERSON
+# /docs/arquitectura.md      @USUARIO_ANDERSON
+
+# Rafael: datos, reglas y evaluación
+# /src/datos/                @USUARIO_RAFAEL
+# /src/reglas/               @USUARIO_RAFAEL
+# /eval/                     @USUARIO_RAFAEL
+# /data/                     @USUARIO_RAFAEL
+# /config/datos.yaml         @USUARIO_RAFAEL
+# /docs/datos.md             @USUARIO_RAFAEL
+# /docs/evaluacion.md        @USUARIO_RAFAEL
+# /docs/diccionario_datos.md @USUARIO_RAFAEL
+
+# Mathias: ingesta
+# /src/ingesta/              @USUARIO_MATHIAS
+# /config/ingesta.yaml       @USUARIO_MATHIAS
+# /tests/unit/ingesta/       @USUARIO_MATHIAS
+
+# Sebastián: motor
+# /src/motor/                @USUARIO_SEBASTIAN
+# /config/motor.yaml         @USUARIO_SEBASTIAN
+# /tests/unit/motor/         @USUARIO_SEBASTIAN
+# /tests/property/           @USUARIO_SEBASTIAN
+
+# Gino: modelo, pre-registro y documentos de decisión
+# /src/modelo/               @USUARIO_GINO
+# /config/modelo.yaml        @USUARIO_GINO
+# /config/preregistro.yaml   @USUARIO_GINO
+# /tests/unit/modelo/        @USUARIO_GINO
+# /eval/adopcion.py          @USUARIO_GINO
+# /docs/responsible_ai.md    @USUARIO_GINO
+# /docs/roadmap.md           @USUARIO_GINO
+# /DECISIONES.md             @USUARIO_GINO
+# /TRANSPARENCIA.md          @USUARIO_GINO
+
+# Jesús: app (Hoy y Plan)
+# /src/app/main.py           @USUARIO_JESUS
+# /src/app/componentes.py    @USUARIO_JESUS
+# /src/app/estado.py         @USUARIO_JESUS
+# /src/app/servicio_falso.py @USUARIO_JESUS
+# /src/app/pages/1_Hoy.py    @USUARIO_JESUS
+# /src/app/pages/2_Plan.py   @USUARIO_JESUS
+# /tests/unit/app_hoy_plan/  @USUARIO_JESUS
+# /docs/guion_demo.md        @USUARIO_JESUS
+
+# Alberto: app (Por qué, Datos, Evaluación), accesibilidad y pitch
+# /src/app/tema.py              @USUARIO_ALBERTO
+# /src/app/pages/3_Por_que.py   @USUARIO_ALBERTO
+# /src/app/pages/4_Datos.py     @USUARIO_ALBERTO
+# /src/app/pages/5_Evaluacion.py @USUARIO_ALBERTO
+# /tests/unit/app_evidencia/    @USUARIO_ALBERTO
+# /tests/a11y/                  @USUARIO_ALBERTO
+# /pitch/                       @USUARIO_ALBERTO
+# /docs/conversaciones.md       @USUARIO_ALBERTO
+# /docs/fuentes_verificadas.md  @USUARIO_ALBERTO

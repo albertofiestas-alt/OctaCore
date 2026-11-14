@@ -1,0 +1,50 @@
+# Parámetros comunes (Anexo B de la v7). Dueño: Anderson. Ningún valor mágico en el código.
+# null = [por fijar ANTES de ver resultados]. Cambios: se anotan en DECISIONES.md.
+#
+# Cada dueño tiene su propio archivo y nadie edita el de otro (Anexo E):
+#   config/ingesta.yaml (Mathias)  config/motor.yaml (Sebastián)  config/modelo.yaml (Gino)
+#   config/datos.yaml (Rafael)     config/preregistro.yaml (Gino)
+# contratos.cargar_config() los une: config/ingesta.yaml se lee como cfg["ingesta"], etc.
+
+horizontes_dias: [3, 7, 14]               # Fijo
+cuantiles: [0.05, 0.20, 0.50, 0.80]       # Fijo
+cuantil_conservador: 0.20                 # Se confirma con la frontera [por medir]
+colchon: null                             # Soles. [por fijar antes de ver resultados]
+umbral_historia_semanas: 4                # Con menos historia: confianza baja, sin propuestas
+umbrales_confianza: null                  # {ancho_alto: x, ancho_bajo: y} [por fijar; Gino en el pre-registro]
+ventana_regla_robusta_semanas: 8          # Fijo
+ventana_dias: 14                          # Ventana del número de hoy
+
+semilla_generador: 20261114               # Fijo; anotada en el README
+semillas_evaluacion: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+version_generador: "0.0.0"
+version_modelo: "0.0.0"
+
+# Responsible AI (Challenge pack). La ingesta descarta estas columnas y una prueba lo verifica.
+variables_sensibles: [edad, genero, ubicacion, distrito, nombre, dni, telefono]
+# En este orden, para que la tarjeta no se parta en pedazos (plan de Mathias).
+patrones_pii:
+  tarjeta: '(?<!\d)(?:\d[ -]?){13,19}(?!\d)'
+  telefono: '(?<!\d)9\d{8}(?!\d)'
+  dni: '(?<!\d)\d{8}(?!\d)'
+  correo: '[\w.+-]+@[\w-]+\.[\w.-]+'
+umbral_alerta_sesgo: null                 # [por fijar antes de ver resultados]
+
+# Opción B. Nace apagada; solo se enciende con las cinco condiciones del diseño.
+generativa:
+  activada: false
+  proveedor: ninguno                      # openai al activar; clave en LLM_API_KEY dentro de .env
+  timeout_s: 6
+  reintentos: 1
+  temperatura: 0
+  max_tokens: 250
+  max_palabras: 90
+
+# Rutas del servicio (relativas a la raíz del repositorio).
+rutas_datos: [data/generado/movimientos.csv, data/muestra/movimientos.csv]   # la primera que exista
+ruta_modelo: data/generado/modelo.joblib
+ruta_adopcion: eval/resultados/adopcion.json
+ruta_registro: registros/recomendaciones.jsonl
+ruta_respuestas: registros/respuestas.jsonl
+ruta_salud: logs/salud.jsonl

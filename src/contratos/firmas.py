@@ -1,73 +1,58 @@
-"""Firmas de las funciones públicas de cada módulo (Anexo A).
+"""Firmas de las funciones públicas de cada módulo (Anexo A de la v7 y Anexo 5 de los planes).
 
-Son Protocols: documentan la forma exacta de entrada y salida. La prueba de
-contrato (tests/contract/test_firmas.py) comprueba que cada módulo, cuando ya
-expone su función, use estos mismos nombres de parámetros.
+Cada paquete de src/ ya tiene estas funciones con su firma exacta y el cuerpo
+`raise NotImplementedError`. El dueño reemplaza el cuerpo, nunca la firma.
+tests/contract/test_firmas.py falla si un nombre o un parámetro cambia.
 
 `historia` y `movimientos_limpios` son un pandas.DataFrame con las columnas
-COLUMNAS_MOVIMIENTO (más ingreso_recurrente si existe) y SIN etiquetas de
-referencia. Ver contratos.historia.validar_historia.
+COLUMNAS_MOVIMIENTO (más ingreso_recurrente y atipico_detectado si existen) y
+SIN etiquetas de referencia. Ver contratos.historia.validar_historia.
+`cfg` es el resultado de contratos.cargar_config(): se lee como cfg["clave"].
 """
 
 from __future__ import annotations
 
-from datetime import date
-from pathlib import Path
-from typing import TYPE_CHECKING, Protocol
-
-from contratos.modelos import (
-    Accion,
-    Decision,
-    EstadoPersona,
-    Metodo,
-    PagoInferido,
-    Pronostico,
-    ReporteCalidad,
-)
-
-if TYPE_CHECKING:
-    import pandas as pd
-
-    from contratos.config import Config
-
-
-class Cargar(Protocol):
-    """ingesta.cargar"""
-
-    def __call__(
-        self, origen: str | Path
-    ) -> tuple[pd.DataFrame, ReporteCalidad, list[PagoInferido]]: ...
-
-
-class Predecir(Protocol):
-    """modelo.predecir, reglas.regla1 y reglas.regla2 (misma firma)."""
-
-    def __call__(self, historia: pd.DataFrame, fecha: date) -> Pronostico: ...
-
-
-class Decidir(Protocol):
-    """motor.decidir"""
-
-    def __call__(self, estado: EstadoPersona, pronostico: Pronostico, cfg: Config) -> Decision: ...
-
-
-class Consultar(Protocol):
-    """servicio.consultar"""
-
-    def __call__(self, id: str, fecha: date, metodo: Metodo) -> Decision: ...
-
-
-class Responder(Protocol):
-    """servicio.responder"""
-
-    def __call__(self, propuesta_id: str, accion: Accion) -> None: ...
-
-
-# Módulo -> función -> nombres de parámetros, en orden. Fuente para la prueba de contrato.
+# Módulo -> función (o Clase.metodo) -> nombres de parámetros, en orden (sin self/cls).
+# Fuente única para la prueba de contrato. Cambiarla: Anderson y Gino + DECISIONES.md.
 FIRMAS: dict[str, dict[str, tuple[str, ...]]] = {
-    "ingesta": {"cargar": ("origen",)},
-    "modelo": {"predecir": ("historia", "fecha")},
-    "reglas": {"regla1": ("historia", "fecha"), "regla2": ("historia", "fecha")},
-    "motor": {"decidir": ("estado", "pronostico", "cfg")},
-    "servicio": {"consultar": ("id", "fecha", "metodo"), "responder": ("propuesta_id", "accion")},
+    "datos": {
+        "generar": ("n_personas", "meses", "semilla", "perturbado", "parametros"),
+        "particion": ("df", "semilla"),
+    },
+    "ingesta": {
+        "cargar": ("origen", "cfg"),
+        "proximos_pagos": ("pagos_inferidos", "customer_id", "fecha_corte", "ventana"),
+        "semanas_historia": ("movimientos", "customer_id", "fecha_corte"),
+        "cargar_etiquetas": ("origen",),
+        "detectar_pii": ("texto", "cfg"),
+        "enmascarar_pii": ("df", "cfg"),
+    },
+    "reglas": {
+        "regla1": ("historia", "fecha", "cfg"),
+        "regla2": ("historia", "fecha", "cfg"),
+    },
+    "modelo": {
+        "construir_features": ("historia", "fecha", "cfg"),
+        "entrenar": ("movimientos_train", "cfg", "semilla"),
+        "Modelo.predecir": ("historia", "fecha"),
+        "Modelo.guardar": ("ruta",),
+        "Modelo.cargar": ("ruta",),
+    },
+    "motor": {
+        "decidir": ("estado", "pronostico", "cfg"),
+    },
+    "servicio": {
+        "cargar_archivo": ("origen",),
+        "consultar": ("customer_id", "fecha", "metodo"),
+        "responder": ("propuesta_id", "accion"),
+        "salud": (),
+        "auditar": ("registro_id",),
+    },
+}
+
+# Excepciones y constantes públicas que cada módulo debe exponer.
+NOMBRES_PUBLICOS: dict[str, tuple[str, ...]] = {
+    "ingesta": ("ErrorIngesta",),
+    "modelo": ("HistoriaInsuficiente", "Modelo", "FEATURES"),
+    "servicio": ("ErrorServicio",),
 }

@@ -1,7 +1,7 @@
 """Comandos del proyecto, en Python puro para que funcionen igual en Windows, macOS y Linux.
 
     python tareas.py setup   instala el entorno (.venv + requirements.txt)
-    python tareas.py datos   genera los datos con la semilla de config/config.yaml
+    python tareas.py datos   genera los datos con la semilla de config/base.yaml
     python tareas.py test    corre todas las pruebas
     python tareas.py eval    produce la tabla de resultados y su hash
     python tareas.py demo    levanta la interfaz

@@ -1,6 +1,7 @@
 # Arranque (sábado 10:15 a 11:00)
 
-Meta de las 11:00: `python tareas.py test` en verde en las 7 laptops y contratos fusionados en `main`.
+Meta de V0 (11:00): `python tareas.py test` en verde en las 7 laptops y contratos fusionados en `main`.
+Antes de esto, lee la sección **Lectura de asignaciones** del [README](../README.md): ahí está tu plan, tus carpetas y tu revisor.
 
 ## 1. Entorno (todos)
 
@@ -11,115 +12,85 @@ python tareas.py test             # debe terminar en "passed" sin "failed"
 ```
 
 Si `test_version_de_python` falla, instala Python 3.11. No cambies la versión exigida.
+Si renombras o mueves la carpeta del repositorio, borra `.venv` y vuelve a correr `setup`: el entorno guarda la ruta absoluta.
 
 ## 2. Rama (todos)
 
 ```bash
+git switch main && git pull origin main
 git switch -c feat/<persona>-<tema>
 ```
 
-Reglas: `main` siempre ejecutable; se entra por pull request revisado por alguien de otro módulo y solo con `python tareas.py test` en verde. Commits pequeños con prefijo `feat`, `fix`, `test`, `docs`, `data` o `eval`. Nadie edita la carpeta de otra persona sin avisarle.
+Reglas: `main` siempre ejecutable; se entra por pull request revisado por tu revisor cruzado y solo con `python tareas.py test` en verde. Commits pequeños con prefijo `feat`, `fix`, `test`, `docs`, `data` o `eval`. `git add <tu carpeta>`, nunca `git add .` ni `git add -A`. Nadie edita la carpeta de otra persona sin avisarle.
 
-## 3. Contratos (leer antes de escribir código)
+## 3. Contratos, firmas y configuración (leer antes de escribir código)
 
-- Modelos: [src/contratos/modelos.py](../src/contratos/modelos.py). Firmas: [src/contratos/firmas.py](../src/contratos/firmas.py).
-- Fixtures listas para usar en pruebas, por nombre: `estado_orden_pagos`, `pronostico_orden_pagos`, `decision_orden_pagos`, `estado_tipico`, `pronostico_tipico`, `decision_tipica`, `decision_sin_historia`, `reporte_calidad`, `registro`, `ruta_movimientos_minimo`, `historia_minima`, `cfg`. Ver [tests/conftest.py](../tests/conftest.py).
-- En cuanto tu módulo expone su función, `tests/contract/test_firmas.py` exige la firma del Anexo A.
-- Cambiar un contrato: pull request aprobado por Anderson y Gino + entrada en DECISIONES.md.
+- **Modelos**: [src/contratos/modelos.py](../src/contratos/modelos.py) (Anexo A de la v7 y Anexo 4 de tu plan). `PagoDecision` y `DecisionPago` son la misma clase.
+- **Firmas**: [src/contratos/firmas.py](../src/contratos/firmas.py). **Tu paquete ya tiene sus funciones con la firma exacta y `raise NotImplementedError`**: reemplaza el cuerpo, nunca el nombre ni los parámetros. `tests/contract/test_firmas.py` falla si cambias una firma.
+  - `ingesta.cargar(origen, cfg)`, `proximos_pagos(pagos_inferidos, customer_id, fecha_corte, ventana=14)`, `semanas_historia(movimientos, customer_id, fecha_corte)`, `cargar_etiquetas(origen)`, `detectar_pii(texto, cfg)`, `enmascarar_pii(df, cfg)`, `ErrorIngesta`
+  - `reglas.regla1(historia, fecha, cfg)`, `reglas.regla2(historia, fecha, cfg)`
+  - `modelo.construir_features(historia, fecha, cfg)`, `entrenar(movimientos_train, cfg, semilla)`, `Modelo.predecir(historia, fecha)`, `Modelo.guardar(ruta)`, `Modelo.cargar(ruta)` (classmethod), `HistoriaInsuficiente`, `FEATURES`
+  - `motor.decidir(estado, pronostico, cfg)`
+  - `datos.generar(n_personas, meses, semilla, perturbado, parametros)`, `datos.particion(df, semilla)`
+  - `servicio.cargar_archivo(origen)`, `consultar(customer_id, fecha, metodo="modelo")`, `responder(propuesta_id, accion)`, `salud()`, `auditar(registro_id)`
+- **Configuración**: `cfg = contratos.cargar_config()`. Se lee como en los planes: `cfg["cuantil_conservador"]`. Es de solo lectura; para una variante usa `cfg.con(cuantil_conservador=0.05)`.
+  - `config/base.yaml`: parámetros comunes del Anexo B (dueño: Anderson).
+  - `config/<modulo>.yaml`: los tuyos. Se leen como `cfg["<modulo>"]`: `config/ingesta.yaml` → `cfg["ingesta"]["max_mb"]`, `config/motor.yaml` → `cfg["motor"]["ancho_alto"]`, `config/preregistro.yaml` → `cfg["preregistro"]`. Créalo tú en tu rama; nadie edita el de otro.
+- **Cambiar un contrato o una firma**: pull request aprobado por Anderson y Gino + entrada en [DECISIONES.md](../DECISIONES.md).
 
-## 4. Esqueleto con una prueba que pasa (cada uno en su rama)
+## 4. Fixtures para probar sin esperar a nadie
 
-Patrón: la función con su firma exacta y una prueba de la meta marcada `xfail(strict=True)`. Pasa hoy; cuando la implementes, la prueba empieza a pasar de verdad, `strict` la marca como fallo y quitas la marca.
+Archivos en `tests/fixtures/` (se leen directo o se piden por nombre en una prueba; ver [tests/conftest.py](../tests/conftest.py)):
 
-| Persona | Rama | Archivo | Primera prueba |
-|---|---|---|---|
-| Mathias | `feat/mathias-ingesta` | `src/ingesta/__init__.py` → `def cargar(origen)` | `tests/unit/test_ingesta.py` |
-| Sebastián | `feat/sebastian-motor` | `src/motor/__init__.py` → `def decidir(estado, pronostico, cfg)` | `tests/unit/test_motor.py` |
-| Rafael | `feat/rafael-muestra` | `data/muestra/movimientos.csv` (20 personas, 24 meses) | ya existe: `tests/contract/test_muestra.py` |
-| Rafael | `feat/rafael-reglas` | `src/reglas/__init__.py` → `def regla1(historia, fecha)`, `def regla2(historia, fecha)` | `tests/unit/test_reglas.py` |
-| Gino | `feat/gino-modelo` | `src/modelo/__init__.py` → `def predecir(historia, fecha)` | `tests/unit/test_modelo.py` |
-| Jesús | `feat/jesus-pantallas` | `src/app/main.py` (Hoy) y `src/app/pages/3_Plan.py` | `tests/e2e/test_app.py` |
-| Alberto | `feat/alberto-porque` | `src/app/pages/2_Por_que.py`, `4_Carga.py`, `5_Evaluacion.py` | `tests/e2e/test_por_que.py` |
-| Anderson | `feat/anderson-servicio` | `src/servicio/` | `tests/unit/test_servicio.py` |
+| Archivo / fixture | Qué es |
+|---|---|
+| `estado_caso_orden_pagos.json`, `pronostico_caso_orden_pagos.json` | Caso del orden de pagos: saldo 100, pago de 300 el día 3. El motor debe dar `numero_hoy == 0` y `mensaje_falta` con "faltan S/200" |
+| `decision_sin_alcance.json` | La Decision esperada para ese caso |
+| `estado_tipico.json`, `pronostico_tipico.json` | Caso típico (P0002) |
+| `decision_verde.json` | Número 20, pagos en verde y una propuesta (para Hoy y Plan) |
+| `decision_rojo.json` | Un pago en rojo, número 0 |
+| `decision_confianza_baja.json` | 2 semanas de historia, confianza baja, sin propuestas, `respaldo: true` |
+| `reporte_calidad_ejemplo.json` | ReporteCalidad con PII enmascarada y una columna sensible descartada |
+| `registro.json` | Una línea del registro de recomendaciones |
+| `movimientos_minimo.csv` (`ruta_movimientos_minimo`, `historia_minima`) | 14 movimientos crudos con un duplicado, un atípico, una suscripción doble y pagos con fecha |
+| `cfg` | La configuración real |
 
-### Mathias
+Los nombres de la guía anterior (`estado_orden_pagos`, `decision_tipica`, `decision_sin_historia`, `reporte_calidad`...) siguen funcionando como alias.
 
-```python
-# src/ingesta/__init__.py
-def cargar(origen):
-    raise NotImplementedError("ingesta v0: 12:00")
+## 5. Dónde van tus pruebas
 
-# tests/unit/test_ingesta.py
-import pytest
-from ingesta import cargar
+`tests/unit/<tu_modulo>/test_*.py` (por ejemplo `tests/unit/motor/test_orden_pagos.py`). Puedes repetir nombres de archivo entre carpetas. Propiedades en `tests/property/` (Sebastián), accesibilidad en `tests/a11y/` (Alberto), integración y e2e en `tests/integracion/` y `tests/e2e/` (Anderson).
 
-@pytest.mark.xfail(strict=True, reason="ingesta v0 a las 12:00")
-def test_elimina_duplicado_exacto(ruta_movimientos_minimo):
-    limpios, reporte, pagos = cargar(ruta_movimientos_minimo)
-    assert reporte.duplicados_eliminados == 1
-    assert reporte.filas_salida == 13
-```
-
-### Sebastián
+Patrón para la meta de una hora: la prueba con `xfail(strict=True)`. Pasa hoy; cuando implementas, empieza a pasar de verdad, `strict` la marca como fallo y quitas la marca.
 
 ```python
-# src/motor/__init__.py
-def decidir(estado, pronostico, cfg):
-    raise NotImplementedError("motor: 12:30")
-
-# tests/unit/test_motor.py
+# tests/unit/motor/test_orden_pagos.py
 import pytest
 from motor import decidir
 
-@pytest.mark.xfail(strict=True, reason="caso del orden de pagos a las 12:30")
-def test_orden_de_pagos(estado_orden_pagos, pronostico_orden_pagos, cfg):
-    d = decidir(estado_orden_pagos, pronostico_orden_pagos, cfg)
+@pytest.mark.xfail(strict=True, raises=NotImplementedError, reason="caso del orden de pagos a las 12:30")
+def test_orden_de_pagos(estado_caso_orden_pagos, pronostico_caso_orden_pagos, cfg):
+    d = decidir(estado_caso_orden_pagos, pronostico_caso_orden_pagos, cfg)
     assert d.numero_hoy == 0
-    assert any("faltan S/200" in l for l in d.limites)
+    assert "faltan S/200" in d.mensaje_falta
 ```
 
-### Rafael (reglas) y Gino (modelo)
+## 6. La app (Jesús y Alberto)
+
+Páginas (v7): `src/app/main.py`, `pages/1_Hoy.py`, `pages/2_Plan.py` (Jesús) y `tema.py`, `pages/3_Por_que.py`, `pages/4_Datos.py`, `pages/5_Evaluacion.py` (Alberto).
+
+La app solo importa `servicio` y `contratos`. Con el entorno instalado (`tareas.py setup`) **no hace falta tocar `sys.path`**:
 
 ```python
-# tests/unit/test_reglas.py   (Gino: igual con `from modelo import predecir`)
-import pytest
-from datetime import date
-from contratos import Pronostico
-from reglas import regla2
-
-@pytest.mark.xfail(strict=True, reason="regla 2 a las 12:30")
-def test_regla2_devuelve_pronostico(historia_minima):
-    p = regla2(historia_minima, date(2025, 10, 31))
-    assert isinstance(p, Pronostico)
-```
-
-### Jesús y Alberto
-
-La app solo importa `servicio` y `contratos`. Hasta las 13:00 usen las fixtures como Decisiones falsas:
-
-```python
-# src/app/main.py
-import json
-from pathlib import Path
-import streamlit as st
+import servicio                    # forma recomendada
 from contratos import Decision
-
-AVISO = "Orientación educativa basada en una simulación con datos ficticios. No es asesoría financiera ni ejecuta operaciones."
-RAIZ = Path(__file__).resolve().parents[2]
-d = Decision.model_validate_json((RAIZ / "tests/fixtures/contratos/decision_tipica.json").read_text(encoding="utf-8"))
-
-st.title("Hoy")
-st.metric("Hoy puedes gastar hasta", f"S/{d.numero_hoy:,.0f}")
-st.caption(AVISO)
-
-# tests/e2e/test_app.py
-from pathlib import Path
-from streamlit.testing.v1 import AppTest
-
-APP = Path(__file__).resolve().parents[2] / "src/app/main.py"
-
-def test_pantalla_hoy_abre_y_muestra_numero():
-    at = AppTest.from_file(str(APP)).run()
-    assert not at.exception
-    assert at.metric[0].value.startswith("S/")
 ```
+
+`from src import servicio` también funciona y devuelve el mismo módulo, pero no mezcles las dos formas en un mismo archivo. Hasta que el servicio real responda (13:00), usa `servicio_falso.py` con las fixtures `decision_verde`, `decision_rojo`, `decision_confianza_baja`, `decision_sin_alcance` y `reporte_calidad_ejemplo`.
+
+Lo que devuelve el servicio real:
+
+- `consultar(...)` → `Decision` con `registro_id` (para auditar) y `respaldo=True` si se usó la regla sencilla porque el modelo no estaba disponible o no se adoptó. Errores: `servicio.ErrorServicio` con `.mensaje_usuario` listo para mostrar.
+- `responder(propuesta_id, accion)` → `{"ok", "propuesta_id", "accion", "registro_id", "mensaje"}`; el mensaje dice "Simulación: no se movió ningún dinero." Una segunda respuesta a la misma propuesta devuelve `ok: False`.
+- `salud()` → `{"consultas", "p50", "p95", "tasa_error", "tasa_respaldo", "unidad": "ms"}` (`p50`/`p95` son `None` sin consultas).
+- `auditar(registro_id)` → `{"encontrado", "entradas", "decision", "version_modelo", "hash_config", "misma_config", "mismos_datos", "diferencias", "se_reproduce", ...}`.
