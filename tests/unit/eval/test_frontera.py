@@ -163,6 +163,15 @@ def test_frontera_perturbado_escribe_en_otro_archivo(fr, df, cfg):
     assert list(_leer(fr.RUTA_SALIDA_PERTURBADO)[0].keys()) == COLUMNAS
 
 
+def test_perturbado_entrena_con_el_dataset_normal_si_se_le_pasa(fr, df, cfg, monkeypatch):
+    entrenados = []
+    monkeypatch.setattr(fr, "_entrenar_modelo", lambda d, c: entrenados.append(d) or "MODELO")
+    normal = df.copy()
+    fr.frontera_perturbado(df, cfg, df_entrenamiento=normal)
+    fr.frontera_perturbado(df, cfg)
+    assert entrenados[0] is normal and entrenados[1] is df
+
+
 def test_referencias_no_soportadas_avisan_y_no_rompen(fr, df, cfg, monkeypatch):
     base = fr.juguete
 
