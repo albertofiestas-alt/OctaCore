@@ -1,6 +1,6 @@
 # Reporte de calidad de los datos sinteticos
 
-Generado con semilla 20261114, version 1.1, hash 736316b2c4ad9b5c (verdad de eventos: hash 04a07cae737c1505). Tiempo: 17 s.
+Generado con semilla 20261114, version 1.1, hash 736316b2c4ad9b5c (verdad de eventos: hash 04a07cae737c1505).
 
 ## Resultado de las comprobaciones
 

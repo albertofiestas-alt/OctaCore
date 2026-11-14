@@ -417,6 +417,8 @@ def generar_con_verdad(n_personas=400, meses=MESES, semilla=None, perturbado=Fal
     df["monto"] = df["monto"].round(2)
     susc_ids = df.loc[df["_susc_doble"], "transaction_id"].tolist()
     df = df[COLUMNAS]
+    # OJO: to_csv() en memoria usa os.linesep, asi que "hash" y "hash_verdad" dependen del sistema (CRLF en Windows,
+    # LF en Linux/macOS) aunque los datos sean identicos. Pendiente de decision; ver docs/datos.md.
     contenido = df.to_csv(index=False).encode("utf-8")
     pii = verdad[verdad["evento"].str.startswith("pii_")]["evento"].str.removeprefix("pii_").value_counts()
     meta = {"semilla": semilla, "version_generador": str(prm["version_generador"]), "perturbado": bool(perturbado),
@@ -621,11 +623,11 @@ def _fmt(x, pre="", suf="", dec=None):
     return f"{pre}{x:,.{dec}f}{suf}"
 
 
-def _reporte(med, real, real_mu, antes, fallas, meta, meta_p, tiempo):
+def _reporte(med, real, real_mu, antes, fallas, meta, meta_p):
     t, ta = real["total"], (antes or {}).get("completo", {}).get("total")
     l = ["# Reporte de calidad de los datos sinteticos", "",
          f"Generado con semilla {meta['semilla']}, version {meta['version_generador']}, hash {meta['hash']} "
-         f"(verdad de eventos: hash {meta['hash_verdad']}). Tiempo: {tiempo:.0f} s.", "",
+         f"(verdad de eventos: hash {meta['hash_verdad']}).", "",
          "## Resultado de las comprobaciones", ""]
     l += [f"- FALLA: {x}" for x in fallas] or ["- Todas las comprobaciones pasan (contrato, ids unicos, signos, diciembre en los meses 12 y 24, "
                                                "duplicados con original, PII solo en las filas declaradas en verdad_eventos.csv)."]
@@ -722,6 +724,15 @@ def _semilla_config() -> int:
         ) from e
 
 
+def _escribir_csv(df, ruta):
+    """CSV con LF en cualquier sistema (Windows escribiria CRLF y el archivo cambiaria entre laptops)."""
+    df.to_csv(ruta, index=False, lineterminator="\n")
+
+
+def _escribir_texto(ruta, texto):
+    ruta.write_text(texto, encoding="utf-8", newline="\n")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--n", type=int, default=400)
@@ -737,25 +748,25 @@ def main(argv=None):
     dfp, meta_p, verdad_p = generar_con_verdad(a.n, MESES, a.semilla + 1000, perturbado=True)
     fallas, med = verificar(df, meta, verdad)
     fp, _ = verificar(dfp, meta_p, verdad_p)
-    df.to_csv(out / "generado" / "movimientos.csv", index=False)
-    dfp.to_csv(out / "generado" / "movimientos_perturbado.csv", index=False)
-    verdad.to_csv(out / "generado" / "verdad_eventos.csv", index=False)
-    verdad_p.to_csv(out / "generado" / "verdad_eventos_perturbado.csv", index=False)
-    (out / "generado" / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
-    (out / "generado" / "meta_perturbado.json").write_text(json.dumps(meta_p, indent=2, ensure_ascii=False), encoding="utf-8")
+    _escribir_csv(df, out / "generado" / "movimientos.csv")
+    _escribir_csv(dfp, out / "generado" / "movimientos_perturbado.csv")
+    _escribir_csv(verdad, out / "generado" / "verdad_eventos.csv")
+    _escribir_csv(verdad_p, out / "generado" / "verdad_eventos_perturbado.csv")
+    _escribir_texto(out / "generado" / "meta.json", json.dumps(meta, indent=2, ensure_ascii=False))
+    _escribir_texto(out / "generado" / "meta_perturbado.json", json.dumps(meta_p, indent=2, ensure_ascii=False))
     part = particion(df, a.semilla) | {"semilla": a.semilla, "hash_datos": meta["hash"]}
-    (out / "generado" / "particion.json").write_text(json.dumps(part, indent=2, ensure_ascii=False), encoding="utf-8")
+    _escribir_texto(out / "generado" / "particion.json", json.dumps(part, indent=2, ensure_ascii=False))
     mu = muestra_de(df)
     ids_mu = sorted(mu["customer_id"].unique().tolist())
-    mu.to_csv(out / "muestra" / "movimientos.csv", index=False)
-    verdad[verdad["customer_id"].isin(ids_mu)].to_csv(out / "muestra" / "verdad_eventos.csv", index=False)
-    (out / "muestra" / "meta.json").write_text(json.dumps({"origen": "subconjunto del dataset completo", "personas": ids_mu,
-                                                           "semilla": meta["semilla"], "version_generador": meta["version_generador"],
-                                                           "hash_completo": meta["hash"]}, indent=2), encoding="utf-8")
+    _escribir_csv(mu, out / "muestra" / "movimientos.csv")
+    _escribir_csv(verdad[verdad["customer_id"].isin(ids_mu)], out / "muestra" / "verdad_eventos.csv")
+    _escribir_texto(out / "muestra" / "meta.json", json.dumps({"origen": "subconjunto del dataset completo", "personas": ids_mu,
+                                                              "semilla": meta["semilla"], "version_generador": meta["version_generador"],
+                                                              "hash_completo": meta["hash"]}, indent=2))
     real, real_mu = medir_realismo(df), medir_realismo(mu)
     antes = json.loads(MEDIDAS_V1_0.read_text(encoding="utf-8")) if MEDIDAS_V1_0.exists() else None
-    (out / "REPORTE_DATOS.md").write_text(_reporte(med, real, real_mu, antes, fallas + [f"(perturbado) {x}" for x in fp],
-                                                   meta, meta_p, time.time() - t0), encoding="utf-8")
+    _escribir_texto(out / "REPORTE_DATOS.md", _reporte(med, real, real_mu, antes, fallas + [f"(perturbado) {x}" for x in fp],
+                                                       meta, meta_p))
     from datos.chat import generar_preguntas        # preguntas de entrenamiento del asistente (opcion C)
     chat = generar_preguntas(out / "chat", a.semilla)
     print(json.dumps({"chat": chat, "filas": med["filas"], "personas": med["personas"], "fallas": fallas + fp, "hash": meta["hash"],
