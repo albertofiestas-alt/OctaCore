@@ -29,3 +29,10 @@ Las alternativas rechazadas con datos también se anotan. La fuente es la v7; su
 - `umbrales_confianza` (`ancho_alto`, `ancho_bajo`). **[Gino]** Hoy los planes los ponen en tres lugares: `config/base.yaml` (Anexo B), `config/motor.yaml` (plan de Sebastián) y `config/preregistro.yaml` (tu plan). Hay que elegir uno y que el motor lea de ahí.
 - `umbral_alerta_sesgo` (config/base.yaml o preregistro)
 - Umbral numérico de la regla de adopción (README y `config/preregistro.yaml`)
+
+## Regla de adopción (Gino, borrador)
+
+| # | Fecha y hora | Decisión | Dato que la respalda | Qué decidimos | Qué haríamos distinto | Aprobó |
+|---|---|---|---|---|---|---|
+| 18 | 14-nov 11:51 | Cómo se compara el modelo con regla2 "a igual % de pagos descubiertos" en `eval/adopcion.py` | El plan dice "mismo % que regla2" pero la frontera trae 4 puntos por método (cuantiles P5, P20, P50, P80) y no coinciden en %; `eval/resultados/frontera.csv` aún no existe **[por medir]** | Referencia = punto de regla2 en `cuantil_conservador`; gasto del modelo a ese % por interpolación lineal; si el modelo no cubre ese %, no se extrapola y no se adopta. Mejora en soles por día, absoluta, en la prueba y en el perturbado. Alternativa rechazada: comparar los cuatro cuantiles (exigiría ganar en todos, más estricto que el plan) | Con más puntos de frontera, comparar toda la curva. Si Gino prefiere umbral relativo, es un cambio de una línea | Gino **[falta Gino]** |
+| 19 | 14-nov 11:51 | `config/preregistro.yaml` entra solo con estructura y todo en null; la regla falla con "pre-registro pendiente" si `umbral_adopcion_mejora` o `cuantil_conservador` son null | Plan de Gino: los números los fija Gino a mano a las 12:00 en un solo commit antes de `make eval`; `tests/unit/eval/test_adopcion.py` | Ningún valor inventado; la regla no escribe `adopcion.json` mientras haya null | Una prueba que también falle si el commit de pre-registro es posterior a la primera corrida de `make eval` (hoy solo se verifica a mano con `git log`) | Gino **[falta Gino]** |
