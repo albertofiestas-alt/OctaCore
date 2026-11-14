@@ -40,12 +40,36 @@ REFERENCIAS = ("gasto_cero", "gasto_fijo")
 _ERRORES_REFERENCIA = (ValueError, KeyError, NotImplementedError)
 
 
-def _cargar_simulador():
-    """Import perezoso de eval/simular.py (eval/ no es un paquete). Falla claro si aún es un esqueleto."""
-    spec = importlib.util.spec_from_file_location("eval_simular", Path(__file__).resolve().parent / "simular.py")
+def _cargar_modulo(nombre: str):
+    spec = importlib.util.spec_from_file_location(f"eval_{nombre}", Path(__file__).resolve().parent / f"{nombre}.py")
     modulo = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(modulo)
-    return modulo.simular_persona
+    return modulo
+
+
+def _es_esqueleto(simular) -> bool:
+    """El esqueleto de V0 lanza NotImplementedError de inmediato; uno real falla distinto con argumentos vacíos."""
+    try:
+        simular(None, None, None, "regla2", 0.20)
+    except NotImplementedError:
+        return True
+    except Exception:  # noqa: BLE001 - cualquier otro error indica código real
+        return False
+    return False
+
+
+def _cargar_simulador():
+    """Import perezoso de eval/simular.py (eval/ no es un paquete).
+
+    Si todavía es un esqueleto usa eval/_simulador_respaldo.py y lo avisa con un warning: los números salen del
+    RESPALDO, no del simulador oficial. Para nada: se borra el respaldo cuando exista simular.py.
+    """
+    oficial = _cargar_modulo("simular").simular_persona
+    if not _es_esqueleto(oficial):
+        return oficial
+    warnings.warn("eval/simular.py sigue en esqueleto: la frontera usa el simulador de RESPALDO "
+                  "(eval/_simulador_respaldo.py), no el oficial", UserWarning, stacklevel=2)
+    return _cargar_modulo("_simulador_respaldo").simular_persona
 
 
 def _inicio_mes(n: int) -> pd.Timestamp:
@@ -106,10 +130,10 @@ def _escribir(ruta: Path, filas: list[dict]) -> None:
             w.writerow({**fila, "cuantil": "" if fila["cuantil"] is None else fila["cuantil"]})
 
 
-def _calcular(df, cfg, metodos, ruta: Path) -> list[dict]:
+def _calcular(df, cfg, metodos, ruta: Path, df_modelo=None) -> list[dict]:
     simular = _cargar_simulador()
     personas = _personas_de_prueba(df)
-    modelo = _entrenar_modelo(df, cfg) if "modelo" in metodos else None
+    modelo = _entrenar_modelo(df if df_modelo is None else df_modelo, cfg) if "modelo" in metodos else None
 
     filas = []
     for metodo in metodos:
@@ -136,6 +160,9 @@ def frontera(df, cfg, metodos=("regla1", "regla2", "modelo")):
     return _calcular(df, cfg, metodos, RUTA_SALIDA)
 
 
-def frontera_perturbado(df, cfg, metodos=("regla1", "regla2", "modelo")):
-    """Lo mismo con el dataset del generador perturbado. Guarda eval/resultados/frontera_perturbado.csv."""
-    return _calcular(df, cfg, metodos, RUTA_SALIDA_PERTURBADO)
+def frontera_perturbado(df, cfg, metodos=("regla1", "regla2", "modelo"), df_entrenamiento=None):
+    """Lo mismo con el dataset del generador perturbado. Guarda eval/resultados/frontera_perturbado.csv.
+
+    Robustez: pasa `df_entrenamiento` (el dataset normal) para que el modelo se entrene con el mundo normal y se mida
+    en el perturbado; sin él se entrena con `df` (mismo mundo que se mide, no mide robustez)."""
+    return _calcular(df, cfg, metodos, RUTA_SALIDA_PERTURBADO, df_entrenamiento)
