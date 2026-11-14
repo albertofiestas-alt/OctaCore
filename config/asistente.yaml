@@ -1,0 +1,34 @@
+# Asistente (opción C). Dueños: Gino (intenciones, eval), Mathias (guardia). null = [por fijar ANTES de ver resultados].
+modo: 1                       # 1 = sin LLM (siempre disponible); 2 = con LLM (necesita autorización de la opción B)
+umbral_intencion: null        # confianza mínima para no pedir reformular [por fijar en el pre-registro]
+max_caracteres: 200           # guardia
+max_palabras: 120             # verificador de salida
+
+# Clasificador de intención
+csv_preguntas: data/chat/preguntas.csv
+semilla_clasificador: 20261114
+confianza_reglas: 0.5         # bajo esta confianza del ML mandan las palabras clave (valor a priori, no ajustado con resultados)
+confianza_llm: 1.0            # confianza que se asigna a una intención validada que devolvió el LLM
+
+# Parámetros validados en código (también los que extrae el LLM)
+dia_minimo: 0
+dia_maximo: 14
+monto_minimo: 0
+monto_maximo: 10000
+max_ingresos_extra: 3
+dia_por_defecto: 0            # ingreso sin día ("y si me adelantan S/50") = hoy
+
+# Palabras clave de respaldo (sin tildes, minúsculas). Orden = prioridad; la primera intención que coincide gana.
+palabras_clave:
+  fuera_de_alcance: [invertir, inversion, prestamo, credito, dolares, bitcoin, cripto, acciones, clima, tiempo hara, receta, futbol, chiste]
+  que_pasa_si: ["y si ", que pasa si, que pasaria, que ocurriria, simula, si cobro, si recibo, si gasto, si me pagan]
+  propuesta: [propon, sugerencia, recomiendas, recomendacion, que hago para, apartar, separar]
+  concepto: [que es, que significa, que quiere decir, significa]
+  estado_pago: [me alcanza, alcanza para, alcanzara, esta cubierto, esta cubierta, en riesgo]
+  explicar_numero: [por que, como llegaron, como calcularon, como se calcula, de donde sale]
+gasto_palabras: [gasto, gastar, gasta, compra, comprar, cena, pago de]   # un monto con estas palabras antes es gasto_hoy
+
+# Evaluación del chat (eval/chat.py)
+ruta_ciegos: data/chat/ciego_*.csv
+ruta_ataques: data/chat/ataques.csv
+ruta_resultados_chat: eval/resultados/chat.csv
