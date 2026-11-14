@@ -1,0 +1,11 @@
+# Parámetros de la ingesta (dueño: Mathias). Se leen como cfg["ingesta"].
+# Valores iniciales del plan (sección 5 y "PII y columnas sensibles"). Cambiarlos no exige tocar código.
+
+max_mb: 50                    # tamaño máximo del CSV [por fijar]
+mad_k: 5                      # atípico si |monto| > mediana + k * MAD (si MAD = 0: 5 * mediana)
+tol_monto: 0.10               # pago con fecha: monto dentro de 10 % de la mediana
+tol_dia: 3                    # pago con fecha: el día del mes varía a lo sumo esto
+min_ocurrencias: 3            # pago con fecha: ocurrencias mínimas
+ventana_suscripcion_dias: 30  # suscripción duplicada: dos cobros iguales dentro de esta ventana
+max_filas: 1000000            # lectura segura: filas máximas del CSV
+max_columnas: 100             # lectura segura: columnas máximas del CSV
