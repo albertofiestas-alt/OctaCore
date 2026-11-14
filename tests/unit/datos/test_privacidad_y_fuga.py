@@ -24,8 +24,10 @@ def datos():
 
 
 @pytest.fixture(scope="module")
-def csv_generado(datos) -> str:
-    return datos[0].to_csv(index=False)
+def con_verdad():
+    from datos.generador import generar_con_verdad
+
+    return generar_con_verdad(N, 24, semilla=7)
 
 
 def _normalizar(nombre: str) -> str:
@@ -70,7 +72,9 @@ def test_features_del_modelo_sin_etiquetas():
 
 
 # --------------------------------------------------------------------------- #
-# PII: en TODO el texto del CSV (patrones de config/base.yaml + 8 y 9 dígitos)
+# PII (v1.1): el generador inyecta PII FICTICIA en ~0.5 % del texto de comercio para que la
+# ingesta la enmascare. Fuera de las filas declaradas en verdad_eventos no puede haber ninguna,
+# en ninguna columna (patrones de config/base.yaml + 8 y 9 dígitos).
 # --------------------------------------------------------------------------- #
 
 PATRONES = {
@@ -82,18 +86,40 @@ PATRONES = {
 }
 
 
-@pytest.mark.parametrize("nombre", sorted(PATRONES))
-def test_sin_pii_en_el_csv_generado(csv_generado, nombre):
-    encontrado = PATRONES[nombre].search(csv_generado)
-    assert encontrado is None, f"patrón {nombre} encontrado: {encontrado.group()!r}"
+VERDAD_MUESTRA = MUESTRA.parent / "verdad_eventos.csv"
 
 
-@pytest.mark.skipif(not MUESTRA.exists(), reason="sin data/muestra")
+def _pii_fuera_de_lo_declarado(df: pd.DataFrame, verdad: pd.DataFrame, nombre: str) -> list[str]:
+    """Textos donde el patrón aparece fuera de las filas con PII declarada (o fuera de comercio)."""
+    declaradas = set(verdad.loc[verdad["evento"].str.startswith("pii_"), "transaction_id"])
+    fuera = []
+    for col in df.columns:
+        texto = df[col].fillna("").astype(str)
+        hay = texto.str.contains(PATRONES[nombre])
+        if col == "comercio":
+            hay &= ~df["transaction_id"].isin(declaradas)
+        fuera += texto[hay].head(3).tolist()
+    return fuera
+
+
 @pytest.mark.parametrize("nombre", sorted(PATRONES))
-def test_sin_pii_en_la_muestra_publicada(nombre):
-    texto = MUESTRA.read_text(encoding="utf-8")
-    encontrado = PATRONES[nombre].search(texto)
-    assert encontrado is None, f"patrón {nombre} encontrado: {encontrado.group()!r}"
+def test_sin_pii_no_declarada_en_el_generado(con_verdad, nombre):
+    df, _, verdad = con_verdad
+    fuera = _pii_fuera_de_lo_declarado(df, verdad, nombre)
+    assert not fuera, f"patrón {nombre} fuera de las filas declaradas: {fuera!r}"
+
+
+def test_hay_pii_declarada_en_el_generado(con_verdad):
+    assert con_verdad[2]["evento"].str.startswith("pii_").sum() > 0
+
+
+@pytest.mark.skipif(not (MUESTRA.exists() and VERDAD_MUESTRA.exists()), reason="sin data/muestra con verdad_eventos")
+@pytest.mark.parametrize("nombre", sorted(PATRONES))
+def test_sin_pii_no_declarada_en_la_muestra_publicada(nombre):
+    df = pd.read_csv(MUESTRA, dtype=str, keep_default_na=False)
+    verdad = pd.read_csv(VERDAD_MUESTRA, dtype=str, keep_default_na=False)
+    fuera = _pii_fuera_de_lo_declarado(df, verdad, nombre)
+    assert not fuera, f"patrón {nombre} fuera de las filas declaradas: {fuera!r}"
 
 
 def test_los_patrones_si_detectan_pii():

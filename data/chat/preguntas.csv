@@ -223,3 +223,97 @@ cuanto interes me da el banco,fuera_de_alcance
 debo reducir mis gastos cuanto,propuesta
 ¿Cuánto podría gastar si cobro S/250 el día 3?,que_pasa_si
 proponme como llegar al dia 5,propuesta
+"oye, de donde sacaste que hoy me toca gastar S/. 48",explicar_numero
+xq mi limite de hoy bajo tanto?,explicar_numero
+¿Qué datos usaste para decirme cuánto gasto hoy?,explicar_numero
+me explicas el porque del monto de hoy plis,explicar_numero
+Quisiera saber qué influye en la cifra que me muestras arriba,explicar_numero
+"no cuadra: ayer 90 y hoy 40, ¿qué cambió?",explicar_numero
+mostrame los pasos q siguio la app para llegar a mi numero,explicar_numero
+¿Ya está listo el pago del 15 o me falta plata?,estado_pago
+mi cuota del cole del dia 8 corre peligro?,estado_pago
+q pagos vencen esta semana y cuales no alcanzo a cubrir,estado_pago
+"El agua del 20, ¿la cubro?",estado_pago
+llego con lo del arriendo o no,estado_pago
+¿Cuál es el pago más complicado que viene?,estado_pago
+sale en rojo la tarjeta del dia 6?,estado_pago
+¿Qué pasaría con mi límite si el viernes me depositan S/. 300?,que_pasa_si
+y si le presto 70 a mi hermano hoy,que_pasa_si
+simulame q cobro 450 soles el dia 14,que_pasa_si
+"Si compro unas zapatillas de S/ 180 mañana, ¿me afecta?",que_pasa_si
+q tal si no me pagan nada hasta el dia 12,que_pasa_si
+"y si entran 120 el 4 y otros 60 el 9, como queda",que_pasa_si
+¿Cambia en algo si hoy gasto 25 soles menos?,que_pasa_si
+que pasa si se me atrasa el cobro 3 dias,que_pasa_si
+dame ideas para no pasarme de mi limite esta quincena,propuesta
+¿Qué recorto primero para llegar tranquilo al 10?,propuesta
+sugiereme cuanto guardar cada dia hasta mi pago grande,propuesta
+¿Qué me aconsejas hacer con el pago de S/ 220 que se viene?,propuesta
+armame un plan simple para los proximos 7 dias,propuesta
+como reparto mi plata hasta cobrar,propuesta
+a que se refiere cuando habla de ingreso conservador,concepto
+¿Qué es eso del escenario P50?,concepto
+que significa que la confianza sea alta,concepto
+¿Qué quiere decir 'pago con fecha'?,concepto
+para q sirve el rango de incertidumbre,concepto
+que diferencia hay entre el semaforo verde y el amarillo,concepto
+¿Qué significa que no se ejecute nada?,concepto
+¿Cuál es la capital de Francia?,fuera_de_alcance
+dime la receta del ceviche,fuera_de_alcance
+¿Conviene sacar un crédito hipotecario?,fuera_de_alcance
+mandale S/. 80 a mi mama por yape,fuera_de_alcance
+q opinas de las acciones de tesla,fuera_de_alcance
+traduceme esto al ingles porfa,fuera_de_alcance
+¿Cuánto cuesta un iPhone nuevo?,fuera_de_alcance
+xq mi numero de hoy es tan chico,explicar_numero
+q datos usa la app para calcular mi numero,explicar_numero
+mostrame como la app llego a esta cifra,explicar_numero
+que influye en el numero que me sale hoy,explicar_numero
+¿Qué factores influyen en mi límite de hoy?,explicar_numero
+xq hoy puedo gastar menos que ayer,explicar_numero
+de donde saca la app el monto de hoy,explicar_numero
+explicame los pasos del calculo de mi numero,explicar_numero
+q hay detras de la cifra de arriba,explicar_numero
+¿En qué se basa la app para decirme cuánto gastar?,explicar_numero
+q pagos tengo esta semana y cuales no llego a cubrir,estado_pago
+cual es el pago mas dificil de los proximos dias,estado_pago
+¿Cuál de mis pagos está más ajustado?,estado_pago
+me alcanza para pagar el recibo de agua del dia 6,estado_pago
+q pagos estan en riesgo,estado_pago
+¿Llego al pago del colegio la otra semana?,estado_pago
+mi cuota del dia 9 queda cubierta o no,estado_pago
+¿Cuáles pagos de esta semana corren peligro?,estado_pago
+el alquiler del dia 3 me alcanza?,estado_pago
+si compro unos zapatos de S/ 120 mañana ¿me afecta?,que_pasa_si
+y si mañana gasto 70 soles,que_pasa_si
+q pasa si me llegan S/ 200 por yape el dia 5,que_pasa_si
+¿Y si me hacen un plin de 100 soles el día 4?,que_pasa_si
+si compro una mochila de s/90 mañana cambia mi numero,que_pasa_si
+y si mañana cobro 150,que_pasa_si
+q pasa con mi numero si gasto 60 hoy,que_pasa_si
+¿Afecta mi semáforo si me depositan 300 mañana?,que_pasa_si
+armame un plan para los proximos 5 dias,propuesta
+q me recomiendas hacer esta semana,propuesta
+dame un plan para llegar al pago del dia 10,propuesta
+¿Cómo me organizo para no fallar un pago?,propuesta
+q puedo hacer para mejorar mi numero,propuesta
+ayudame con un plan para cubrir mis pagos,propuesta
+que me sugieres apartar mañana,propuesta
+armame una estrategia para la semana,propuesta
+a que se refiere ingreso conservador,concepto
+¿Qué es el ingreso conservador?,concepto
+q significa incertidumbre en la app,concepto
+¿Qué quiere decir que mi número tiene incertidumbre?,concepto
+q es el colchon de la app,concepto
+explicame que es el cuantil p20,concepto
+a que se refiere la confianza media,concepto
+dime una receta de lomo saltado,fuera_de_alcance
+mandale S/ 50 a mi hermano por yape,fuera_de_alcance
+transferir plata a mi amigo por plin,fuera_de_alcance
+q receta me recomiendas para cenar,fuera_de_alcance
+enviale 100 soles a mi tia,fuera_de_alcance
+abre una cuenta de ahorros por favor,fuera_de_alcance
+compra entradas para el concierto,fuera_de_alcance
+¿Cómo está el clima mañana?,fuera_de_alcance
+recargame el celular por yape,fuera_de_alcance
+q me recomiendas para ver en netflix,fuera_de_alcance

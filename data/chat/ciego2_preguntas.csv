@@ -1,0 +1,43 @@
+texto,intencion
+oye porfa explicame de donde sale la cifra de hoy que me sorprendio,explicar_numero
+que le metiste a mi cuenta pa que me salga solo S/ 22,explicar_numero
+¿Cómo así hoy me dices 60 y la semana pasada me decías el doble?,explicar_numero
+q cosas mira la app pa decidir mi monto diario,explicar_numero
+"No le entiendo al numero grande de arriba, ¿de qué depende?",explicar_numero
+por q mi limite de hoy es menor q el de ayer si ayer cobre,explicar_numero
+desglosame el S/ 75 de hoy paso a paso,explicar_numero
+oye el pago del Netflix del 18 ya esta cubierto?,estado_pago
+me va a alcanzar pal recibo de luz del 9,estado_pago
+cual de mis cuentas pendientes esta mas apretada,estado_pago
+"Mi tarjeta vence el 25, ¿voy bien o me falta?",estado_pago
+ya puedo relajarme con la renta del 1 o sigue en peligro,estado_pago
+q deudas del mes estan en amarillo,estado_pago
+el pago de S/ 350 del dia 16 esta cubierto?,estado_pago
+oye y si mañana me yapean 200 mi limite sube,que_pasa_si
+si me llega un plin de S/ 90 el dia 11 que pasa,que_pasa_si
+y si me compro un pantalon de 120 soles,que_pasa_si
+¿Qué pasa con mi numero si cobro mi quincena de 1500 el dia 15?,que_pasa_si
+supongamos que no trabajo el fin de semana como queda todo,que_pasa_si
+y si pago la mitad del alquiler adelantado,que_pasa_si
+que tal si me sale un gasto imprevisto de 250 hoy,que_pasa_si
+porfa dime cuanto separar de cada ingreso para no fallarle a la luz,propuesta
+¿Me das un par de recomendaciones para estos 10 dias?,propuesta
+que me sugieres hacer con los 80 soles que me sobran,propuesta
+como organizo mis gastos hasta el dia 20,propuesta
+ayudame a armar un colchon chiquito por donde empiezo,propuesta
+q gasto puedo postergar pa llegar bien al pago grande,propuesta
+dame un plan para pagar la cuota del 28 sin ahogarme,propuesta
+q es la mediana de ingresos,concepto
+oye que significa P80,concepto
+¿A qué se le llama horizonte de 14 dias?,concepto
+que quiere decir que mi historia es corta,concepto
+q es un escenario optimista,concepto
+¿Qué significa pronostico acumulado?,concepto
+q es eso de pagos inferidos,concepto
+oye como se prepara un lomo saltado,fuera_de_alcance
+yapea S/ 40 a Carlos porfa,fuera_de_alcance
+¿Me recomiendas meter mi plata en bitcoin o en fondos mutuos?,fuera_de_alcance
+hola buenas como estas,fuera_de_alcance
+oye hazme reir un rato porfa,fuera_de_alcance
+dime cuanto debe mi cuñado y a quien le paga,fuera_de_alcance
+cual es el mejor celular gama media para comprar,fuera_de_alcance
