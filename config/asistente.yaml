@@ -1,0 +1,41 @@
+# Asistente (opción C). Dueños: Gino (intenciones, eval), Mathias (guardia). null = [por fijar ANTES de ver resultados].
+modo: 1                       # 1 = sin LLM (siempre disponible); 2 = con LLM (necesita autorización de la opción B)
+umbral_intencion: 0.30         # fijado 14-nov 12:18 por Gino (DECISIONES #24); medido en validación, no en el ciego
+max_caracteres: 200           # guardia
+max_palabras: 120             # verificador de salida
+
+# Clasificador de intención
+csv_preguntas: data/chat/preguntas.csv
+semilla_clasificador: 20261114
+confianza_reglas: 0.5         # bajo esta confianza del ML mandan las palabras clave (valor a priori, no ajustado con resultados)
+confianza_llm: 1.0            # confianza que se asigna a una intención validada que devolvió el LLM
+
+# Parámetros validados en código (también los que extrae el LLM)
+dia_minimo: 0
+dia_maximo: 14
+monto_minimo: 0
+monto_maximo: 10000
+max_ingresos_extra: 3
+dia_por_defecto: 0            # ingreso sin día ("y si me adelantan S/50") = hoy
+
+# Palabras clave de respaldo (sin tildes, minúsculas). Orden = prioridad; la primera intención que coincide gana.
+palabras_clave:                # se buscan como palabra (o frase) completa
+  fuera_de_alcance: [invertir, inversion, inversiones, prestamo, prestamos, credito, creditos, dolares, bitcoin, cripto, criptomoneda, criptomonedas, clima, tiempo hara, receta, recetas, futbol, chiste, yape, plin, pagale, mandame]
+  que_pasa_si: [y si, que pasa si, que pasaria, que ocurriria, simula, simular, si cobro, si recibo, si gasto, si me pagan]
+  propuesta: [propon, proponme, propone, propuesta, sugerencia, sugerencias, recomiendas, recomendacion, recomendaciones, que hago para, apartar, separar]
+  concepto: [que es, que significa, que quiere decir, significa]
+  estado_pago: [me alcanza, alcanza para, alcanzara, esta cubierto, esta cubierta, en riesgo]
+  explicar_numero: [por que, como llegaron, como calcularon, como se calcula, de donde sale]
+# Palabras que mandan a fuera_de_alcance AUNQUE la confianza ML sea alta (DECISIONES #27). Solo las inequívocas:
+# acciones de mover dinero a otra persona y recetas. 'yape', 'plin' y 'transferencia' son ambiguas (pueden ser ingresos
+# o pagos del propio usuario): solo cuentan con confianza ML baja (arriba).
+confianza_regla_inequivoca: 1.0   # confianza que se asigna cuando manda una palabra inequívoca
+palabras_fuera_inequivocas: [receta, recetas, transferir, enviar, enviale, mandale, depositale]
+# Un monto es gasto o ingreso según la ÚLTIMA de estas palabras que aparezca antes de él (sin ninguna: ingreso).
+gasto_palabras: [gasto, gastar, gasta, compra, compro, comprar, cena, pagar, presto]
+ingreso_palabras: [cobro, cobrar, recibo, recibir, pagan, entra, entrar, gano, ganar, ingreso, adelantan, depositan, abonan, cae]
+
+# Evaluación del chat (eval/chat.py)
+ruta_ciegos: data/chat/ciego2_*.csv   # el primer ciego (ciego_preguntas.csv) es desarrollo desde DECISIONES #27
+ruta_ataques: data/chat/ataques.csv
+ruta_resultados_chat: eval/resultados/chat.csv

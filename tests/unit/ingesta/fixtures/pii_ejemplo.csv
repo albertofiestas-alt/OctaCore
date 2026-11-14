@@ -1,0 +1,9 @@
+customer_id,transaction_id,fecha_hora,monto,moneda,tipo,categoria,comercio
+P0001,T001,2026-01-05 10:00:00,12345678,PEN,ingreso,otros,Bodega Sol
+P0001,T002,2026-01-06 10:00:00,-25.50,PEN,gasto,otros,Pago 4111 1111 1111 1111 gracias
+P0002,T003,2026-01-07 10:00:00,-10.00,PEN,gasto,otros,Cliente 12345678 Lima
+P0003,T004,2026-01-08 10:00:00,-12.00,PEN,gasto,otros,Yape 987654321
+P0004,T005,2026-01-09 10:00:00,-8.00,PEN,gasto,otros,ana.perez@correo.pe
+P0005,T006,2026-01-10 10:00:00,-5.00,PEN,gasto,otros,Tarjeta 4111-1111-1111-1111
+12345678,T007,2026-01-11 10:00:00,-7.00,PEN,gasto,987654321,Bodega Sol
+P0006,T008,2026-01-12 10:00:00,-9.00,PEN,gasto,otros,Ref 1234567 y 123456789
