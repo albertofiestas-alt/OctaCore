@@ -1,0 +1,17 @@
+{
+  "numero_hoy": 0.0,
+  "por_pago": [
+    {"pago_id": "C0001-alquiler-2025-11-17", "permitido": -66.67, "semaforo": "rojo"}
+  ],
+  "confianza": "baja",
+  "desglose": {
+    "saldo": 100.0,
+    "pago_limitante": "C0001-alquiler-2025-11-17",
+    "ingreso_conservador": 0.0,
+    "pagos_hasta_limitante": 300.0,
+    "colchon": 0.0,
+    "faltante": 200.0
+  },
+  "limites": ["No alcanza para el pago del día 3: faltan S/200."],
+  "propuestas": []
+}

@@ -1,0 +1,15 @@
+customer_id,transaction_id,fecha_hora,monto,moneda,tipo,categoria,comercio,saldo,ingreso_recurrente,es_duplicado,es_atipico,pago_con_fecha,arquetipo
+C0001,T000001,2025-09-03 09:12:00,350.00,PEN,ingreso,otros,App Movilidad Ficticia,350.00,False,False,False,False,conductor
+C0001,T000002,2025-09-05 13:40:00,-25.50,PEN,gasto,alimentacion,Mercado Ficticio,324.50,,False,False,False,conductor
+C0001,T000003,2025-09-17 08:00:00,-300.00,PEN,gasto,alquiler,Inmobiliaria Ficticia,24.50,,False,False,True,conductor
+C0001,T000004,2025-09-20 19:05:00,410.00,PEN,ingreso,otros,App Movilidad Ficticia,434.50,False,False,False,False,conductor
+C0001,T000005,2025-10-17 08:00:00,-300.00,PEN,gasto,alquiler,Inmobiliaria Ficticia,134.50,,False,False,True,conductor
+C0001,T000006,2025-10-17 08:00:00,-300.00,PEN,gasto,alquiler,Inmobiliaria Ficticia,134.50,,True,False,True,conductor
+C0001,T000007,2025-10-22 21:30:00,-1800.00,PEN,gasto,,Tienda Ficticia,-1665.50,,False,True,False,conductor
+C0002,T000008,2025-10-01 10:00:00,1200.00,PEN,ingreso,otros,Empresa Ficticia,1200.00,True,False,False,False,asalariado
+C0002,T000009,2025-10-03 07:00:00,-29.90,PEN,gasto,suscripcion,StreamFicticio,1170.10,,False,False,False,asalariado
+C0002,T000010,2025-10-04 07:00:00,-29.90,PEN,gasto,suscripcion,StreamFicticio,1140.20,,False,False,False,asalariado
+C0002,T000011,2025-10-15 10:00:00,1200.00,PEN,ingreso,otros,Empresa Ficticia,2340.20,True,False,False,False,asalariado
+C0002,T000012,2025-10-19 09:00:00,-80.00,PEN,gasto,servicios,Luz Ficticia,2260.20,,False,False,True,asalariado
+C0002,T000013,2025-10-23 09:00:00,-60.00,PEN,gasto,servicios,Internet Ficticio,2200.20,,False,False,True,asalariado
+C0002,T000014,2025-10-28 09:00:00,-350.00,PEN,gasto,deuda,Financiera Ficticia,1850.20,,False,False,True,asalariado

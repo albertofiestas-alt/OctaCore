@@ -1,0 +1,13 @@
+{
+  "filas_entrada": 14,
+  "filas_salida": 13,
+  "duplicados_eliminados": 1,
+  "faltantes": {"categoria": 1, "comercio": 0},
+  "atipicos": 1,
+  "suscripciones_duplicadas": [
+    {"customer_id": "C0002", "comercio": "StreamFicticio", "periodo": "2025-10", "cobros": 2}
+  ],
+  "pagos_inferidos": [
+    {"customer_id": "C0001", "comercio": "Inmobiliaria Ficticia", "categoria": "alquiler", "monto": 300.0, "dia_mes": 17}
+  ]
+}

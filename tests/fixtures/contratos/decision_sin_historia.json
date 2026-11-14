@@ -1,0 +1,10 @@
+{
+  "numero_hoy": 12.5,
+  "por_pago": [
+    {"pago_id": "C0003-alquiler-2025-11-20", "permitido": 12.5, "semaforo": "ambar"}
+  ],
+  "confianza": "baja",
+  "desglose": {"saldo": 300.0, "semanas_historia": 2},
+  "limites": ["Hay menos de 4 semanas de historia: solo se muestra el número de hoy, sin propuestas."],
+  "propuestas": []
+}

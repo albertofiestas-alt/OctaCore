@@ -1,0 +1,11 @@
+{
+  "customer_id": "C0002",
+  "fecha_corte": "2025-11-14",
+  "saldo": 400.0,
+  "pagos": [
+    {"pago_id": "C0002-servicios-2025-11-19", "dia": 5, "monto": 80.0, "categoria": "servicios"},
+    {"pago_id": "C0002-servicios-2025-11-23", "dia": 9, "monto": 60.0, "categoria": "servicios"},
+    {"pago_id": "C0002-deuda-2025-11-28", "dia": 14, "monto": 350.0, "categoria": "deuda"}
+  ],
+  "colchon": 50.0
+}
