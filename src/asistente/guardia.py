@@ -21,6 +21,8 @@ if TYPE_CHECKING:
 _TLD = "com|net|org|pe|io|co|app|xyz|dev|example|ly|gob|info|me"
 _URL = re.compile(rf"(?:https?://|www\.)\S+|\b[\w-]+\.(?:{_TLD})\b\S*", re.IGNORECASE)
 
+PATRON_URL = _URL  # público: lo reutiliza el verificador de salida
+
 _PERSONAS = (
     r"(?:vecin[oa]|jef[ea]|cunad[oa]|suegr[oa]|hermano|hermana|amig[oa]|primo|prima|tio|tia|novi[oa]|espos[oa]|"
     r"pareja|socio|socia|companer[oa]|otra persona|otro usuario|otro cliente|cliente)"
