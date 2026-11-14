@@ -51,8 +51,29 @@ def test_hoy_sin_alcance_mensaje_de_falta():
 
 
 def test_hoy_banner_respaldo_solo_si_respaldo():
-    assert "regla sencilla" in textos(abrir(HOY, "P0003"))
-    assert "regla sencilla" not in textos(abrir(HOY, "P0001"))
+    assert "regla robusta (regla 2)" in textos(abrir(HOY, "P0003"))
+    t = textos(abrir(HOY, "P0001"))
+    assert "regla robusta" not in t and "regla de respaldo" not in t
+
+
+def test_banner_respaldo_generico_si_no_hay_veredicto(monkeypatch, tmp_path):
+    monkeypatch.setenv("UKKU_RESULTADOS", str(tmp_path))
+    t = textos(abrir(HOY, "P0003"))
+    assert "regla de respaldo" in t and "no se adoptó" not in t
+
+
+def test_banner_generico_si_el_modelo_si_se_adopto(monkeypatch, tmp_path):
+    (tmp_path / "adopcion.json").write_text('{"adopta": true, "razon": "x"}', encoding="utf-8")
+    monkeypatch.setenv("UKKU_RESULTADOS", str(tmp_path))
+    assert "regla de respaldo" in textos(abrir(HOY, "P0003"))
+
+
+def test_consultar_pide_regla2_por_defecto(monkeypatch):
+    pedidos = []
+    original = servicio_falso.consultar
+    monkeypatch.setattr(servicio_falso, "consultar", lambda p, f, m="modelo": pedidos.append(m) or original(p, f, m))
+    AppTest.from_file(HOY, default_timeout=30).run()
+    assert pedidos == ["regla2"]
 
 
 def test_error_del_servicio_sin_traceback(monkeypatch):
