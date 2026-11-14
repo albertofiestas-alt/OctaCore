@@ -1,0 +1,6 @@
+combinacion,brecha,arquetipo_mayor_tasa,arquetipo_menor_tasa,umbral_brecha,alerta
+1,0.14457831325301204,conductor,asalariado,0.2,False
+1+2,0.14457831325301204,conductor,asalariado,0.2,False
+1+2+4,0.14457831325301204,conductor,asalariado,0.2,False
+1+2+3+4,0.14457831325301204,conductor,asalariado,0.2,False
+1+2+4+6,0.27710843373493976,conductor,asalariado,0.2,True

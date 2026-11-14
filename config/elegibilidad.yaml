@@ -1,0 +1,21 @@
+# Pre-registro del experimento de elegibilidad (docs/criterios_elegibilidad_semaforo.md). Dueño: Gino.
+# Valores confirmados por Gino (DECISIONES #29); los que siguen en null los fija él a mano ANTES de correr con la serie real.
+# eval/elegibilidad.py falla con "pre-registro pendiente" si algún campo es null. Cambiar algo después de ver resultados
+# exige declararlo en DECISIONES.md.
+
+# N: meses calendario completos y consecutivos de la ventana (los ÚLTIMOS N de la serie). Entero >= 1.
+meses_verde: 6   # fijado por Gino, DECISIONES #29
+# k: semanas ámbar toleradas en la ventana (semana = bloque de 7 días desde el inicio de la ventana con >= 1 día ámbar).
+# 0 = ninguna. Solo se usa en la combinación con criterio 6; el último mes de la ventana debe ir sin ámbar.
+semanas_ambar_toleradas: 2   # Gino: 1 semana por cada 3 meses; con N = 6 meses son 2 (#29)
+# M: días mínimos de serie observados por persona (criterio 4, historia).
+historia_minima_dias: 182   # Gino: 26 semanas = 182 días (#29)
+# Pagos con fecha DISTINTOS en la ventana (criterio 4): suma por mes de pagos_con_fecha_mes. Evita verdes triviales.
+pagos_minimos: 3   # Gino: 3 pagos distintos en los 6 meses, no días (#29)
+# Días de la ventana con confianza "baja" que se toleran (criterio 3). 0 = ninguno.
+dias_confianza_baja_toleradas: 14   # Gino: ~8 % de los 182 días de la ventana (#29)
+# Brecha máxima entre arquetipos (diferencia de tasas, 0 a 1) a partir de la cual se declara alerta de sesgo.
+# NO es el umbral_alerta_sesgo del modelo.
+umbral_brecha: 0.20   # Gino: 20 puntos porcentuales (#29)
+# Reducción de gasto (fracción, p. ej. entre 0.2 y 0.3) con la que se generó la serie de la prueba de incentivo.
+reduccion_gasto_incentivo: 0.25   # Gino: gasto 25 % menor (#29)
