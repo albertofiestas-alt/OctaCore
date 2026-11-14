@@ -206,9 +206,29 @@ def test_pre_registro_pendiente_si_algun_valor_es_null(eleg, campo):
         eleg.califican(serie(persona("P1")), {**PREREG, campo: None})
 
 
-def test_el_yaml_real_nace_con_todo_en_null_y_la_funcion_se_niega_a_correr(eleg):
+# Valores confirmados por Gino (DECISIONES #29). Los que siguen en null son los que aún no fijó.
+FIJADOS_POR_GINO = {
+    "meses_verde": 6,
+    "semanas_ambar_toleradas": 2,  # 1 semana por cada 3 meses, N = 6 meses
+    "historia_minima_dias": 182,  # 26 semanas
+    "dias_con_pagos_minimos": 3,
+    "umbral_brecha": 0.20,
+    "reduccion_gasto_incentivo": 0.25,
+}
+
+
+def test_el_yaml_real_tiene_los_valores_de_gino_y_ninguno_inventado(eleg):
     cfg = yaml.safe_load((RAIZ / "config" / "elegibilidad.yaml").read_text(encoding="utf-8"))
-    assert set(cfg) == set(PREREG) and all(v is None for v in cfg.values())
+    assert set(cfg) == set(PREREG)
+    fijados = {k: v for k, v in cfg.items() if v is not None}
+    assert {k: v for k, v in fijados.items() if k in FIJADOS_POR_GINO} == FIJADOS_POR_GINO
+    # cualquier otro valor lo pone Gino y debe quedar declarado en DECISIONES.md
+
+
+def test_con_un_campo_null_en_el_yaml_real_la_funcion_se_niega_a_correr(eleg):
+    cfg = yaml.safe_load((RAIZ / "config" / "elegibilidad.yaml").read_text(encoding="utf-8"))
+    if all(v is not None for v in cfg.values()):
+        pytest.skip("el pre-registro está completo")
     with pytest.raises(ValueError, match="pre-registro pendiente"):
         eleg.evaluar_elegibilidad(serie(persona("P1")))
 
