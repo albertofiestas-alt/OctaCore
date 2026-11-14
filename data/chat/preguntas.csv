@@ -1,0 +1,225 @@
+texto,intencion
+¿Qué tiempo hará mañana?,fuera_de_alcance
+¿Por qué hoy puedo gastar menos que ayer?,explicar_numero
+el pago de luz del dia 12 esta en riesgo,estado_pago
+como llegaron a s/35,explicar_numero
+Prueba con un ingreso de S/200 el día 3,que_pasa_si
+por que dice que hoy puedo gastar s/120,explicar_numero
+que significa confianza media,concepto
+¿Qué quiere decir ámbar?,concepto
+¿Estoy cubierto para el pago del día 2?,estado_pago
+no entiendo por que me sale s/120,explicar_numero
+y si cobro s/150 el dia 5,que_pasa_si
+quien gano el partido de ayer,fuera_de_alcance
+compro dolares,fuera_de_alcance
+¿Cuánto debería apartar para el alquiler?,propuesta
+"Si recibo S/100 el día 2, ¿cambia mi número?",que_pasa_si
+mi pago del dia 5 esta seguro,estado_pago
+¿Está cubierto el alquiler?,estado_pago
+esta cubierto el alquiler,estado_pago
+¿Cómo saco una tarjeta de crédito?,fuera_de_alcance
+¿Y si me pagan 100 soles el día 10?,que_pasa_si
+y si me adelantan s/50,que_pasa_si
+transfiere s/250 a mi cuenta de ahorros,fuera_de_alcance
+de donde sale ese numero,explicar_numero
+¿Qué significa rojo?,concepto
+¿Qué pagos están en riesgo?,estado_pago
+estoy cubierto para el pago del dia 3,estado_pago
+y si el dia 12 entra un pago de s/100,que_pasa_si
+explicame como calculaste mi numero de hoy,explicar_numero
+¿Qué es un cuantil?,concepto
+No entiendo por qué me sale S/120,explicar_numero
+que hago para llegar a mi pago,propuesta
+por que hoy puedo gastar menos que ayer,explicar_numero
+cuanto deberia separar hoy,propuesta
+explicame el calculo del gasto diario,explicar_numero
+y si no entra ningun ingreso esta semana,que_pasa_si
+hay algo que pueda hacer para mejorar mi semaforo,propuesta
+¿Qué son los pagos con fecha?,concepto
+y si me pagan 80 soles el dia 12,que_pasa_si
+¿Podré pagar la cuota del día 10?,estado_pago
+por que solo puedo gastar s/15 hoy,explicar_numero
+que pasa con mi semaforo si cobro 100 el dia 7,que_pasa_si
+¿Cómo se calcula lo que puedo gastar hoy?,explicar_numero
+Transfiere S/100 a mi cuenta de ahorros,fuera_de_alcance
+¿Y si cobro S/150 el día 7?,que_pasa_si
+¿Me conviene un seguro?,fuera_de_alcance
+que quiere decir ambar,concepto
+¿Y si el día 12 entra un pago de S/100?,que_pasa_si
+¿Compro dólares?,fuera_de_alcance
+prueba con un ingreso de s/200 el dia 3,que_pasa_si
+¿Cómo me aseguro de cubrir el pago del día 10?,propuesta
+que pasaria si hoy gasto 150 soles,que_pasa_si
+¿Qué quiere decir verde?,concepto
+Prueba con un ingreso de S/150 el día 3,que_pasa_si
+¿En qué debería invertir?,fuera_de_alcance
+¿Por qué dice que hoy puedo gastar S/120?,explicar_numero
+¿Qué es el semáforo?,concepto
+que puedo hacer para no quedarme corto,propuesta
+y si me adelantan s/100,que_pasa_si
+como me aseguro de cubrir el pago del dia 10,propuesta
+¿Estoy cubierto para el pago del día 3?,estado_pago
+Propónme cómo llegar al día 7,propuesta
+que son los supuestos,concepto
+¿Quién ganó el partido de ayer?,fuera_de_alcance
+¿Por qué dice orientación educativa?,concepto
+tienes alguna sugerencia para mi semana,propuesta
+como se calcula lo que puedo gastar hoy,explicar_numero
+que pasa con mi pago de internet,estado_pago
+¿Voy a llegar al pago del día 7?,estado_pago
+¿Cuál de mis pagos está en rojo?,estado_pago
+¿Qué son los supuestos?,concepto
+dame una propuesta,propuesta
+cual de mis pagos esta en rojo,estado_pago
+¿Puedo pagar el recibo del celular?,estado_pago
+Dime si cubro el pago de S/150 del día 3,estado_pago
+mi pago del dia 12 esta seguro,estado_pago
+¿Tienes alguna sugerencia para mi semana?,propuesta
+Dame un préstamo,fuera_de_alcance
+cuanto podria gastar si cobro s/250 el dia 3,que_pasa_si
+¿Qué es el P5?,concepto
+"si recibo s/250 el dia 10, cambia mi numero",que_pasa_si
+"Si recibo S/250 el día 10, ¿cambia mi número?",que_pasa_si
+y si gasto s/300 en una compra,que_pasa_si
+¿Cuánto debería separar hoy?,propuesta
+detallame como sale mi gasto de hoy,explicar_numero
+proponme como llegar al dia 7,propuesta
+¿Y si me pagan 80 soles el día 12?,que_pasa_si
+podre pagar la cuota del dia 10,estado_pago
+¿Por qué mi número de hoy es tan bajo?,explicar_numero
+que me recomiendas apartar,propuesta
+que significa el numero grande de la pantalla,explicar_numero
+Simula que gano 100 soles el día 10,que_pasa_si
+dame un prestamo,fuera_de_alcance
+dime si cubro el pago de s/150 del dia 3,estado_pago
+voy a llegar al pago del dia 7,estado_pago
+¿Y si no entra ningún ingreso esta semana?,que_pasa_si
+que pasaria si hoy gasto 80 soles,que_pasa_si
+Explícame cómo calculaste mi número de hoy,explicar_numero
+¿Me alcanza para el alquiler del día 12?,estado_pago
+¿Qué puedo hacer para no quedarme corto?,propuesta
+y si el dia 12 entra un pago de s/250,que_pasa_si
+por que el pago del dia 12 sale en ambar,estado_pago
+¿Por qué solo puedo gastar S/35 hoy?,explicar_numero
+y si cobro s/150 el dia 7,que_pasa_si
+que es el semaforo,concepto
+el pago de luz del dia 10 esta en riesgo,estado_pago
+¿Qué pasaría si hoy gasto 150 soles?,que_pasa_si
+¿Cuánto interés me da el banco?,fuera_de_alcance
+como declaro mis impuestos,fuera_de_alcance
+¿Cómo llegaron a S/120?,explicar_numero
+¿Cómo llegaron a S/35?,explicar_numero
+¿Alcanza el dinero para la cuota de la deuda?,estado_pago
+quiero entender mi numero de hoy,explicar_numero
+¿Qué significa que sea una simulación?,concepto
+¿Cuánto me queda si gasto S/100 ahora?,que_pasa_si
+escribeme un poema,fuera_de_alcance
+simula que gano 100 soles el dia 10,que_pasa_si
+¿Qué significa el número grande de la pantalla?,explicar_numero
+como me aseguro de cubrir el pago del dia 7,propuesta
+Detállame cómo sale mi gasto de hoy,explicar_numero
+¿Qué significa confianza baja?,concepto
+¿Por qué el pago del día 12 sale en ámbar?,estado_pago
+Transfiere S/250 a mi cuenta de ahorros,fuera_de_alcance
+¿Por qué solo puedo gastar S/15 hoy?,explicar_numero
+¿Qué pasa si gasto S/200 hoy?,que_pasa_si
+que significa que sea una simulacion,concepto
+Propónme cómo llegar al día 5,propuesta
+que pasa si gasto s/200 hoy,que_pasa_si
+alcanza el dinero para la cuota de la deuda,estado_pago
+no entiendo por que me sale s/25,explicar_numero
+¿Qué es el escenario P20?,concepto
+¿Hay algo que pueda hacer para mejorar mi semáforo?,propuesta
+cuanto deberia apartar para el alquiler,propuesta
+que significa rojo,concepto
+¿Qué es el colchón?,concepto
+Quiero entender mi número de hoy,explicar_numero
+¿Por qué el pago del día 10 sale en ámbar?,estado_pago
+prueba con un ingreso de s/150 el dia 3,que_pasa_si
+¿Y si cobro S/150 el día 5?,que_pasa_si
+¿Debo reducir mis gastos? ¿Cuánto?,propuesta
+cual es la mejor accion para comprar,fuera_de_alcance
+¿Por qué dice que hoy puedo gastar S/0?,explicar_numero
+No entiendo por qué me sale S/25,explicar_numero
+Dime si cubro el pago de S/400 del día 3,estado_pago
+¿Me alcanza para el alquiler del día 7?,estado_pago
+¿Qué plan me propones?,propuesta
+que es el p5,concepto
+¿Cómo abro una cuenta de ahorros en el banco?,fuera_de_alcance
+que pasa con mi semaforo si cobro 200 el dia 3,que_pasa_si
+por que dice que hoy puedo gastar s/0,explicar_numero
+cuanto podria gastar si cobro s/400 el dia 12,que_pasa_si
+por que el pago del dia 10 sale en ambar,estado_pago
+que son los pagos con fecha,concepto
+¿De dónde sale ese número?,explicar_numero
+Explícame el cálculo del gasto diario,explicar_numero
+cuanto me queda si gasto s/100 ahora,que_pasa_si
+dime si cubro el pago de s/400 del dia 3,estado_pago
+que pagos estan en riesgo,estado_pago
+¿Y si gasto S/400 en una compra?,que_pasa_si
+estoy cubierto para el pago del dia 2,estado_pago
+cuentame un chiste,fuera_de_alcance
+como saco una tarjeta de credito,fuera_de_alcance
+me alcanza para el alquiler del dia 7,estado_pago
+que es el colchon,concepto
+¿Mi pago del día 12 está seguro?,estado_pago
+me conviene un seguro,fuera_de_alcance
+que pesa mas en mi numero de hoy,explicar_numero
+por que dice orientacion educativa,concepto
+¿Cómo declaro mis impuestos?,fuera_de_alcance
+podre pagar la cuota del dia 7,estado_pago
+"si recibo s/100 el dia 2, cambia mi numero",que_pasa_si
+¿Qué pesa más en mi número de hoy?,explicar_numero
+por que solo puedo gastar s/35 hoy,explicar_numero
+¿Podré pagar la cuota del día 7?,estado_pago
+simula que gano 300 soles el dia 12,que_pasa_si
+y si me pagan 100 soles el dia 10,que_pasa_si
+Dame una propuesta,propuesta
+recomiendame criptomonedas,fuera_de_alcance
+¿Y si gasto S/300 en una compra?,que_pasa_si
+como abro una cuenta de ahorros en el banco,fuera_de_alcance
+¿Y si el día 12 entra un pago de S/250?,que_pasa_si
+para que sirve el escenario pesimista,concepto
+¿Qué pasa con mi semáforo si cobro 100 el día 7?,que_pasa_si
+¿El pago de luz del día 12 está en riesgo?,estado_pago
+que pasa si gasto s/400 hoy,que_pasa_si
+¿Qué pasaría si hoy gasto 80 soles?,que_pasa_si
+que es el escenario p20,concepto
+que quiere decir verde,concepto
+por que mi numero de hoy es tan bajo,explicar_numero
+que es un cuantil,concepto
+¿El pago de luz del día 10 está en riesgo?,estado_pago
+¿Para qué sirve el escenario pesimista?,concepto
+que plan me propones,propuesta
+¿Cuánto me queda si gasto S/300 ahora?,que_pasa_si
+ayudame con mi tarea de matematicas,fuera_de_alcance
+¿Cómo me aseguro de cubrir el pago del día 7?,propuesta
+transfiere s/100 a mi cuenta de ahorros,fuera_de_alcance
+Escríbeme un poema,fuera_de_alcance
+puedo pagar el recibo del celular,estado_pago
+Simula que gano 300 soles el día 12,que_pasa_si
+¿Qué hago para llegar a mi pago?,propuesta
+¿Qué pasa con mi semáforo si cobro 200 el día 3?,que_pasa_si
+Recomiéndame criptomonedas,fuera_de_alcance
+¿Mi pago del día 5 está seguro?,estado_pago
+cuanto me queda si gasto s/300 ahora,que_pasa_si
+en que deberia invertir,fuera_de_alcance
+¿Qué significa confianza media?,concepto
+y si gasto s/400 en una compra,que_pasa_si
+que significa confianza baja,concepto
+Ayúdame con mi tarea de matemáticas,fuera_de_alcance
+como llegaron a s/120,explicar_numero
+que tiempo hara manana,fuera_de_alcance
+¿Cuál es la mejor acción para comprar?,fuera_de_alcance
+¿Qué pasa si gasto S/400 hoy?,que_pasa_si
+me alcanza para el alquiler del dia 12,estado_pago
+¿Y si me adelantan S/100?,que_pasa_si
+¿Y si me adelantan S/50?,que_pasa_si
+¿Qué pasa con mi pago de internet?,estado_pago
+¿Qué me recomiendas apartar?,propuesta
+Cuéntame un chiste,fuera_de_alcance
+¿Cuánto podría gastar si cobro S/400 el día 12?,que_pasa_si
+cuanto interes me da el banco,fuera_de_alcance
+debo reducir mis gastos cuanto,propuesta
+¿Cuánto podría gastar si cobro S/250 el día 3?,que_pasa_si
+proponme como llegar al dia 5,propuesta
