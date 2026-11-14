@@ -1,0 +1,18 @@
+# config/preregistro.yaml  (dueño: Gino). Se lee como cfg["preregistro"].
+# ESTRUCTURA SOLA: todo en null. Gino fija cada número A MANO a las 12:00 y lo commitea
+# en UN solo commit, con la hora visible en git log, ANTES de cualquier `make eval`.
+# Después de ver resultados, cambiar algo de aquí exige declararlo en DECISIONES.md.
+# Mientras haya null en un campo que la regla usa, eval/adopcion.py falla con "pre-registro pendiente".
+
+# Mejora mínima de gasto permitido (soles/día, absoluto) del modelo sobre regla2,
+# a igual % de pagos descubiertos, en la prueba Y en el perturbado.
+umbral_adopcion_mejora: null
+
+# Cuantil de regla2 que fija el % de descubiertos de referencia para la comparación.
+cuantil_conservador: null
+
+colchon: null                     # soles
+umbral_historia_semanas: null     # con menos historia: confianza baja, sin propuestas
+umbrales_confianza: null          # {ancho_alto: x, ancho_bajo: y}
+umbral_alerta_sesgo: null         # brecha máxima aceptable entre grupos
+semillas_evaluacion: null         # cantidad de semillas (20 o más)
