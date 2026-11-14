@@ -82,3 +82,15 @@ def test_persona_o_fecha_sin_datos_da_mensaje_claro(srv):
         srv.consultar("P0001", date(2020, 1, 1), "regla2")
     with pytest.raises(servicio.ErrorServicio, match="Fecha inválida"):
         srv.consultar("P0001", "14/11/2026", "regla2")
+
+
+def test_simular_con_el_motor_oficial(srv):
+    from contratos import Escenario, IngresoExtra
+
+    base = srv.consultar("P0001", FECHA, "regla2")
+    vacio = srv.simular("P0001", FECHA, Escenario())
+    assert int(vacio.numero_hoy) == int(base.numero_hoy)  # escenario vacío = decidir
+    gasto = srv.simular("P0001", FECHA, Escenario(gasto_hoy=80))
+    assert int(gasto.numero_hoy) <= int(base.numero_hoy) and gasto.evidencia["escenario"]["gasto_hoy"] == 80.0
+    cobro = srv.simular("P0001", FECHA, Escenario(ingresos_extra=[IngresoExtra(dia=5, monto=200.0)]))
+    assert int(cobro.numero_hoy) >= int(base.numero_hoy)

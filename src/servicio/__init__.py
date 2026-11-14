@@ -273,14 +273,15 @@ def _pronosticar(
 # --------------------------------------------------------------------------- #
 
 
-def _calcular(
+def _armar(
     customer_id: str,
     fecha: date,
     metodo: str,
     movimientos: pd.DataFrame,
     pagos: list[dict[str, Any]],
     cfg: Config,
-) -> tuple[Decision, dict[str, Any]]:
+) -> tuple[EstadoPersona, Pronostico, str, list[str], pd.DataFrame]:
+    """Estado de la persona y pronóstico con la escalera de respaldo (lo comparten consultar y simular)."""
     ingesta = _capa("ingesta")
     de_la_persona = movimientos[movimientos["customer_id"] == customer_id]
     if de_la_persona.empty:
@@ -300,6 +301,18 @@ def _calcular(
         semanas_historia=ingesta.semanas_historia(movimientos, customer_id, fecha),
     )
     pron, metodo_usado, motivos = _pronosticar(historia, fecha, metodo, cfg)
+    return estado, pron, metodo_usado, motivos, historia
+
+
+def _calcular(
+    customer_id: str,
+    fecha: date,
+    metodo: str,
+    movimientos: pd.DataFrame,
+    pagos: list[dict[str, Any]],
+    cfg: Config,
+) -> tuple[Decision, dict[str, Any]]:
+    estado, pron, metodo_usado, motivos, historia = _armar(customer_id, fecha, metodo, movimientos, pagos, cfg)
     decision = _como(Decision, _capa("motor").decidir(estado, pron, cfg))
     decision = decision.model_copy(update={"respaldo": metodo_usado != metodo})
     info = {
@@ -344,6 +357,20 @@ def consultar(customer_id: str, fecha: date | datetime | str, metodo: Metodo = "
         )
         medida.metodo = info["metodo_usado"]
         medida.respaldo = decision.respaldo
+    return decision
+
+
+def simular(customer_id: str, fecha: date | datetime | str, escenario: Any) -> Decision:
+    """Decision de un escenario hipotético ("¿y si cobro S/200 el día 5?") con motor.simular y el mismo estado y
+    pronóstico que consultar. No se registra: no es una recomendación. `respaldo` marca si el pronóstico bajó de escalón."""
+    cfg = _cfg()
+    with _cronometro("simular", "modelo") as medida:
+        fecha = _a_fecha(fecha)
+        datos = _datos_activos()
+        estado, pron, metodo_usado, _, _ = _armar(customer_id, fecha, "modelo", datos["movimientos"], datos["pagos"], cfg)
+        decision = _como(Decision, _capa("motor.simular").simular(estado, pron, escenario, cfg))
+        decision = decision.model_copy(update={"respaldo": metodo_usado != "modelo"})
+        medida.metodo, medida.respaldo = metodo_usado, decision.respaldo
     return decision
 
 
@@ -448,4 +475,5 @@ __all__ = [
     "reiniciar",
     "responder",
     "salud",
+    "simular",
 ]

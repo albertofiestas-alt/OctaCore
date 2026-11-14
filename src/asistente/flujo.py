@@ -5,8 +5,8 @@ Respaldo hecho por delegación de Gino (DECISIONES #33), modo 1 (sin LLM). Si An
     -> herramienta (servicio.consultar; que_pasa_si calcula el escenario) -> rag -> plantilla -> verificador -> registro
 
 Usa las piezas de otros dueños: plantillas.resultados_de/plantilla (Sebastián), rag.BaseConocimiento/kb_dinamica (Rafael).
-Único punto de enchufe pendiente: servicio.simular (Anderson). Si existe se usa; si no, _escenario_temporal calcula el
-número del escenario con la fórmula del diseño sobre el desglose de la Decision (solo P20).
+que_pasa_si usa servicio.simular (motor.simular oficial, mismo estado y pronóstico que consultar). Si falla, la respuesta
+dice que no pudo calcular el escenario: ya no existe ninguna fórmula temporal.
 
 Convención de la página: todo rechazo lleva Respuesta.datos["motivo"] (fijo) y ["capa"] (guardia, intencion, parametros,
 servicio, flujo); Respuesta.texto ya es un mensaje amable. Las citas van en Respuesta.citas.
@@ -83,20 +83,6 @@ def _sin_cubrir(dia: int, monto: float, numerador: float) -> dict[str, Any]:
     return {"dia": dia, "monto": monto, "falta": int(math.ceil(-numerador))}
 
 
-def _escenario_temporal(d: Any, esc: Escenario) -> tuple[int, list[dict[str, Any]]]:
-    """TEMPORAL: la fórmula del diseño (saldo - gasto + ingreso conservador + ingresos conocidos - pagos - colchón) sobre
-    los puntos de control del desglose de la Decision, solo en el escenario del número de hoy (P20)."""
-    des = d.desglose
-    nums = {}
-    for p in des["puntos_de_control"]:
-        extra = sum(i.monto for i in esc.ingresos_extra if i.dia <= p["dia"])
-        nums[p["dia"]] = (des["saldo"] - esc.gasto_hoy + p["ingreso_conservador"] + extra - p["pagos_acumulados"]
-                          - des["colchon"])
-    minimo = min(n / max(dia, 1) for dia, n in nums.items())
-    sin = [_sin_cubrir(p.dia, p.monto, nums[p.dia]) for p in d.por_pago if p.dia in nums and nums[p.dia] < 0]
-    return int(math.floor(max(0.0, minimo))), sin
-
-
 # --------------------------------------------------------------------------- #
 # Conocimiento (RAG)
 # --------------------------------------------------------------------------- #
@@ -149,16 +135,19 @@ def _con_decision(servicio: Any, cfg: Any, intencion: str, params: dict[str, Any
     datos: dict[str, Any] = {"numero_hoy": int(decision.numero_hoy), "confianza": decision.confianza}
     if intencion == "que_pasa_si":
         esc = Escenario(**params)
-        simular = getattr(servicio, "simular", None)
-        if callable(simular):  # punto de enchufe: servicio.simular(customer_id, fecha, escenario) -> Decision
-            simulada = simular(customer_id, fecha, esc)
-            despues = int(simulada.numero_hoy)
-            sin = [_sin_cubrir(p.dia, p.monto, p.permitido * max(p.dia, 1)) for p in simulada.por_pago if p.permitido < 0]
-            res = plantillas.resultados_de(decision, escenario=esc, simulada=simulada)
-        else:
-            despues, sin = _escenario_temporal(decision, esc)
-            res = plantillas.resultados_de(decision, escenario=esc)
-            res["despues"] = {"numero_hoy": despues, "pagos": []}
+        try:  # servicio.simular -> motor.simular oficial, con el mismo estado y pronóstico que consultar
+            simulada = servicio.simular(customer_id, fecha, esc)
+        except Exception as e:  # noqa: BLE001 - no hay fórmula de respaldo: se dice que no se pudo calcular
+            log.warning("asistente: simular falló (%s)", type(e).__name__)
+            res = plantillas.resultados_de(decision, escenario=esc)  # sin simulada: la plantilla lo dice
+            cuerpo, acciones = plantillas.plantilla(intencion, res)
+            r = Respuesta(texto=cuerpo, intencion=intencion, fuente="plantilla", citas=["decision#1"], acciones=acciones,
+                          datos={**datos, "motivo": "simulacion_fallida", "capa": "servicio"})
+            return _cerrar(r, {**res, "intencion": intencion, "cifra_clave": res["numero_hoy"]},
+                           rag.kb_dinamica(decision), cfg)
+        despues = int(simulada.numero_hoy)
+        sin = [_sin_cubrir(p.dia, p.monto, p.permitido * max(p.dia, 1)) for p in simulada.por_pago if p.permitido < 0]
+        res = plantillas.resultados_de(decision, escenario=esc, simulada=simulada)
         datos = {"antes": {"numero_hoy": int(decision.numero_hoy)},
                  "despues": {"numero_hoy": despues, "pagos_sin_cubrir": sin}}
         clave = despues

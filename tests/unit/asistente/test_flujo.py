@@ -14,9 +14,10 @@ import pandas as pd
 import pytest
 
 import motor
+from motor.simular import simular as simular_motor
 from asistente import flujo, plantillas
 from asistente.intenciones import Intencion
-from contratos import Respuesta
+from contratos import Escenario, IngresoExtra, Respuesta
 from contratos.config import RAIZ
 from servicio import ErrorServicio
 
@@ -51,23 +52,18 @@ def decision(cfg, estado_tipico, pronostico_tipico):
 
 
 @pytest.fixture
-def srv(cfg_chat, decision):
-    return FakeServicio(cfg_chat, decision)
+def srv(cfg_chat, decision, estado_tipico, pronostico_tipico):
+    """Servicio falso cuyo simular es el motor.simular oficial con el estado y el pronóstico de las fixtures."""
+    return FakeServicio(cfg_chat, decision,
+                        simular=lambda cid, f, esc: simular_motor(estado_tipico, pronostico_tipico, esc, cfg_chat))
 
 
 def preguntar(servicio, texto):
     return flujo.preguntar(servicio, "P0002", FECHA, texto)
 
 
-def esperado_despues(decision, gasto=0.0, extras=()):
-    """Número de hoy con un escenario, recalculado a mano desde el desglose (fórmula del diseño)."""
-    d = decision.desglose
-    minimo = min(
-        (d["saldo"] - gasto + p["ingreso_conservador"] + sum(m for dia, m in extras if dia <= p["dia"])
-         - p["pagos_acumulados"] - d["colchon"]) / max(p["dia"], 1)
-        for p in d["puntos_de_control"]
-    )
-    return int(math.floor(max(0.0, minimo)))
+def numero_simulado(estado, pron, cfg, **escenario):
+    return int(simular_motor(estado, pron, Escenario(**escenario), cfg).numero_hoy)
 
 
 def lineas(cfg):
@@ -149,24 +145,39 @@ def test_estado_pago_sin_pago_ese_dia(srv):
     assert r.datos["verificacion"] == "ok"  # sin pago que nombrar no hay cifra clave que exigir
 
 
-def test_que_pasa_si_gasto(srv, decision):
+def test_que_pasa_si_gasto(srv, decision, estado_tipico, pronostico_tipico, cfg):
     r = preguntar(srv, "y si gasto 80 soles hoy")
-    esperado = esperado_despues(decision, gasto=80)
-    assert (r.fuente, r.intencion) == ("motor", "que_pasa_si")
+    esperado = numero_simulado(estado_tipico, pronostico_tipico, cfg, gasto_hoy=80)
+    assert (r.fuente, r.intencion, r.datos["verificacion"]) == ("motor", "que_pasa_si", "ok")
     assert r.datos["antes"]["numero_hoy"] == int(decision.numero_hoy)
     assert r.datos["despues"]["numero_hoy"] == esperado <= int(decision.numero_hoy)
     assert f"S/{esperado}" in r.texto and f"S/{int(decision.numero_hoy)}" in r.texto
     assert "simulación" in r.texto.lower()
 
 
-def test_que_pasa_si_cobro(srv, decision):
+def test_que_pasa_si_cobro(srv, decision, estado_tipico, pronostico_tipico, cfg):
     r = preguntar(srv, "y si cobro S/200 el dia 5")
-    esperado = esperado_despues(decision, extras=[(5, 200.0)])
+    esperado = numero_simulado(estado_tipico, pronostico_tipico, cfg,
+                               ingresos_extra=[IngresoExtra(dia=5, monto=200.0)])
+    assert r.datos["verificacion"] == "ok"
     assert r.datos["despues"]["numero_hoy"] == esperado >= int(decision.numero_hoy)
 
 
-def test_escenario_sin_cambios_da_el_mismo_numero(decision):
-    assert esperado_despues(decision) == int(decision.numero_hoy)  # la fórmula de la prueba coincide con el motor
+def test_simular_falla_dice_que_no_pudo_y_no_usa_la_formula_vieja(cfg_chat, decision):
+    def roto(cid, f, esc):
+        raise RuntimeError("boom")
+
+    r = preguntar(FakeServicio(cfg_chat, decision, simular=roto), "y si gasto 80 soles hoy")
+    assert (r.fuente, r.intencion) == ("plantilla", "que_pasa_si")
+    assert (r.datos["motivo"], r.datos["verificacion"]) == ("simulacion_fallida", "ok")
+    assert "no pude calcular" in r.texto.lower() and "despues" not in r.datos
+    assert f"S/{int(decision.numero_hoy)}" in r.texto and "boom" not in r.texto
+
+
+def test_servicio_sin_simular_tambien_dice_que_no_pudo(cfg_chat, decision):
+    r = preguntar(FakeServicio(cfg_chat, decision), "y si cobro S/200 el dia 5")  # sin atributo simular
+    assert r.datos["motivo"] == "simulacion_fallida" and "despues" not in r.datos
+    assert not hasattr(flujo, "_escenario_temporal")
 
 
 def test_que_pasa_si_sin_monto_pide_el_monto(srv):
@@ -228,18 +239,19 @@ def test_enchufe_de_plantillas_de_sebastian(srv, decision, monkeypatch):
     assert visto == {"intencion": "explicar_numero", "numero": int(decision.numero_hoy)}
 
 
-def test_enchufe_de_servicio_simular(cfg_chat, decision, estado_tipico, pronostico_tipico, cfg):
-    despues = motor.decidir(estado_tipico.model_copy(update={"saldo": estado_tipico.saldo - 1000}), pronostico_tipico, cfg)
+def test_servicio_simular_recibe_el_escenario_de_parametros(cfg_chat, decision, estado_tipico, pronostico_tipico, cfg):
     llamadas = []
 
     def simular(customer_id, fecha, escenario):
-        llamadas.append(escenario)
-        return despues
+        llamadas.append((customer_id, fecha, escenario))
+        return simular_motor(estado_tipico, pronostico_tipico, escenario, cfg)
 
-    srv = FakeServicio(cfg_chat, decision, simular=simular)
-    r = preguntar(srv, "y si gasto 1000 soles hoy")
-    assert llamadas[0].gasto_hoy == 1000.0
-    assert r.datos["despues"]["numero_hoy"] == int(despues.numero_hoy)
+    r = preguntar(FakeServicio(cfg_chat, decision, simular=simular), "y si cobro 300 el dia 4 y gasto 50 hoy")
+    (cid, fecha, esc), = llamadas
+    assert (cid, fecha, esc.gasto_hoy) == ("P0002", FECHA, 50.0)
+    assert [(i.dia, i.monto) for i in esc.ingresos_extra] == [(4, 300.0)]
+    assert r.datos["despues"]["numero_hoy"] == numero_simulado(
+        estado_tipico, pronostico_tipico, cfg, gasto_hoy=50, ingresos_extra=[IngresoExtra(dia=4, monto=300.0)])
 
 
 # --- registro ------------------------------------------------------------------------
