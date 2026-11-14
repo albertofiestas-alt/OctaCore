@@ -29,8 +29,46 @@ def _semillas_minimas() -> int:
 def _medir_semilla(semilla: int) -> dict:
     """Mide una semilla: genera datos con esa semilla, entrena el modelo y simula modelo y regla2 en el cuantil
     conservador. Devuelve {semilla, pct_descubiertos_modelo, pct_descubiertos_regla2, gasto_modelo, gasto_regla2}.
-    Depende de datos.generar/particion, modelo.entrenar y eval.simular (aún sin implementar): no se inventa nada."""
-    raise NotImplementedError("eval.pares._medir_semilla: faltan datos.generar, modelo.entrenar y eval.simular")
+    Gancho completado por Gino: usa eval/frontera.py (personas de prueba, entrenamiento del modelo solo con personas y
+    meses de entrenamiento, agregación) y el simulador que haya (oficial o el de RESPALDO, con aviso). Mide solo regla2 y
+    modelo, solo en el cuantil conservador del pre-registro (el protocolo no cambia; se omiten las otras 6 combinaciones)."""
+    from contratos import cargar_config
+
+    fr = _frontera()
+    cfg = cargar_config()
+    cuantil = float(cfg["preregistro"]["cuantil_conservador"])
+    df = _generar(semilla)
+    simular = fr._cargar_simulador()
+    personas = fr._personas_de_prueba(df)
+    modelo = fr._entrenar_modelo(df, cfg, semilla)
+    medicion = {"semilla": semilla}
+    for metodo in ("modelo", "regla2"):
+        usa = modelo if metodo == "modelo" else None
+        pct, gasto = fr._agregar([simular(h, e, cfg, metodo, cuantil, usa) for h, e in personas])
+        medicion[f"pct_descubiertos_{metodo}"] = pct
+        medicion[f"gasto_{metodo}"] = gasto
+    return medicion
+
+
+def _frontera():
+    """eval/frontera.py (eval/ no es un paquete: se carga por ruta)."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("eval_frontera", Path(__file__).resolve().parent / "frontera.py")
+    modulo = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(modulo)
+    return modulo
+
+
+def _generar(semilla: int):
+    """Datos del generador con esa semilla (400 personas, 24 meses, mundo normal)."""
+    import pandas as pd
+
+    from datos import generar
+
+    df = generar(semilla=semilla)[0]
+    # generar entrega fecha_hora como texto (igual que el CSV); el simulador y el modelo piden datetime
+    return df.assign(fecha_hora=pd.to_datetime(df["fecha_hora"]))
 
 
 def _bootstrap(diferencias: np.ndarray) -> tuple[float, float, float]:

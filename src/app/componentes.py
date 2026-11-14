@@ -26,8 +26,16 @@ def banner_ejemplo() -> None:
 
 
 def banner_respaldo(decision) -> None:
-    if decision.respaldo:
-        st.warning("Se está usando la regla sencilla porque el modelo no está disponible.")
+    if not decision.respaldo:
+        return
+    veredicto = estado.adopcion()
+    if veredicto is not None and veredicto.get("adopta") is False:
+        st.warning(
+            "Usamos la regla robusta (regla 2). El modelo de ML no se adoptó: "
+            "no superó a la regla en nuestra evaluación pre-registrada."
+        )
+    else:
+        st.warning("Se está usando una regla de respaldo porque el método principal no pudo calcular.")
 
 
 def numero_hoy(decision) -> None:
@@ -63,7 +71,7 @@ def selector() -> tuple[str, object]:
 
 
 def pagina(titulo: str) -> None:
-    st.set_page_config(page_title=f"OctaCore · {titulo}", layout="centered")
+    st.set_page_config(page_title=f"Ukku · {titulo}", layout="centered")
     tema.aplicar()
 
 

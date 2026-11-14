@@ -61,6 +61,14 @@ def _pagos_hasta(estado: EstadoPersona, d: int) -> float:
     return float(sum(p.monto for p in estado.pagos if p.dia <= d))
 
 
+# Ingresos hipotéticos CONOCIDOS de una simulación (opción C): ((día, monto), ...). Vacío en decidir.
+IngresosExtra = tuple[tuple[int, float], ...]
+
+
+def _extra_hasta(ingresos_extra: IngresosExtra, d: int) -> float:
+    return float(sum(m for (dia0, m) in ingresos_extra if dia0 <= d))
+
+
 def numerador(
     estado: EstadoPersona,
     pronostico: Pronostico,
@@ -68,20 +76,29 @@ def numerador(
     cuantil: float,
     cfg: Any,
     con_colchon: bool = True,
+    ingresos_extra: IngresosExtra = (),
 ) -> float:
-    """saldo + ingreso(d, q) - pagos con día <= d - colchón (si con_colchon)."""
+    """saldo + ingreso(d, q) + ingresos extra hasta d - pagos con día <= d - colchón (si con_colchon)."""
     colchon = estado.colchon if con_colchon else 0.0
     return (
         estado.saldo
         + ingreso_conservador(pronostico, d, cuantil, _horizontes(cfg))
+        + _extra_hasta(ingresos_extra, d)
         - _pagos_hasta(estado, d)
         - colchon
     )
 
 
-def permitido(estado: EstadoPersona, pronostico: Pronostico, d: int, cuantil: float, cfg: Any) -> float:
+def permitido(
+    estado: EstadoPersona,
+    pronostico: Pronostico,
+    d: int,
+    cuantil: float,
+    cfg: Any,
+    ingresos_extra: IngresosExtra = (),
+) -> float:
     """Gasto diario que todavía cubre los pagos hasta el día d (divisor max(d, 1))."""
-    return numerador(estado, pronostico, d, cuantil, cfg) / max(d, 1)
+    return numerador(estado, pronostico, d, cuantil, cfg, ingresos_extra=ingresos_extra) / max(d, 1)
 
 
 def puntos_de_control(estado: EstadoPersona) -> list[int]:
@@ -89,9 +106,11 @@ def puntos_de_control(estado: EstadoPersona) -> list[int]:
     return sorted({p.dia for p in estado.pagos} | {HORIZONTE_MAXIMO})
 
 
-def _minimo(estado: EstadoPersona, pronostico: Pronostico, cuantil: float, cfg: Any) -> tuple[int, float]:
+def _minimo(
+    estado: EstadoPersona, pronostico: Pronostico, cuantil: float, cfg: Any, ingresos_extra: IngresosExtra = ()
+) -> tuple[int, float]:
     """(día que limita, permitido mínimo). Empate: el día menor."""
-    perm = {d: permitido(estado, pronostico, d, cuantil, cfg) for d in puntos_de_control(estado)}
+    perm = {d: permitido(estado, pronostico, d, cuantil, cfg, ingresos_extra) for d in puntos_de_control(estado)}
     d_lim = min(perm, key=lambda d: (perm[d], d))
     return d_lim, perm[d_lim]
 
@@ -104,18 +123,28 @@ def _color(cobertura: Callable[[float], float]) -> str:
     return "rojo"
 
 
-def semaforo_con_gasto(estado: EstadoPersona, pronostico: Pronostico, d: int, gasto: float, cfg: Any) -> str:
+def semaforo_con_gasto(
+    estado: EstadoPersona,
+    pronostico: Pronostico,
+    d: int,
+    gasto: float,
+    cfg: Any,
+    ingresos_extra: IngresosExtra = (),
+) -> str:
     """Semáforo del día d si se gastan `gasto` soles por día (sin colchón)."""
 
     def cobertura(q: float) -> float:
-        return numerador(estado, pronostico, d, q, cfg, con_colchon=False) - gasto * max(d, 1)
+        n = numerador(estado, pronostico, d, q, cfg, con_colchon=False, ingresos_extra=ingresos_extra)
+        return n - gasto * max(d, 1)
 
     return _color(cobertura)
 
 
-def semaforo(estado: EstadoPersona, pronostico: Pronostico, d: int, cfg: Any) -> str:
+def semaforo(
+    estado: EstadoPersona, pronostico: Pronostico, d: int, cfg: Any, ingresos_extra: IngresosExtra = ()
+) -> str:
     """Semáforo del pago del día d: verde si se cubre con P5, ámbar si con P50, rojo si no (sin colchón)."""
-    return semaforo_con_gasto(estado, pronostico, d, 0.0, cfg)
+    return semaforo_con_gasto(estado, pronostico, d, 0.0, cfg, ingresos_extra)
 
 
 def _ancho_relativo(pronostico: Pronostico) -> float:
@@ -165,8 +194,14 @@ def proponer(
     numero_hoy: int,
     confianza_decision: str,
     texto: Callable[[dict[str, Any]], str] | None = None,
+    ingresos_extra: IngresosExtra = (),
+    simulada: bool = False,
 ) -> list[Propuesta]:
-    """Una propuesta 'apartar_p5' si 0 <= g5 < numero_hoy y hay historia suficiente; si no, []."""
+    """Una propuesta 'apartar_p5' si 0 <= g5 < numero_hoy y hay historia suficiente; si no, [].
+
+    En una simulación el id termina en ':simulada' para que nunca se confunda con la propuesta real
+    (servicio.responder solo debe aprobar o rechazar propuestas reales).
+    """
     if texto is None:
 
         def texto(datos: dict[str, Any]) -> str:
@@ -175,7 +210,7 @@ def proponer(
     if not _historia_suficiente(estado, cfg):
         return []
     q5 = cfg["motor"]["cuantil_propuesta"]
-    d_lim5, g5 = _minimo(estado, pronostico, q5, cfg)
+    d_lim5, g5 = _minimo(estado, pronostico, q5, cfg, ingresos_extra)
     g20 = int(numero_hoy)
     if not (0 <= g5 < g20):
         return []
@@ -186,7 +221,8 @@ def proponer(
 
     # Verificación obligatoria: gastando floor(g5) por día, ningún punto queda descubierto en P5.
     for d in puntos_de_control(estado):
-        assert numerador(estado, pronostico, d, q5, cfg) - g5_entero * max(d, 1) >= -1e-9, (
+        cubierto = numerador(estado, pronostico, d, q5, cfg, ingresos_extra=ingresos_extra) - g5_entero * max(d, 1)
+        assert cubierto >= -1e-9, (
             f"propuesta no cubre el punto {d} en P5"
         )
 
@@ -200,19 +236,24 @@ def proponer(
         "monto": pago.monto,
         "categoria": pago.categoria,
     }
+    propuesta_id = f"{estado.customer_id}:{estado.fecha_corte.isoformat()}:{TIPO_PROPUESTA}:{pago.pago_id}"
+    if simulada:
+        propuesta_id += ":simulada"
     return [
         Propuesta(
-            propuesta_id=f"{estado.customer_id}:{estado.fecha_corte.isoformat()}:{TIPO_PROPUESTA}:{pago.pago_id}",
+            propuesta_id=propuesta_id,
             texto=texto(datos),
             monto=apartar,
             pago_id=pago.pago_id,
             antes={
                 "numero_hoy": g20,
-                "semaforo_pago_limite": semaforo_con_gasto(estado, pronostico, pago.dia, g20, cfg),
+                "semaforo_pago_limite": semaforo_con_gasto(estado, pronostico, pago.dia, g20, cfg, ingresos_extra),
             },
             despues={
                 "numero_hoy": g5_entero,
-                "semaforo_pago_limite": semaforo_con_gasto(estado, pronostico, pago.dia, g5_entero, cfg),
+                "semaforo_pago_limite": semaforo_con_gasto(
+                    estado, pronostico, pago.dia, g5_entero, cfg, ingresos_extra
+                ),
             },
             confianza=confianza_decision,
         )
@@ -224,32 +265,46 @@ def proponer(
 # --------------------------------------------------------------------------- #
 
 
-def _numero_y_faltante(estado: EstadoPersona, pronostico: Pronostico, cfg: Any) -> tuple[int, int, int | None]:
+def _numero_y_faltante(
+    estado: EstadoPersona, pronostico: Pronostico, cfg: Any, ingresos_extra: IngresosExtra = ()
+) -> tuple[int, int, int | None]:
     """(numero_hoy, dia_limitante, faltante o None)."""
     q = cfg["cuantil_conservador"]
-    d_lim, minimo = _minimo(estado, pronostico, q, cfg)
+    d_lim, minimo = _minimo(estado, pronostico, q, cfg, ingresos_extra)
     numero = int(math.floor(max(0.0, minimo)))
     faltante = None
     if minimo < 0:
-        faltante = int(math.ceil(-numerador(estado, pronostico, d_lim, q, cfg)))
+        faltante = int(math.ceil(-numerador(estado, pronostico, d_lim, q, cfg, ingresos_extra=ingresos_extra)))
     return numero, d_lim, faltante
 
 
-def construir_desglose(estado: EstadoPersona, pronostico: Pronostico, cfg: Any) -> dict[str, Any]:
-    """Desglose con las claves exactas que dibuja la pantalla Por qué."""
+def _lista_extra(ingresos_extra: IngresosExtra) -> list[dict[str, Any]]:
+    return [{"dia": int(d), "monto": float(m)} for (d, m) in ingresos_extra]
+
+
+def construir_desglose(
+    estado: EstadoPersona, pronostico: Pronostico, cfg: Any, ingresos_extra: IngresosExtra = ()
+) -> dict[str, Any]:
+    """Desglose con las claves exactas que dibuja la pantalla Por qué.
+
+    En una simulación con ingresos extra, cada punto lleva además "ingreso_extra" (acumulado hasta ese día)
+    y el desglose lleva "ingresos_extra"; sin simulación las claves no cambian.
+    """
     q = cfg["cuantil_conservador"]
-    numero, d_lim, faltante = _numero_y_faltante(estado, pronostico, cfg)
-    puntos = [
-        {
+    numero, d_lim, faltante = _numero_y_faltante(estado, pronostico, cfg, ingresos_extra)
+    puntos = []
+    for d in puntos_de_control(estado):
+        punto: dict[str, Any] = {
             "dia": d,
             "ingreso_conservador": float(ingreso_conservador(pronostico, d, q, _horizontes(cfg))),
             "pagos_acumulados": round(_pagos_hasta(estado, d), 2),
-            "numerador": round(numerador(estado, pronostico, d, q, cfg), 2),
-            "permitido": round(permitido(estado, pronostico, d, q, cfg), 2),
+            "numerador": round(numerador(estado, pronostico, d, q, cfg, ingresos_extra=ingresos_extra), 2),
+            "permitido": round(permitido(estado, pronostico, d, q, cfg, ingresos_extra), 2),
         }
-        for d in puntos_de_control(estado)
-    ]
-    return {
+        if ingresos_extra:
+            punto["ingreso_extra"] = round(_extra_hasta(ingresos_extra, d), 2)
+        puntos.append(punto)
+    desglose: dict[str, Any] = {
         "saldo": float(estado.saldo),
         "colchon": float(estado.colchon),
         "cuantil": _atributo(q),
@@ -259,12 +314,17 @@ def construir_desglose(estado: EstadoPersona, pronostico: Pronostico, cfg: Any) 
         "faltante": faltante,
         "registro_id": "",
     }
+    if ingresos_extra:
+        desglose["ingresos_extra"] = _lista_extra(ingresos_extra)
+    return desglose
 
 
-def construir_evidencia(estado: EstadoPersona, pronostico: Pronostico, cfg: Any) -> dict[str, Any]:
+def construir_evidencia(
+    estado: EstadoPersona, pronostico: Pronostico, cfg: Any, ingresos_extra: IngresosExtra = ()
+) -> dict[str, Any]:
     """Evidencia de la decisión (sección 4, tarea 2)."""
     q = cfg["cuantil_conservador"]
-    d_lim, minimo = _minimo(estado, pronostico, q, cfg)
+    d_lim, minimo = _minimo(estado, pronostico, q, cfg, ingresos_extra)
     c14 = pronostico.por_horizonte[HORIZONTE_MAXIMO]
     pago = _pago_del_dia(estado, d_lim)
     return {
@@ -287,10 +347,32 @@ def construir_evidencia(estado: EstadoPersona, pronostico: Pronostico, cfg: Any)
 
 
 def decidir(estado: EstadoPersona, pronostico: Pronostico, cfg: Any) -> Decision:
-    """Decision completa. El servicio pone respaldo y registro_id (ver con_registro_id)."""
+    """Decision completa. El servicio pone respaldo y registro_id (ver con_registro_id).
+
+    La firma es la del contrato (contratos/firmas.py). Las simulaciones de la opción C usan
+    motor.simular, que comparte este cálculo vía decidir_con_extras sin cambiar esta firma.
+    """
+    return decidir_con_extras(estado, pronostico, cfg)
+
+
+def decidir_con_extras(
+    estado: EstadoPersona,
+    pronostico: Pronostico,
+    cfg: Any,
+    ingresos_extra: IngresosExtra = (),
+    escenario: dict[str, Any] | None = None,
+) -> Decision:
+    """El cálculo de decidir con ingresos hipotéticos CONOCIDOS (sin cuantiles) que suman desde su día.
+
+    `escenario` (solo en simulaciones) queda en evidencia["escenario"] y en los supuestos, para que la
+    persona vea qué se simuló; además el id de la propuesta termina en ':simulada'.
+    """
+    ingresos_extra = tuple((int(d), float(m)) for (d, m) in ingresos_extra)
     q = cfg["cuantil_conservador"]
-    desglose = construir_desglose(estado, pronostico, cfg)
-    evidencia = construir_evidencia(estado, pronostico, cfg)
+    desglose = construir_desglose(estado, pronostico, cfg, ingresos_extra)
+    evidencia = construir_evidencia(estado, pronostico, cfg, ingresos_extra)
+    if escenario is not None:
+        evidencia["escenario"] = escenario
     numero = desglose["numero_hoy"]
     d_lim = desglose["dia_limitante"]
     faltante = desglose["faltante"]
@@ -303,13 +385,15 @@ def decidir(estado: EstadoPersona, pronostico: Pronostico, cfg: Any) -> Decision
             pago_id=p.pago_id,
             dia=p.dia,
             monto=p.monto,
-            permitido=round(permitido(estado, pronostico, p.dia, q, cfg), 2),
-            semaforo=semaforo(estado, pronostico, p.dia, cfg),
+            permitido=round(permitido(estado, pronostico, p.dia, q, cfg, ingresos_extra), 2),
+            semaforo=semaforo(estado, pronostico, p.dia, cfg, ingresos_extra),
         )
         for p in estado.pagos
     ]
     nivel = confianza(estado, pronostico, cfg)
-    propuestas = proponer(estado, pronostico, cfg, numero, nivel)
+    propuestas = proponer(
+        estado, pronostico, cfg, numero, nivel, ingresos_extra=ingresos_extra, simulada=escenario is not None
+    )
 
     return Decision(
         numero_hoy=numero,
@@ -340,6 +424,7 @@ __all__ = [
     "construir_desglose",
     "construir_evidencia",
     "decidir",
+    "decidir_con_extras",
     "ingreso_conservador",
     "numerador",
     "permitido",

@@ -46,9 +46,24 @@ def _demasiado_grande(max_mb: float) -> ErrorIngesta:
 
 def _bytes_de_ruta(ruta: Path, limite: int, max_mb: float) -> bytes:
     try:
-        # O_NOFOLLOW evita seguir un enlace simbólico final; O_NONBLOCK evita colgarse en una FIFO.
-        flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+        # Windows no tiene O_NOFOLLOW: el enlace simbólico se rechaza antes de abrir, en todos los
+        # sistemas. Donde existe, O_NOFOLLOW cierra además la carrera entre la comprobación y la
+        # apertura. O_NONBLOCK evita colgarse en una FIFO y O_BINARY evita que Windows abra el
+        # descriptor en modo texto (traduce CRLF y corta en el byte 0x1A).
+        if ruta.is_symlink():
+            raise ErrorIngesta(
+                "No se pudo abrir el archivo. Revisa que exista, no sea un acceso directo y tengas permiso.",
+                "enlace simbólico",
+            )
+        flags = (
+            os.O_RDONLY
+            | getattr(os, "O_NOFOLLOW", 0)
+            | getattr(os, "O_NONBLOCK", 0)
+            | getattr(os, "O_BINARY", 0)
+        )
         fd = os.open(ruta, flags)
+    except ErrorIngesta:
+        raise
     except FileNotFoundError:
         raise ErrorIngesta("No se encontró el archivo. Revisa la ruta y vuelve a subirlo.", "archivo inexistente") from None
     except OSError:

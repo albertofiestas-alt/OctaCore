@@ -39,3 +39,4 @@ ingreso_palabras: [cobro, cobrar, recibo, recibir, pagan, entra, entrar, gano, g
 ruta_ciegos: data/chat/ciego2_*.csv   # el primer ciego (ciego_preguntas.csv) es desarrollo desde DECISIONES #27
 ruta_ataques: data/chat/ataques.csv
 ruta_resultados_chat: eval/resultados/chat.csv
+ruta_registro_chat: registros/chat.jsonl   # una línea por pregunta, con la pregunta enmascarada (flujo.py)

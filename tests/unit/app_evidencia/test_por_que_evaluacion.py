@@ -39,11 +39,43 @@ def test_por_que_confianza_baja_con_razon():
     assert "Confianza: baja" in t and "2 semanas de historia" in t
 
 
-def test_evaluacion_sin_archivos_da_mensaje_con_comando(monkeypatch):
+def test_evaluacion_con_resultados_de_main():
     at = AppTest.from_file(EV, default_timeout=30).run()
     assert not at.exception
     t = textos(at)
-    assert "python tareas.py eval" in t and AVISO in t and "datos son sintéticos" in t
+    assert "No se adopta: se usa la regla 2" in t and AVISO in t and "datos son sintéticos" in t
+    assert "[respaldo]" in t and "Generador 1.0" in t and "Generador 1.1" in t
+    assert "31/42" in t and "34/42" in t and "ya pasó a desarrollo" in t
+    assert "Pendiente" in t  # sesgos, calidad_datos, ablaciones aún no existen
+    filas = [r for df in at.dataframe for r in df.value.to_dict("records")]
+    assert any(f.get("Métrica") == "Pagos descubiertos (pp)" and abs(f["Media"] - 0.433) < 0.001 for f in filas)
+    assert any(f.get("Métrica") == "Gasto permitido (S/ por día)" and abs(f["Media"] - 0.309) < 0.001 for f in filas)
+    assert [e.label for e in at.expander if "Elegibilidad" in e.label]
+    assert "Señal indicativa, no es puntaje de crédito" in " ".join(c.value for c in at.caption)
+
+
+def test_evaluacion_sin_ningun_archivo_no_falla(monkeypatch, tmp_path):
+    monkeypatch.setenv("UKKU_RESULTADOS", str(tmp_path / "no_existe"))
+    at = AppTest.from_file(EV, default_timeout=30).run()
+    assert not at.exception
+    t = textos(at)
+    assert "Pendiente" in t and "sesgos.csv" in t and "calidad_datos.json" in t and "ablaciones.csv" in t
+    assert AVISO in t
+
+
+def test_evaluacion_archivo_ilegible_no_falla(monkeypatch, tmp_path):
+    (tmp_path / "pares.csv").write_text("a,b" + chr(10) + "solo,uno,dos,tres", encoding="utf-8")
+    (tmp_path / "calidad_datos.json").write_text("{no es json", encoding="utf-8")
+    monkeypatch.setenv("UKKU_RESULTADOS", str(tmp_path))
+    assert not AppTest.from_file(EV, default_timeout=30).run().exception
+
+
+def test_evaluacion_calidad_presente(monkeypatch, tmp_path):
+    (tmp_path / "calidad_datos.json").write_text(
+        '{"filas_entrada": 10, "filas_salida": 8, "duplicados_eliminados": 2}', encoding="utf-8")
+    monkeypatch.setenv("UKKU_RESULTADOS", str(tmp_path))
+    at = AppTest.from_file(EV, default_timeout=30).run()
+    assert {m.label: m.value for m in at.metric}["Filas limpias"] == "8"
 
 
 def test_evaluacion_auditoria_encontrada_y_no_encontrada():

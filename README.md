@@ -1,4 +1,4 @@
-# OctaCore · ¿Cuánto puedo gastar hoy sin fallar a un pago con fecha?
+# Ukku (equipo OctaCore) · ¿Cuánto puedo gastar hoy sin fallar a un pago con fecha?
 
 > Orientación educativa basada en una simulación con datos ficticios. No es asesoría financiera ni ejecuta operaciones.
 

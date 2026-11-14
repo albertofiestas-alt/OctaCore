@@ -184,3 +184,36 @@ def test_fixture_diez_filas_de_punta_a_punta():
     assert reporte.duplicados_eliminados == 1
     assert reporte.atipicos >= 1
     assert "edad" in reporte.columnas_sensibles_descartadas and "edad" not in df.columns
+
+
+# --------------------------------------------------------------------------- #
+# Categoría vacía imputada desde la misma persona y comercio (DECISIONES #31, salvedad 3)
+# --------------------------------------------------------------------------- #
+
+
+def test_categoria_vacia_se_imputa_del_mismo_comercio_de_la_persona():
+    df = _df(categoria=["alquiler", None, "alquiler"], comercio=["Arrendador", "Arrendador", "Arrendador"])
+    out, f = aplicar_defaults(df, {})
+    assert list(out["categoria"]) == ["alquiler"] * 3
+    assert f["categoria"] == 1 and f["categoria_imputada_por_comercio"] == 1
+
+
+def test_no_se_imputa_si_el_comercio_tiene_varias_categorias_o_ninguna():
+    varias = _df(categoria=["alquiler", None, "deuda"], comercio=["X", "X", "X"])
+    assert aplicar_defaults(varias, {})[0]["categoria"].iloc[1] == "otros"
+    ninguna = _df(categoria=[None, "otros", "alquiler"], comercio=["Solo", "Y", "Z"])
+    out, f = aplicar_defaults(ninguna, {})
+    assert out["categoria"].iloc[0] == "otros" and f["categoria_imputada_por_comercio"] == 0
+
+
+def test_no_se_imputa_entre_personas_ni_con_comercio_vacio():
+    otra = _df(customer_id=["P1", "P2", "P1"], categoria=["alquiler", None, "otros"], comercio=["A", "A", "B"])
+    assert aplicar_defaults(otra, {})[0]["categoria"].iloc[1] == "otros"
+    sin_comercio = _df(categoria=["alquiler", None, "otros"], comercio=[None, None, "B"])
+    assert aplicar_defaults(sin_comercio, {})[0]["categoria"].iloc[1] == "otros"
+
+
+def test_categoria_desconocida_no_se_imputa():
+    df = _df(categoria=["alquiler", "viajes", "otros"], comercio=["A", "A", "B"])
+    out, f = aplicar_defaults(df, {})
+    assert out["categoria"].iloc[1] == "otros" and f["categoria_imputada_por_comercio"] == 0
