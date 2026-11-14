@@ -10,19 +10,12 @@ from datetime import date
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, BinaryIO
 
+from .errores import ErrorIngesta
+
 if TYPE_CHECKING:
     import pandas as pd
 
     from contratos import Config, PagoConFecha, ReporteCalidad
-
-
-class ErrorIngesta(Exception):
-    """Archivo vacío, ilegible, demasiado grande o sin columnas del contrato."""
-
-    def __init__(self, mensaje_usuario: str, detalle: str = "") -> None:
-        super().__init__(mensaje_usuario)
-        self.mensaje_usuario = mensaje_usuario  # qué corregir, en palabras simples
-        self.detalle = detalle
 
 
 def cargar(
