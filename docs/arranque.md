@@ -5,7 +5,7 @@ Meta de las 11:00: `python tareas.py test` en verde en las 7 laptops y contratos
 ## 1. Entorno (todos)
 
 ```bash
-git clone <url-del-repo> octocore && cd octocore
+git clone https://github.com/Hackathon-BBVA-Grupo-8/OctaCore.git && cd OctaCore
 py -3.11 tareas.py setup          # macOS/Linux: python3.11 tareas.py setup
 python tareas.py test             # debe terminar en "passed" sin "failed"
 ```
