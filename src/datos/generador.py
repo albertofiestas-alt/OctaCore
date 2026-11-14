@@ -1,6 +1,6 @@
 """Generador sintetico del proyecto (dueno: Rafael).
 
-Uso:  python -m src.datos.generador [--n 400] [--semilla 12345] [--salida data]
+Uso:  python -m datos [--n 400] [--semilla N] [--salida data]   (sin --semilla usa semilla_generador de config/base.yaml)
 Genera data/generado/movimientos.csv, movimientos_perturbado.csv, data/muestra/movimientos.csv y data/REPORTE_DATOS.md.
 Todo parametro marcado [SUPUESTO] se ajusta para que la plausibilidad salga razonable (ver verificar()).
 Los datos son ficticios: ningun nombre, DNI, telefono ni cuenta reales.
@@ -282,6 +282,15 @@ def generar(n_personas=400, meses=MESES, semilla=None, perturbado=False, paramet
     return df, meta
 
 
+def separar_etiquetas(df):
+    """(movimientos SIN etiquetas de referencia, etiquetas indexadas por transaction_id).
+
+    Regla anti fuga: lo primero sale al modelo, al motor y a la interfaz; lo segundo solo a eval/.
+    """
+    etiquetas = df[["transaction_id"] + ETIQUETAS].set_index("transaction_id")
+    return df.drop(columns=ETIQUETAS), etiquetas
+
+
 def mes_indice(fecha) -> int:
     """Mes 1 = enero del ano 1."""
     return (fecha.year - INICIO.year) * 12 + fecha.month
@@ -398,12 +407,15 @@ RAIZ = Path(__file__).resolve().parents[2]
 
 
 def _semilla_config() -> int:
-    """La semilla vive en config/config.yaml (semilla_generador). Si no se puede leer, usa la misma del archivo."""
+    """La semilla vive en config/base.yaml (semilla_generador). Si no se puede leer, falla: nunca hay semilla por defecto."""
+    from contratos.config import RUTA_CONFIG, cargar_config
     try:
-        from contratos.config import cargar_config
-        return int(cargar_config().semilla_generador)
-    except Exception:
-        return 20261114
+        return int(cargar_config()["semilla_generador"])
+    except Exception as e:
+        raise RuntimeError(
+            f"No se pudo leer semilla_generador de {RUTA_CONFIG}: {e}. "
+            "Corrige la configuración o pasa la semilla explícita (generar(..., semilla=...))."
+        ) from e
 
 
 def main(argv=None):
@@ -425,6 +437,8 @@ def main(argv=None):
     dfp.to_csv(out / "generado" / "movimientos_perturbado.csv", index=False)
     (out / "generado" / "meta.json").write_text(json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     (out / "generado" / "meta_perturbado.json").write_text(json.dumps(meta_p, indent=2, ensure_ascii=False), encoding="utf-8")
+    part = particion(df, a.semilla) | {"semilla": a.semilla, "hash_datos": meta["hash"]}
+    (out / "generado" / "particion.json").write_text(json.dumps(part, indent=2, ensure_ascii=False), encoding="utf-8")
     mu = muestra_de(df)
     mu.to_csv(out / "muestra" / "movimientos.csv", index=False)
     (out / "muestra" / "meta.json").write_text(json.dumps({"origen": "subconjunto del dataset completo", "personas": sorted(mu["customer_id"].unique().tolist()),
