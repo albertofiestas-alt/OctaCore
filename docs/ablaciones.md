@@ -18,15 +18,17 @@ Modelo completo: pinball a 14 días en P20 = 110,08; 9,51 % de pagos descubierto
 | las 5 de historia (queda el calendario) | **+33,21** | +0,55 | -0,62 |
 | regla2 (sin modelo), referencia | -0,62 | -0,82 | -0,24 |
 
-## Qué se ve
-- **Ayudan** las variables de ingreso reciente: número de ingresos en 28 días, ingreso de 28 días y días desde el último ingreso (cada una ~3 puntos de pinball, ~3 %), luego el ingreso de 56 días y el día del mes. Todas juntas pesan mucho: sin las 5 de historia el pinball empeora 33 (+30 %).
-- **Estorban**: `mediana_ingreso_dia_28d` (sin ella el pinball mejora 1,07) y, apenas, `dia_semana`. Mes (seno y coseno) es neutro. En estos datos el calendario no aporta.
-- **Descubiertos y gasto**: los cambios son de ±0,3 pp y ±0,15 S/día. Un solo pago descubierto pesa 0,055 pp (1 de 1 820 pagos), así que con una semilla y 80 personas **no se distinguen del ruido**; el pinball es la medida útil aquí.
+## Qué se midió (y nada más)
+- **El ingreso reciente ayuda.** Quitar el número de ingresos en 28 días, el ingreso de 28 días o los días desde el último ingreso empeora el pinball en ~3 puntos (~3 %); quitar el ingreso de 56 días, 1,3; el día del mes, 0,9. Quitar las 5 variables de historia a la vez lo empeora 33 (+30 %).
+- **Estorban o son neutras:** quitar `mediana_ingreso_dia_28d` mejora el pinball en 1,07 y quitar `dia_semana`, en 0,19 (estorban); mes (seno y coseno) cambia ≤ 0,12 (neutro).
+- **Descubiertos y gasto no se distinguen del ruido con 1 semilla:** los cambios son de ±0,3 pp y ±0,15 S/día, y un solo pago descubierto pesa 0,055 pp (1 de 1 820 pagos). **El pinball es la medida útil aquí**, y aun así una diferencia de ~1 punto con 1 semilla no es concluyente.
+- **regla2 no es peor que el modelo completo** en estas medidas: pinball 109,46 contra 110,08, 8,68 % contra 9,51 % de descubiertos y S/ 34,12 contra S/ 34,37 de gasto.
 
-## Por qué el modelo no supera a regla2 (honestamente)
-Con 1 semilla el modelo completo no mejora a regla2: pinball 110,08 contra 109,46, 9,51 % contra 8,68 % de descubiertos y S/ 34,37 contra S/ 34,12 de gasto. Las ablaciones explican la causa probable: casi toda la señal está en el ingreso reciente, y esa información regla2 ya la usa directamente (percentiles empíricos de las ventanas de 8 semanas); lo que el modelo agrega (día de la semana, mes, mediana diaria) no aporta o estorba en estos datos. Con menos señal nueva y más variables que añaden ruido, el modelo no tiene de dónde ganarle. No se cambió el modelo ni el pre-registro tras ver esto.
+No se midió **por qué** el modelo no supera a regla2: las ablaciones no lo prueban. Esto es coherente con los pares de semillas (fila 32 de `DECISIONES.md`), no una explicación de ellos.
 
-**Límites:** una sola semilla (falta intervalo); el entrenamiento y la medición usan ventanas con las copias duplicadas sin quitar; todo con el simulador de respaldo y el generador 1.1; las diferencias de ~1 punto de pinball pueden ser ruido.
+No se cambió el modelo tras verlo; quitar `mediana_ingreso_dia_28d` sería un cambio posterior al pre-registro.
+
+**Límites:** una sola semilla (falta intervalo); el entrenamiento y la medición usan ventanas con las copias duplicadas sin quitar; todo con el simulador de respaldo y el generador 1.1.
 
 ## Cómo reproducirlo
 ```
