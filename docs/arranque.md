@@ -77,7 +77,7 @@ def test_orden_de_pagos(estado_caso_orden_pagos, pronostico_caso_orden_pagos, cf
 
 ## 6. La app (Jesús y Alberto)
 
-Páginas (v7): `src/app/main.py`, `pages/1_Hoy.py`, `pages/2_Plan.py` (Jesús) y `tema.py`, `pages/3_Por_que.py`, `pages/4_Datos.py`, `pages/5_Evaluacion.py` (Alberto).
+Páginas (v9): `src/app/main.py`, `pages/1_Hoy.py`, `pages/2_Plan.py` (Jesús) y `tema.py`, `pages/3_Por_que.py`, `pages/5_Evaluacion.py` (Alberto). No hay pantalla de carga de datos: los datos son sintéticos y vienen precargados; la calidad de los datos se muestra en Evaluación a partir de `eval/resultados/calidad_datos.json` (Mathias).
 
 La app solo importa `servicio` y `contratos`. Con el entorno instalado (`tareas.py setup`) **no hace falta tocar `sys.path`**:
 
