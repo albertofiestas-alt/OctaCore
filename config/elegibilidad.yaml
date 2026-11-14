@@ -1,0 +1,21 @@
+# Pre-registro del experimento de elegibilidad (docs/criterios_elegibilidad_semaforo.md). Dueño: Gino.
+# TODO en null: Gino fija cada valor A MANO y lo commitea con la hora visible ANTES de correr con la serie real.
+# eval/elegibilidad.py falla con "pre-registro pendiente" si algún campo es null. Cambiar algo después de ver resultados
+# exige declararlo en DECISIONES.md.
+
+# N: meses calendario completos y consecutivos de la ventana (los ÚLTIMOS N de la serie). Entero >= 1.
+meses_verde: null
+# k: semanas ámbar toleradas en la ventana (semana = bloque de 7 días desde el inicio de la ventana con >= 1 día ámbar).
+# 0 = ninguna. Solo se usa en la combinación con criterio 6; el último mes de la ventana debe ir sin ámbar.
+semanas_ambar_toleradas: null
+# M: días mínimos de serie observados por persona (criterio 4, historia).
+historia_minima_dias: null
+# k_p: días mínimos de la ventana con algún pago con fecha en el horizonte (criterio 4, evita verdes triviales).
+dias_con_pagos_minimos: null
+# Días de la ventana con confianza "baja" que se toleran (criterio 3). 0 = ninguno.
+dias_confianza_baja_toleradas: null
+# Brecha máxima entre arquetipos (diferencia de tasas, 0 a 1) a partir de la cual se declara alerta de sesgo.
+# NO es el umbral_alerta_sesgo del modelo.
+umbral_brecha: null
+# Reducción de gasto (fracción, p. ej. entre 0.2 y 0.3) con la que se generó la serie de la prueba de incentivo.
+reduccion_gasto_incentivo: null
