@@ -19,6 +19,7 @@ from .errores import ErrorIngesta
 CATEGORIA_POR_DEFECTO = "otros"
 COMERCIO_POR_DEFECTO = "SIN_COMERCIO"
 CATEGORIA_DESCONOCIDA = "categoria_desconocida"
+CATEGORIA_IMPUTADA = "categoria_imputada_por_comercio"
 ID_REPETIDO = "transaction_id_repetido"
 DUPLICADO_EXACTO = "duplicado_exacto"
 DUPLICADO_SIN_COMERCIO = "duplicado_sin_comercio"
@@ -62,13 +63,41 @@ def aplicar_defaults(df: pd.DataFrame, cfg: Any) -> tuple[pd.DataFrame, dict[str
     norm = out["categoria"].where(~cat_vacia).map(lambda v: _normalizar(str(v)) if pd.notna(v) else None)
     desconocida = ~cat_vacia & ~norm.isin(CATEGORIAS)
     categoria = norm.where(~cat_vacia & ~desconocida, CATEGORIA_POR_DEFECTO)
-    out["categoria"] = categoria.astype(object)
 
     com_vacio = _vacio(out["comercio"])
+    imputada = _imputar_por_comercio(out, norm, cat_vacia, com_vacio)
+    categoria = categoria.where(imputada.isna(), imputada)
+    out["categoria"] = categoria.astype(object)
+
     out["comercio"] = out["comercio"].where(~com_vacio, COMERCIO_POR_DEFECTO).astype(object)
 
     faltantes[CATEGORIA_DESCONOCIDA] = int(desconocida.sum())
+    faltantes[CATEGORIA_IMPUTADA] = int(imputada.notna().sum())
     return out, faltantes
+
+
+def _imputar_por_comercio(
+    df: pd.DataFrame, norm: pd.Series, cat_vacia: pd.Series, com_vacio: pd.Series
+) -> pd.Series:
+    """Categoría para las filas con categoria vacía, tomada de la misma persona y comercio.
+
+    Solo si en las otras filas de esa persona y ese comercio hay exactamente UNA categoría válida
+    (un dato faltante del alquiler sigue siendo alquiler). Si no hay ninguna o hay varias, queda NA
+    y rige el default "otros". Sin customer_id o con el comercio vacío no se imputa nada.
+    """
+    vacia = pd.Series(pd.NA, index=df.index, dtype=object)
+    if "customer_id" not in df.columns:
+        return vacia
+    validas = ~cat_vacia & norm.isin(CATEGORIAS) & ~com_vacio
+    if not validas.any() or not (cat_vacia & ~com_vacio).any():
+        return vacia
+    claves = ["customer_id", "comercio"]
+    conocidas = pd.DataFrame({"customer_id": df["customer_id"], "comercio": df["comercio"], "cat": norm})[validas]
+    unicas = conocidas.groupby(claves)["cat"].agg(lambda s: s.iloc[0] if s.nunique() == 1 else pd.NA)
+    objetivo = df.loc[cat_vacia & ~com_vacio, claves]
+    cruce = objetivo.merge(unicas.rename("cat").reset_index(), on=claves, how="left")
+    vacia.loc[objetivo.index] = cruce["cat"].to_numpy()
+    return vacia.where(vacia.notna(), pd.NA)
 
 
 def quitar_duplicados(df: pd.DataFrame) -> tuple[pd.DataFrame, int, dict[str, int]]:
