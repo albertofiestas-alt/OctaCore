@@ -279,3 +279,21 @@ def test_con_el_yaml_real_completo_corre_de_punta_a_punta(eleg):
     r = eleg.evaluar_elegibilidad(serie(persona("P1", "x"), persona("P2", "y")))
     assert r["parametros"]["pagos_minimos"] == 3 and r["parametros"]["dias_confianza_baja_toleradas"] == 14
     assert set(r["tasas"].combinacion) == set(COMBOS) and r["incentivo"] is None
+
+
+def test_brecha_relativa_razon_de_tasas_y_arquetipos_en_cero(eleg):
+    _, brechas = eleg.tasas_por_arquetipo(_poblacion(), PREREG)
+    b = brechas.set_index("combinacion").loc["1+2+4"]
+    # tasas: estable 1.0, irregular 0.0, mixto 0.5 -> razón = menor / mayor = 0.0 / 1.0
+    assert b.razon_tasas == 0.0 and b.n_arquetipos_tasa_cero == 1
+
+
+def test_razon_de_tasas_es_uno_si_no_hay_brecha_y_es_nan_si_nadie_califica(eleg):
+    iguales = serie(*[persona(f"A{i}", "x") for i in range(5)], *[persona(f"B{i}", "y") for i in range(5)])
+    _, b = eleg.tasas_por_arquetipo(iguales, PREREG)
+    assert (b.razon_tasas == 1.0).all() and (b.n_arquetipos_tasa_cero == 0).all()
+    nadie = serie(*[persona(f"A{i}", "x", semaforo=_rojo_dia_5) for i in range(5)], *[persona(f"B{i}", "y", semaforo=_rojo_dia_5) for i in range(5)])
+    _, b0 = eleg.tasas_por_arquetipo(nadie, PREREG)
+    assert b0.razon_tasas.isna().all() and (b0.n_arquetipos_tasa_cero == 2).all()
+    # la métrica relativa es solo informativa: no cambia la alerta (que sigue siendo la brecha absoluta)
+    assert not b0.alerta.any()

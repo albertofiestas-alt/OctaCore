@@ -177,6 +177,9 @@ def tasas_por_arquetipo(serie: pd.DataFrame, prereg: dict | None = None) -> tupl
                 "arquetipo_menor_tasa": bajo["arquetipo"],
                 "umbral_brecha": p["umbral_brecha"],
                 "alerta": brecha > p["umbral_brecha"],
+                # Métricas relativas complementarias (DECISIONES #35): solo se reportan, sin umbral ni efecto en la alerta.
+                "razon_tasas": float(bajo["tasa"] / alto["tasa"]) if alto["tasa"] > 0 else float("nan"),
+                "n_arquetipos_tasa_cero": int((g["tasa"] == 0).sum()),
             }
         )
     return tasas, pd.DataFrame(filas)
