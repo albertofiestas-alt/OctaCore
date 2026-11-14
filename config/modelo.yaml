@@ -7,3 +7,4 @@ min_child_samples: 50
 paso_muestreo_dias: 3        # una muestra por persona cada N días
 ventana_corta_dias: 28       # ingreso_28d, n_ingresos_28d, mediana_ingreso_dia_28d
 ventana_larga_dias: 56       # ingreso_56d
+tolerancia_empate_soles: 1.0  # [propuesto] |y - q| <= esto cuenta como empate en la calibración (montos con centavos; sueldos fijos)

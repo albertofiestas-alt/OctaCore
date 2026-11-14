@@ -24,8 +24,14 @@ def _nombres(cfg) -> dict[str, float]:
     return {f"p{round(100 * q)}": float(q) for q in cfg["cuantiles"]}
 
 
-def _armar_muestras(movimientos: pd.DataFrame, cfg) -> tuple[pd.DataFrame, dict[int, np.ndarray]]:
-    """Una fila por persona cada `paso_muestreo_dias` días. Y[h] = ingreso en los h días siguientes."""
+def _armar_muestras(
+    movimientos: pd.DataFrame, cfg, desde: pd.Timestamp | None = None
+) -> tuple[pd.DataFrame, dict[int, np.ndarray]]:
+    """Una fila por persona cada `paso_muestreo_dias` días. Y[h] = ingreso en los h días siguientes.
+
+    `desde`: solo muestras con día de corte >= desde (la historia anterior igual se usa para las variables).
+    El último día de corte es tal que los 14 días siguientes caben en los datos recibidos.
+    """
     horizontes = [int(h) for h in cfg["horizontes_dias"]]
     paso = int(cfg["modelo"]["paso_muestreo_dias"])
     primero, ultimo = minimo_dias(cfg), max(horizontes)
@@ -36,6 +42,8 @@ def _armar_muestras(movimientos: pd.DataFrame, cfg) -> tuple[pd.DataFrame, dict[
         # t = índice del día de corte: la serie anterior es serie[:t]; el futuro es serie[t:t+h].
         for t in range(primero, len(serie) - ultimo + 1, paso):
             fecha = inicio + pd.Timedelta(days=t)
+            if desde is not None and fecha < desde:
+                continue
             filas.append(features_desde_serie(serie[:t], fecha, cfg))
             for h in horizontes:
                 objetivos[h].append(float(serie[t : t + h].sum()))
@@ -45,9 +53,16 @@ def _armar_muestras(movimientos: pd.DataFrame, cfg) -> tuple[pd.DataFrame, dict[
 
 
 class Modelo:
-    def __init__(self, modelos: dict[tuple[int, str], lightgbm.LGBMRegressor], cfg) -> None:
+    def __init__(
+        self,
+        modelos: dict[tuple[int, str], lightgbm.LGBMRegressor],
+        cfg,
+        offsets: dict[tuple[int, str], float] | None = None,
+    ) -> None:
         self.modelos = modelos
         self.cfg = cfg
+        # Desplazamiento aditivo por (horizonte, cuantil), medido SOLO en validación (calibracion.calibrar).
+        self.offsets = {k: float((offsets or {}).get(k, 0.0)) for k in modelos}
 
     def predecir(self, historia: pd.DataFrame, fecha: date) -> Pronostico:
         """Cuantiles ordenados y no negativos. Puede lanzar HistoriaInsuficiente."""
@@ -55,7 +70,8 @@ class Modelo:
         nombres = list(_nombres(self.cfg))
         por_h: dict[int, Cuantiles] = {}
         for h in (int(h) for h in self.cfg["horizontes_dias"]):
-            q = np.sort([max(0.0, float(self.modelos[(h, n)].predict(x)[0])) for n in nombres])
+            crudo = [float(self.modelos[(h, n)].predict(x)[0]) + self.offsets[(h, n)] for n in nombres]
+            q = np.sort([max(0.0, v) for v in crudo])
             por_h[h] = Cuantiles(**dict(zip(nombres, (float(v) for v in q), strict=True)))
         return Pronostico(por_horizonte=por_h)
 
