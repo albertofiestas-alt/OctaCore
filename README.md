@@ -3,7 +3,7 @@
 > Orientación educativa basada en una simulación con datos ficticios. No es asesoría financiera ni ejecuta operaciones.
 
 Hackathon de Ingeniería BBVA · AI Financial Life · 14 y 15 de noviembre de 2026.
-El documento fuente es la propuesta **v7** ([asignaciones/Resumen_propuesta_hackathon_BBVA_v7.docx](asignaciones/Resumen_propuesta_hackathon_BBVA_v7.docx)). Si algo contradice a la v7, manda la v7. Los cambios los aprueba Gino y se anotan en [DECISIONES.md](DECISIONES.md).
+El documento fuente es la propuesta **v9** ([asignaciones/Resumen_propuesta_hackathon_BBVA_v9.docx](asignaciones/Resumen_propuesta_hackathon_BBVA_v9.docx)). Si algo contradice a la v9, manda la v9. Los cambios los aprueba Gino y se anotan en [DECISIONES.md](DECISIONES.md).
 
 ## Lectura de asignaciones
 
@@ -23,7 +23,7 @@ Orden de lectura:
 | Sebastián | Backend: motor de decisión | [Plan_04](asignaciones/Plan_04_Sebastian_backend_motor_decision.docx) | `src/motor/`, `config/motor.yaml`, `tests/unit/motor/`, `tests/property/` | 12:30 motor con el caso del orden de pagos · 13:00–16:00 supuestos, evidencia y límites en cada `Decision` · propuesta | Mathias |
 | Gino Vieyra | Machine learning y líder | [Plan_05](asignaciones/Plan_05_Gino_machine_learning_y_liderazgo.docx) | `src/modelo/`, `config/modelo.yaml`, `config/preregistro.yaml`, `tests/unit/modelo/`, `eval/adopcion.py`, `docs/responsible_ai.md`, `docs/roadmap.md`, `DECISIONES.md`, `TRANSPARENCIA.md` | 12:00 pre-registro y enfoque cerrado · 15:30 modelo v1 · decisiones en los controles · pitch | Rafael |
 | Jesús | Frontend 1: Hoy y Plan | [Plan_06](asignaciones/Plan_06_Jesus_frontend_hoy_y_plan.docx) | `src/app/main.py`, `componentes.py`, `estado.py`, `servicio_falso.py`, `pages/1_Hoy.py`, `pages/2_Plan.py`, `tests/unit/app_hoy_plan/`, `docs/guion_demo.md` | 12:00 maqueta con fixtures · 13:00 Hoy conectada al servicio · 13:00–18:30 supuestos y límites en Hoy, guion de demo | Alberto |
-| Alberto | Frontend 2: Por qué, Datos y Evaluación | [Plan_07](asignaciones/Plan_07_Alberto_frontend_porque_datos_evidencia.docx) | `src/app/tema.py`, `pages/3_Por_que.py`, `pages/4_Datos.py`, `pages/5_Evaluacion.py`, `tests/unit/app_evidencia/`, `tests/a11y/`, `pitch/`, `docs/conversaciones.md`, `docs/fuentes_verificadas.md` | 11:15 `tema.py` · 16:00 Por qué · 16:00–19:30 paneles de sesgos, salud y auditoría · deck y video | Jesús |
+| Alberto | Frontend 2: Por qué y Evaluación | [Plan_07](asignaciones/Plan_07_Alberto_frontend_porque_datos_evidencia.docx) | `src/app/tema.py`, `pages/3_Por_que.py`, `pages/5_Evaluacion.py`, `tests/unit/app_evidencia/`, `tests/a11y/`, `pitch/`, `docs/conversaciones.md`, `docs/fuentes_verificadas.md` | 11:15 `tema.py` · 16:00 Por qué · 16:00–19:30 paneles de sesgos, salud, auditoría y calidad de datos (solo lectura) · deck y video | Jesús |
 
 Ventanas de integración a `main` (Anexo E): **V0 11:00** estructura, contratos, stubs y muestra · **V1 12:00** ingesta, motor, reglas y esqueletos · **V2 13:00** servicio + Hoy (`v0-control1`) · **V3 16:00** modelo v1, propuesta, Por qué y Plan, P0 (`v1-control2`) · **V4 17:45** todo lo que se muestra; 18:00 `v2-congelado` · **Domingo** solo correcciones; 11:00 `v3-final`.
 
@@ -74,7 +74,7 @@ src/modelo             cuantiles por horizonte                               Gin
 src/motor              número de hoy, semáforo, propuestas                   Sebastián
 src/servicio           fachada, registro, respaldo, salud, auditoría         Anderson
 src/app                pantallas Streamlit (1_Hoy, 2_Plan, 3_Por_que,         Jesús, Alberto
-                       4_Datos, 5_Evaluacion)
+                       5_Evaluacion; sin pantalla de carga)
 eval/                  simulación de la decisión, frontera, sesgos, adopción Rafael, Gino
 scripts/               auditar_recomendacion.py                              Anderson
 tests/                 unit/<modulo>, property, contract, integracion, e2e, a11y, fixtures

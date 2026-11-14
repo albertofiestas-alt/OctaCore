@@ -48,6 +48,47 @@ FIRMAS: dict[str, dict[str, tuple[str, ...]]] = {
         "salud": (),
         "auditar": ("registro_id",),
     },
+    # Opción B (capa generativa, nace apagada) y opción C (asistente, nivel P2). Aprobación: Anderson y Gino.
+    "motor.simular": {
+        "simular": ("estado", "pronostico", "escenario", "cfg"),
+    },
+    "generativa.minimizar": {
+        "minimizar": ("decision",),
+    },
+    "generativa.verificador": {
+        "cifras_de": ("entrada",),
+        "verificar": ("texto_json", "entrada", "cfg"),
+    },
+    "generativa.proveedores": {
+        "ProveedorOpenAI.generar": ("sistema", "usuario"),
+        "Cortacircuitos.permite": (),
+        "Cortacircuitos.registrar": ("ok",),
+    },
+    "generativa.redactar": {
+        "redactar": ("decision", "cfg", "proveedor"),
+    },
+    "asistente.guardia": {
+        "revisar": ("texto", "cfg"),
+        "enmascarar_para_registro": ("texto", "cfg"),
+    },
+    "asistente.intenciones": {
+        "entrenar_clasificador": ("csv", "semilla"),
+        "clasificar": ("texto", "cfg", "proveedor"),
+        "parametros": ("texto", "intent", "cfg"),
+    },
+    "asistente.rag": {
+        "BaseConocimiento.buscar": ("consulta", "k", "minimo"),
+        "kb_dinamica": ("decision",),
+    },
+    "asistente.plantillas": {
+        "plantilla": ("intencion", "resultados"),
+    },
+    "asistente.verificador": {
+        "verificar_respuesta": ("obj", "resultados", "pasajes", "cfg"),
+    },
+    "asistente.flujo": {
+        "preguntar": ("servicio", "customer_id", "fecha", "texto", "contexto"),
+    },
 }
 
 # Excepciones y constantes públicas que cada módulo debe exponer.
@@ -55,4 +96,7 @@ NOMBRES_PUBLICOS: dict[str, tuple[str, ...]] = {
     "ingesta": ("ErrorIngesta",),
     "modelo": ("HistoriaInsuficiente", "Modelo", "FEATURES"),
     "servicio": ("ErrorServicio",),
+    "generativa.proveedores": ("ProveedorNoDisponible", "Proveedor", "ProveedorOpenAI", "Cortacircuitos"),
+    "asistente.intenciones": ("Intencion", "INTENCIONES"),
+    "asistente.rag": ("BaseConocimiento",),
 }
