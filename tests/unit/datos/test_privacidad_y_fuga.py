@@ -55,6 +55,13 @@ def test_historia_con_etiquetas_se_rechaza_y_sin_ellas_pasa(datos):
     validar_historia(separar_etiquetas(df)[0])
 
 
+def test_estado_del_motor_sin_etiquetas():
+    from contratos import EstadoPersona, PagoConFecha
+
+    campos = set(EstadoPersona.model_fields) | set(PagoConFecha.model_fields)
+    assert not campos & set(ETIQUETAS_REFERENCIA)
+
+
 def test_features_del_modelo_sin_etiquetas():
     import modelo
 
