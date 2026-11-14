@@ -1,0 +1,566 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0045BA23F6DE813F23FE9BFD /* Acciones.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B596F0B5DB52B2F568DE15 /* Acciones.swift */; };
+		16C95FEAD75DDB1C0D85DFAB /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B1D3E22FF2E661E8846651 /* Store.swift */; };
+		2BCB5917803400EC96ADFA94 /* ukku-original.riv in Resources */ = {isa = PBXBuildFile; fileRef = E01C277B51E98043335F344F /* ukku-original.riv */; };
+		2E6B79CE38F0304DE8EC8FFB /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF733A3EBD7E6A61225A5FD /* SettingsScreen.swift */; };
+		3329D498D439C400A6D790CE /* Personaje in Resources */ = {isa = PBXBuildFile; fileRef = 04F0BBE02F7587117EDA3327 /* Personaje */; };
+		38D88C9CABA2865FC59490C5 /* UkkuPersonaje.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEB9D594D30A96772131A65A /* UkkuPersonaje.swift */; };
+		440E8A6883702B4A477F241F /* RegistroPago.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A2A1D82A016E0B9E0EA9C0 /* RegistroPago.swift */; };
+		6598A3C27788D589DA348844 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = A3DEAB4AC1DCCCE002DE6878 /* RiveRuntime */; };
+		6910475AE05699C93F9975A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4595DDAA7609AF944BEADDE2 /* Assets.xcassets */; };
+		9A32FF4452D8C33806BA6A7A /* Seed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76769238B380E11B27A1AC25 /* Seed.swift */; };
+		A3B0250D23AB3C4FC8C99A1F /* Servicios.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED385F468D51207E7E8D4571 /* Servicios.swift */; };
+		AB87ABC808E91FE8CDA6319C /* RiveScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F204D025118A84C7D1ED1D1F /* RiveScene.swift */; };
+		B42772C3A7B36C9324D771D3 /* UkkuCodexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1528F47A6A879032EABBF199 /* UkkuCodexApp.swift */; };
+		B79137DCA71F900DC3E24956 /* UkkuFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0098E735A82A5BC64DF5818 /* UkkuFlowTests.swift */; };
+		C170B8B6FD31E7DFE5246328 /* Calculo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70584F6B6FFA2B6A64BC582F /* Calculo.swift */; };
+		C34AF5D312022876329DD3B0 /* Modelos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 340379D1E0D52412F64DD660 /* Modelos.swift */; };
+		CCCF756156EC877E54E7D446 /* Simulacion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C7865C48B6C02CEC85B9D0 /* Simulacion.swift */; };
+		D837C328CF029026B53E5B64 /* PlanScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74823D2A49600E339F4E4E4 /* PlanScreen.swift */; };
+		DC27816AB17C722B6BFC33CE /* Estilo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC48192945DA85B1A2A4C509 /* Estilo.swift */; };
+		E25A32C48733086BCF5D3E54 /* ScenarioScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDF768FD0DABA4AA839532E /* ScenarioScreen.swift */; };
+		E6163CBD846E0EFFF15DADA5 /* ActivityScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566306252AD6FA12EC52E58B /* ActivityScreen.swift */; };
+		FB0910FDB4CC51F7F57FD957 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D553E8C435B98FE60BEADBDB /* HomeScreen.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E01891E7AE7B68D87BEF3CED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D351886182E3D098DF556926 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 14A0D96449DA734559E467BA;
+			remoteInfo = UkkuCodex;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		04F0BBE02F7587117EDA3327 /* Personaje */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Personaje; sourceTree = SOURCE_ROOT; };
+		1528F47A6A879032EABBF199 /* UkkuCodexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UkkuCodexApp.swift; sourceTree = "<group>"; };
+		18A2A1D82A016E0B9E0EA9C0 /* RegistroPago.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistroPago.swift; sourceTree = "<group>"; };
+		340379D1E0D52412F64DD660 /* Modelos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modelos.swift; sourceTree = "<group>"; };
+		4595DDAA7609AF944BEADDE2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4F000E95E07B2B5DDD1E9B80 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4FDF768FD0DABA4AA839532E /* ScenarioScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenarioScreen.swift; sourceTree = "<group>"; };
+		566306252AD6FA12EC52E58B /* ActivityScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityScreen.swift; sourceTree = "<group>"; };
+		70584F6B6FFA2B6A64BC582F /* Calculo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Calculo.swift; sourceTree = "<group>"; };
+		76769238B380E11B27A1AC25 /* Seed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Seed.swift; sourceTree = "<group>"; };
+		A5B596F0B5DB52B2F568DE15 /* Acciones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Acciones.swift; sourceTree = "<group>"; };
+		A6C7865C48B6C02CEC85B9D0 /* Simulacion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Simulacion.swift; sourceTree = "<group>"; };
+		A74823D2A49600E339F4E4E4 /* PlanScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanScreen.swift; sourceTree = "<group>"; };
+		C3B1D3E22FF2E661E8846651 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		CAF733A3EBD7E6A61225A5FD /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		D553E8C435B98FE60BEADBDB /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		DC48192945DA85B1A2A4C509 /* Estilo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Estilo.swift; sourceTree = "<group>"; };
+		E0098E735A82A5BC64DF5818 /* UkkuFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UkkuFlowTests.swift; sourceTree = "<group>"; };
+		E01C277B51E98043335F344F /* ukku-original.riv */ = {isa = PBXFileReference; path = "ukku-original.riv"; sourceTree = "<group>"; };
+		EC467DDFB682FECCF14CD583 /* UkkuCodexUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = UkkuCodexUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED385F468D51207E7E8D4571 /* Servicios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Servicios.swift; sourceTree = "<group>"; };
+		F03A43260F80472EB3F41B33 /* UkkuCodex.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = UkkuCodex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F204D025118A84C7D1ED1D1F /* RiveScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveScene.swift; sourceTree = "<group>"; };
+		FEB9D594D30A96772131A65A /* UkkuPersonaje.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UkkuPersonaje.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FDF482FA7F735767E5DFACF5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6598A3C27788D589DA348844 /* RiveRuntime in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01F7E4FE39560D8A4ABB78C5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A5B596F0B5DB52B2F568DE15 /* Acciones.swift */,
+				70584F6B6FFA2B6A64BC582F /* Calculo.swift */,
+				18A2A1D82A016E0B9E0EA9C0 /* RegistroPago.swift */,
+				ED385F468D51207E7E8D4571 /* Servicios.swift */,
+				A6C7865C48B6C02CEC85B9D0 /* Simulacion.swift */,
+				C3B1D3E22FF2E661E8846651 /* Store.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		17056A70517CB3D7E4874002 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				DC48192945DA85B1A2A4C509 /* Estilo.swift */,
+				F204D025118A84C7D1ED1D1F /* RiveScene.swift */,
+				FEB9D594D30A96772131A65A /* UkkuPersonaje.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		1E12FEB6E01B0A754CEF5CC2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				340379D1E0D52412F64DD660 /* Modelos.swift */,
+				76769238B380E11B27A1AC25 /* Seed.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		255BFEDB99A9BC540C261C4D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4595DDAA7609AF944BEADDE2 /* Assets.xcassets */,
+				4F000E95E07B2B5DDD1E9B80 /* Info.plist */,
+				F5F43B41205E162CFEF4401C /* App */,
+				17056A70517CB3D7E4874002 /* Design */,
+				1E12FEB6E01B0A754CEF5CC2 /* Models */,
+				D4772CE26BCF736DFC0D3622 /* Resources */,
+				01F7E4FE39560D8A4ABB78C5 /* Services */,
+				E5CDAB1AD62EB5C5F4492A3A /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		3A7AD789BBECEFD9F497F635 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F03A43260F80472EB3F41B33 /* UkkuCodex.app */,
+				EC467DDFB682FECCF14CD583 /* UkkuCodexUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4CB45C8F35BCFC448527716D = {
+			isa = PBXGroup;
+			children = (
+				04F0BBE02F7587117EDA3327 /* Personaje */,
+				255BFEDB99A9BC540C261C4D /* Sources */,
+				E4BB912EDBCBC646183640D6 /* UITests */,
+				3A7AD789BBECEFD9F497F635 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D4772CE26BCF736DFC0D3622 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E01C277B51E98043335F344F /* ukku-original.riv */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E4BB912EDBCBC646183640D6 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				E0098E735A82A5BC64DF5818 /* UkkuFlowTests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		E5CDAB1AD62EB5C5F4492A3A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				566306252AD6FA12EC52E58B /* ActivityScreen.swift */,
+				D553E8C435B98FE60BEADBDB /* HomeScreen.swift */,
+				A74823D2A49600E339F4E4E4 /* PlanScreen.swift */,
+				4FDF768FD0DABA4AA839532E /* ScenarioScreen.swift */,
+				CAF733A3EBD7E6A61225A5FD /* SettingsScreen.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F5F43B41205E162CFEF4401C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1528F47A6A879032EABBF199 /* UkkuCodexApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		14A0D96449DA734559E467BA /* UkkuCodex */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2177472BCDC8E7D781630C52 /* Build configuration list for PBXNativeTarget "UkkuCodex" */;
+			buildPhases = (
+				B2C6E6EEE8A98D431C4CF9D5 /* Sources */,
+				EA6A6942603DB462BB51412D /* Resources */,
+				FDF482FA7F735767E5DFACF5 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = UkkuCodex;
+			packageProductDependencies = (
+				A3DEAB4AC1DCCCE002DE6878 /* RiveRuntime */,
+			);
+			productName = UkkuCodex;
+			productReference = F03A43260F80472EB3F41B33 /* UkkuCodex.app */;
+			productType = "com.apple.product-type.application";
+		};
+		91FC741EABBEA7EBD73C2C6A /* UkkuCodexUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1873B86B408A1161CC69A1E0 /* Build configuration list for PBXNativeTarget "UkkuCodexUITests" */;
+			buildPhases = (
+				F0867B3B40AEEA3F111C7E30 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				10DCE85CA169E1832A1F3E91 /* PBXTargetDependency */,
+			);
+			name = UkkuCodexUITests;
+			packageProductDependencies = (
+			);
+			productName = UkkuCodexUITests;
+			productReference = EC467DDFB682FECCF14CD583 /* UkkuCodexUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D351886182E3D098DF556926 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					14A0D96449DA734559E467BA = {
+						ProvisioningStyle = Automatic;
+					};
+					91FC741EABBEA7EBD73C2C6A = {
+						TestTargetID = 14A0D96449DA734559E467BA;
+					};
+				};
+			};
+			buildConfigurationList = 2090122369CA9CB60C93D9BB /* Build configuration list for PBXProject "UkkuCodex" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 4CB45C8F35BCFC448527716D;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				7C757675F8A31D395BEDAFB2 /* XCRemoteSwiftPackageReference "rive-ios" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3A7AD789BBECEFD9F497F635 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				14A0D96449DA734559E467BA /* UkkuCodex */,
+				91FC741EABBEA7EBD73C2C6A /* UkkuCodexUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		EA6A6942603DB462BB51412D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6910475AE05699C93F9975A6 /* Assets.xcassets in Resources */,
+				3329D498D439C400A6D790CE /* Personaje in Resources */,
+				2BCB5917803400EC96ADFA94 /* ukku-original.riv in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B2C6E6EEE8A98D431C4CF9D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0045BA23F6DE813F23FE9BFD /* Acciones.swift in Sources */,
+				E6163CBD846E0EFFF15DADA5 /* ActivityScreen.swift in Sources */,
+				C170B8B6FD31E7DFE5246328 /* Calculo.swift in Sources */,
+				DC27816AB17C722B6BFC33CE /* Estilo.swift in Sources */,
+				FB0910FDB4CC51F7F57FD957 /* HomeScreen.swift in Sources */,
+				C34AF5D312022876329DD3B0 /* Modelos.swift in Sources */,
+				D837C328CF029026B53E5B64 /* PlanScreen.swift in Sources */,
+				440E8A6883702B4A477F241F /* RegistroPago.swift in Sources */,
+				AB87ABC808E91FE8CDA6319C /* RiveScene.swift in Sources */,
+				E25A32C48733086BCF5D3E54 /* ScenarioScreen.swift in Sources */,
+				9A32FF4452D8C33806BA6A7A /* Seed.swift in Sources */,
+				A3B0250D23AB3C4FC8C99A1F /* Servicios.swift in Sources */,
+				2E6B79CE38F0304DE8EC8FFB /* SettingsScreen.swift in Sources */,
+				CCCF756156EC877E54E7D446 /* Simulacion.swift in Sources */,
+				16C95FEAD75DDB1C0D85DFAB /* Store.swift in Sources */,
+				B42772C3A7B36C9324D771D3 /* UkkuCodexApp.swift in Sources */,
+				38D88C9CABA2865FC59490C5 /* UkkuPersonaje.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0867B3B40AEEA3F111C7E30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B79137DCA71F900DC3E24956 /* UkkuFlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		10DCE85CA169E1832A1F3E91 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 14A0D96449DA734559E467BA /* UkkuCodex */;
+			targetProxy = E01891E7AE7B68D87BEF3CED /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0A6D0F150E098FB3425D96FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		33E4C2572F9C6AD8217B625F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hackathon.ukku.codex;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		378E12A26AFFDF9CD9F248AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6E4A29C637FEE4A92C7C4155 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hackathon.UkkuCodexUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UkkuCodex;
+			};
+			name = Debug;
+		};
+		6EB25AADE70C5389ADCA11F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hackathon.UkkuCodexUITests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = UkkuCodex;
+			};
+			name = Release;
+		};
+		798252CD135911D653FF3A22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Sources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.hackathon.ukku.codex;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1873B86B408A1161CC69A1E0 /* Build configuration list for PBXNativeTarget "UkkuCodexUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6E4A29C637FEE4A92C7C4155 /* Debug */,
+				6EB25AADE70C5389ADCA11F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2090122369CA9CB60C93D9BB /* Build configuration list for PBXProject "UkkuCodex" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A6D0F150E098FB3425D96FA /* Debug */,
+				378E12A26AFFDF9CD9F248AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		2177472BCDC8E7D781630C52 /* Build configuration list for PBXNativeTarget "UkkuCodex" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33E4C2572F9C6AD8217B625F /* Debug */,
+				798252CD135911D653FF3A22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7C757675F8A31D395BEDAFB2 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios.git";
+			requirement = {
+				kind = exactVersion;
+				version = 6.30.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A3DEAB4AC1DCCCE002DE6878 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7C757675F8A31D395BEDAFB2 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D351886182E3D098DF556926 /* Project object */;
+}

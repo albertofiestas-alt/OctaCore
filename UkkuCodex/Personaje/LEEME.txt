@@ -1,0 +1,4 @@
+Aquí van los clips raster de Ukku que entrega Codex. Formato y nombres: ver
+ukku-app-handoff/original-character/NECESIDADES-CLAUDE.txt
+Cada clip es una carpeta: Personaje/<nombre>/manifest.json + 0000.png, 0001.png, ...
+Si un clip no existe, la app muestra el PNG maestro quieto.
