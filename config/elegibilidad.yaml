@@ -10,10 +10,10 @@ meses_verde: 6   # fijado por Gino, DECISIONES #29
 semanas_ambar_toleradas: 2   # Gino: 1 semana por cada 3 meses; con N = 6 meses son 2 (#29)
 # M: días mínimos de serie observados por persona (criterio 4, historia).
 historia_minima_dias: 182   # Gino: 26 semanas = 182 días (#29)
-# k_p: días mínimos de la ventana con algún pago con fecha en el horizonte (criterio 4, evita verdes triviales).
-dias_con_pagos_minimos: 3   # Gino: 3 "pagos con fecha"; aquí se mide en DÍAS con algún pago en el horizonte (ver DECISIONES #29)
+# Pagos con fecha DISTINTOS en la ventana (criterio 4): suma por mes de pagos_con_fecha_mes. Evita verdes triviales.
+pagos_minimos: 3   # Gino: 3 pagos distintos en los 6 meses, no días (#29)
 # Días de la ventana con confianza "baja" que se toleran (criterio 3). 0 = ninguno.
-dias_confianza_baja_toleradas: null
+dias_confianza_baja_toleradas: 14   # Gino: ~8 % de los 182 días de la ventana (#29)
 # Brecha máxima entre arquetipos (diferencia de tasas, 0 a 1) a partir de la cual se declara alerta de sesgo.
 # NO es el umbral_alerta_sesgo del modelo.
 umbral_brecha: 0.20   # Gino: 20 puntos porcentuales (#29)

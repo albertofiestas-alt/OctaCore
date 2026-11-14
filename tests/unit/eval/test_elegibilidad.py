@@ -19,7 +19,7 @@ PREREG = {
     "meses_verde": 6,
     "semanas_ambar_toleradas": 1,
     "historia_minima_dias": 150,
-    "dias_con_pagos_minimos": 20,
+    "pagos_minimos": 3,
     "dias_confianza_baja_toleradas": 0,
     "umbral_brecha": 0.2,
     "reduccion_gasto_incentivo": 0.25,
@@ -35,7 +35,7 @@ def eleg():
     return mod
 
 
-def persona(cid, arq="A", inicio="2025-01-01", meses=6, semaforo=None, descubierto=None, confianza=None, saltar=()):
+def persona(cid, arq="A", inicio="2025-01-01", meses=6, semaforo=None, descubierto=None, confianza=None, pagos=None, saltar=()):
     """Serie diaria de `meses` meses calendario completos. Las funciones reciben la fecha (Timestamp)."""
     fin = pd.Timestamp(inicio) + pd.DateOffset(months=meses) - pd.Timedelta(days=1)
     filas = []
@@ -49,6 +49,7 @@ def persona(cid, arq="A", inicio="2025-01-01", meses=6, semaforo=None, descubier
                 "semaforo": semaforo(f) if semaforo else "verde",
                 "pago_descubierto": bool(descubierto(f)) if descubierto else False,
                 "confianza": confianza(f) if confianza else "alta",
+                "pagos_con_fecha_mes": pagos(f) if pagos else 1,
                 "arquetipo": arq,
             }
         )
@@ -126,9 +127,44 @@ def test_confianza_baja_rompe_solo_las_combinaciones_con_criterio_3(eleg):
 
 
 def test_sin_pagos_todo_el_tiempo_pasa_el_1_pero_no_el_4(eleg):
-    df = serie(persona("P1", semaforo=lambda f: "sin_pagos"))
+    df = serie(persona("P1", semaforo=lambda f: "sin_pagos", pagos=lambda f: 0))
     assert califica(eleg, df, "P1", "1") and califica(eleg, df, "P1", "1+2")
     assert not califica(eleg, df, "P1", "1+2+4")
+
+
+def test_pagos_distintos_se_suman_por_mes_de_la_ventana(eleg):
+    # 1 pago por mes en 6 meses = 6 pagos >= 3
+    assert califica(eleg, serie(persona("P1")), "P1", "1+2+4")
+    # exactamente 3: un pago en cada uno de tres meses y ninguno en los otros tres
+    tres = serie(persona("P1", pagos=lambda f: 1 if f.month <= 3 else 0))
+    assert califica(eleg, tres, "P1", "1+2+4")
+    # 2 pagos en total
+    dos = serie(persona("P1", pagos=lambda f: 1 if f.month <= 2 else 0))
+    assert not califica(eleg, dos, "P1", "1+2+4")
+
+
+def test_varios_pagos_en_un_mes_cuentan_todos(eleg):
+    uno_y_tres = serie(persona("P1", pagos=lambda f: 3 if f.month == 1 else 0))
+    assert califica(eleg, uno_y_tres, "P1", "1+2+4")
+
+
+def test_los_pagos_de_meses_fuera_de_la_ventana_no_cuentan(eleg):
+    # 12 meses: pagos solo en enero a junio; la ventana es julio a diciembre
+    df = serie(persona("P1", meses=12, pagos=lambda f: 2 if f.month <= 6 else 0))
+    assert not califica(eleg, df, "P1", "1+2+4")
+
+
+def test_los_dias_con_semaforo_ya_no_deciden_el_criterio_4(eleg):
+    # todos los días 'sin_pagos' pero la columna dice que hubo 1 pago por mes: cuenta la columna
+    df = serie(persona("P1", semaforo=lambda f: "sin_pagos", pagos=lambda f: 1))
+    assert califica(eleg, df, "P1", "1+2+4")
+
+
+def test_pagos_con_fecha_mes_negativo_o_no_entero_se_rechaza(eleg):
+    with pytest.raises(ValueError, match="pagos_con_fecha_mes"):
+        eleg.califican(serie(persona("P1", pagos=lambda f: -1)), PREREG)
+    with pytest.raises(ValueError, match="pagos_con_fecha_mes"):
+        eleg.califican(serie(persona("P1", pagos=lambda f: 1.5)), PREREG)
 
 
 def test_historia_minima_total_en_dias(eleg):
@@ -211,7 +247,8 @@ FIJADOS_POR_GINO = {
     "meses_verde": 6,
     "semanas_ambar_toleradas": 2,  # 1 semana por cada 3 meses, N = 6 meses
     "historia_minima_dias": 182,  # 26 semanas
-    "dias_con_pagos_minimos": 3,
+    "pagos_minimos": 3,  # PAGOS distintos con fecha en los 6 meses (suma de pagos_con_fecha_mes), no días
+    "dias_confianza_baja_toleradas": 14,
     "umbral_brecha": 0.20,
     "reduccion_gasto_incentivo": 0.25,
 }
@@ -236,3 +273,9 @@ def test_con_un_campo_null_en_el_yaml_real_la_funcion_se_niega_a_correr(eleg):
 def test_faltan_columnas_se_rechaza(eleg):
     with pytest.raises(ValueError, match="columnas"):
         eleg.califican(serie(persona("P1")).drop(columns=["confianza"]), PREREG)
+
+
+def test_con_el_yaml_real_completo_corre_de_punta_a_punta(eleg):
+    r = eleg.evaluar_elegibilidad(serie(persona("P1", "x"), persona("P2", "y")))
+    assert r["parametros"]["pagos_minimos"] == 3 and r["parametros"]["dias_confianza_baja_toleradas"] == 14
+    assert set(r["tasas"].combinacion) == set(COMBOS) and r["incentivo"] is None

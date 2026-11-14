@@ -1,19 +1,21 @@
 """Experimento de elegibilidad por semáforo verde sostenido (docs/criterios_elegibilidad_semaforo.md). Dueño: Gino.
 
 Entrada: serie diaria por persona con columnas customer_id, fecha, semaforo (verde/ambar/rojo/sin_pagos),
-pago_descubierto (bool), confianza (alta/media/baja) y arquetipo. El arquetipo SOLO se usa para agrupar y reportar
+pago_descubierto (bool), confianza (alta/media/baja), arquetipo y pagos_con_fecha_mes (pagos con fecha distintos del
+mes calendario, entero >= 0, el mismo valor todos los días del mes). El arquetipo SOLO se usa para agrupar y reportar
 sesgo; nunca entra en el cálculo de quién califica (hay una prueba que lo verifica).
 
 Definiciones (todos los parámetros salen de config/elegibilidad.yaml; con algún null la función se niega a correr):
 - Ventana: los ÚLTIMOS N meses calendario completos y consecutivos de la persona (un mes con algún día faltante no
   está completo). Sin N meses seguidos completos, la persona no califica en ningún criterio.
 - Criterio 1 (verde): ningún día rojo ni ámbar en la ventana. Los días `sin_pagos` son neutros: ni cuentan como verde ni
-  rompen, por eso el criterio 4 exige días con pagos.
+  rompen, por eso el criterio 4 exige pagos con fecha.
 - Criterio 6 (tolerancia, reemplaza al 1 en la combinación 1+2+4+6): ningún rojo; semanas ámbar <= k (semana = bloque de
   7 días desde el inicio de la ventana con algún ámbar); el último mes de la ventana sin ámbar.
 - Criterio 2: cero pagos descubiertos en la ventana.
 - Criterio 3: días con confianza `baja` en la ventana <= tolerancia.
-- Criterio 4: días de serie observados >= M y días de la ventana con algún pago >= mínimo.
+- Criterio 4: días de serie observados >= M y PAGOS distintos con fecha >= mínimo, sumando por mes de la ventana el
+  valor de `pagos_con_fecha_mes` (pagos con fecha distintos del mes calendario; un pago mensual cuenta una vez por mes).
 - Criterio 5 (estabilidad del colchón) NO se evalúa: la serie no trae saldo.
 - Arquetipo de una persona = el de su última fila (su estado al final de la serie).
 """
@@ -30,7 +32,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 RUTA_CONFIG = RAIZ / "config" / "elegibilidad.yaml"
 DIR_SALIDA = RAIZ / "eval" / "resultados"
 
-COLUMNAS = ("customer_id", "fecha", "semaforo", "pago_descubierto", "confianza", "arquetipo")
+COLUMNAS = ("customer_id", "fecha", "semaforo", "pago_descubierto", "confianza", "arquetipo", "pagos_con_fecha_mes")
 SEMAFOROS = frozenset({"verde", "ambar", "rojo", "sin_pagos"})
 CONFIANZAS = frozenset({"alta", "media", "baja"})
 DIAS_POR_SEMANA = 7
@@ -38,7 +40,7 @@ CAMPOS = (
     "meses_verde",
     "semanas_ambar_toleradas",
     "historia_minima_dias",
-    "dias_con_pagos_minimos",
+    "pagos_minimos",
     "dias_confianza_baja_toleradas",
     "umbral_brecha",
     "reduccion_gasto_incentivo",
@@ -79,7 +81,11 @@ def _validar(serie: pd.DataFrame) -> pd.DataFrame:
         raise ValueError(f"semaforo desconocido: {sorted(malos)}")
     if malas := set(serie["confianza"]) - CONFIANZAS:
         raise ValueError(f"confianza desconocida: {sorted(malas)}")
+    pagos = pd.to_numeric(serie["pagos_con_fecha_mes"], errors="coerce")
+    if pagos.isna().any() or (pagos < 0).any() or (pagos % 1 != 0).any():
+        raise ValueError("pagos_con_fecha_mes debe ser un entero >= 0")
     df = serie.loc[:, list(COLUMNAS)].copy()
+    df["pagos_con_fecha_mes"] = pagos.astype(int)
     df["fecha"] = pd.to_datetime(df["fecha"])
     if df.duplicated(["customer_id", "fecha"]).any():
         raise ValueError("la serie tiene más de una fila por persona y día")
@@ -113,13 +119,13 @@ def _evaluar_persona(g: pd.DataFrame, p: dict) -> dict[str, bool]:
     semanas_ambar = ((w.loc[ambar, "fecha"] - w["fecha"].min()).dt.days // DIAS_POR_SEMANA).nunique()
     ultimo_mes = w["fecha"].dt.to_period("M").max()
     ambar_en_ultimo_mes = (ambar & (w["fecha"].dt.to_period("M") == ultimo_mes)).any()
-    con_pagos = int((w["semaforo"] != "sin_pagos").sum())
+    pagos = int(w.groupby(w["fecha"].dt.to_period("M"))["pagos_con_fecha_mes"].max().sum())
     return {
         "verde": not rojo and not ambar.any(),
         "verde_tolerancia": not rojo and semanas_ambar <= p["semanas_ambar_toleradas"] and not ambar_en_ultimo_mes,
         "sin_descubiertos": not bool(w["pago_descubierto"].any()),
         "confianza": int((w["confianza"] == "baja").sum()) <= p["dias_confianza_baja_toleradas"],
-        "historia": len(g) >= p["historia_minima_dias"] and con_pagos >= p["dias_con_pagos_minimos"],
+        "historia": len(g) >= p["historia_minima_dias"] and pagos >= p["pagos_minimos"],
     }
 
 
