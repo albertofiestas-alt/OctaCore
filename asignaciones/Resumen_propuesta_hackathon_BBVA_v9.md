@@ -14,7 +14,7 @@ Sábado 14-nov-2026 · Equipo de 7 · Líder: Gino Vieyra · Basada en la guía 
 | v8 | La v7 más la opción C (asistente conversacional del semáforo con LLM, RAG y ML, inspirado en el copiloto del bot_diagnosis) y las aclaraciones de la fórmula del número de hoy | Reemplazada |
 | v9 | La v8 sin pantalla de carga de datos: los datos son sintéticos y vienen precargados; la calidad de los datos se muestra como panel de solo lectura en Evaluación, y la carga de un archivo nuevo (prueba de evolución) queda en la línea de comandos | Fuente de verdad |
 
-Cómo leer las marcas. [SUPUESTO]: no verificado. [propuesto]: lo decide o confirma Gino. [por medir]: se llena con una medición hecha en este trabajo. Regla de oro: cada cifra que digamos sale de una medición nuestra o de una fuente abierta y verificada. Si no, no se dice.
+Cómo leer las marcas. [SUPUESTO]: no verificado. [propuesto]: lo decide o confirma Gino. [por medir]: se llena con una medición hecha en este trabajo. [hecho]: ya medido o fijado, con su archivo o commit de origen. [respaldo]: la cifra sale del simulador de respaldo (`eval/_simulador_respaldo.py`), no del motor oficial ni de `eval/simular.py`; es provisional hasta repetirla con ellos. Regla de oro: cada cifra que digamos sale de una medición nuestra o de una fuente abierta y verificada. Si no, no se dice.
 
 Si algo de este documento contradice a otro, manda la v9. Cada persona tiene un documento individual derivado de esta versión, con sus entregables, interfaces, pruebas, horas y, desde la v9, una sección de tareas nuevas. Los cambios a la v9 los aprueba Gino y se anotan en DECISIONES.md del repositorio.
 
@@ -146,7 +146,7 @@ permitido(d) = (saldo + ingreso_conservador(d) - pagos_con_fecha_hasta(d) - colc
 numero_de_hoy = max(0, min(permitido(d) para cada pago con fecha y para el dia 14))
 
 - **ingreso_conservador(d):** el de un pago a d días es el cuantil elegido del ingreso acumulado al mayor horizonte h de {3, 7, 14} con h menor o igual a d. Si d es menor que 3, es cero. Subestima a propósito.
-- **Parámetros:** el cuantil conservador es el P20 y el colchón es un parámetro de config.yaml [por fijar antes de ver resultados].
+- **Parámetros:** el cuantil conservador es el P20 y el colchón es un parámetro de config.yaml. Fijados antes de ver resultados: cuantil P20, colchón 0, 4 semanas de historia, umbrales de confianza 0,5 y 1,2, umbral de alerta de sesgo 0,05 y 20 semillas [hecho: `config/preregistro.yaml`, commit 005fb50, 14-nov 11:58].
 - **Ejemplo de prueba:** saldo 100, pago de 300 el día 3, ingreso de 400 el día 10, colchón 0. permitido(3) = (100 - 300) / 3, que es menor que 0. El número es 0 y el mensaje dice "no alcanza para el pago del día 3: faltan S/200". Con la fórmula de la v3 daba un número positivo. Es la primera prueba del motor.
 
 ### Aclaraciones de implementación (resueltas al comparar con los documentos del equipo)
@@ -263,7 +263,7 @@ Puntos de referencia en la frontera: "gastar S/0" (cero descubiertos y cero gast
 
 ### Regla de adopción (se escribe en el README antes de correr nada)
 
-El modelo se adopta si, con el mismo porcentaje de pagos descubiertos que la regla robusta, permite más gasto; o con el mismo gasto, deja menos pagos descubiertos. Debe cumplirlo en la prueba y también en el generador perturbado. El umbral numérico de mejora se fija antes de ver resultados [por fijar].
+El modelo se adopta si, con el mismo porcentaje de pagos descubiertos que la regla robusta, permite más gasto; o con el mismo gasto, deja menos pagos descubiertos. Debe cumplirlo en la prueba y también en el generador perturbado. El umbral numérico de mejora se fijó antes de ver resultados: 2,0 soles por día a igual porcentaje de descubiertos, en la prueba y en el perturbado [hecho: `config/preregistro.yaml`, commit 005fb50, 14-nov 11:58, anterior a la primera frontera, commit 04404fc, 12:32]. Veredicto con el simulador de respaldo: no adopta, se usa la regla 2 (mejora de -0,68 en la prueba y +0,06 en el perturbado; `eval/resultados/adopcion.json`, commit 04404fc) [hecho, respaldo, provisional].
 
 ### Cómo llevamos la evaluación al límite
 
@@ -279,7 +279,7 @@ El Challenge pack lista la IA generativa útil entre las capacidades que se obse
 
 Opción C, asistente conversacional del semáforo: una pantalla de chat donde la persona pregunta por su número, sus pagos y escenarios ("y si cobro 200 el día 5"). Usa el motor y el modelo como herramientas de ML, una base de conocimiento propia con búsqueda local (RAG) y, si se activa, un LLM para entender y redactar con cada cifra verificada. Funciona completo sin LLM, por lo que no depende de la autorización. Se inspira en las lecciones del copiloto del bot_diagnosis, sin reutilizar código, datos ni playbooks. Diseño completo en Diseno_Opcion_C_asistente_del_semaforo.docx; nivel P2, con puntos de corte a las 13:00, 16:00 y 17:30.
 
-Fuera del MVP [propuesto]. Las explicaciones se redactan con plantillas a partir del desglose calculado, con cifras que salen del motor. Si la organización autoriza uno externo, entra después del congelamiento: solo recibe datos ficticios, toda cifra de su respuesta se contrasta con el desglose y, si no coincide, se muestra la plantilla.
+Fuera del MVP [hecho: decisión #20 de DECISIONES.md, 14-nov 12:05: sin IA generativa en el núcleo; la capa B queda apagada]. Las explicaciones se redactan con plantillas a partir del desglose calculado, con cifras que salen del motor. Si la organización autoriza uno externo, entra después del congelamiento: solo recibe datos ficticios, toda cifra de su respuesta se contrasta con el desglose y, si no coincide, se muestra la plantilla.
 
 ## 8. Arquitectura, contratos y seguridad
 
@@ -559,13 +559,16 @@ Es la tabla de minutos que sigue, con el bloque de Responsible AI dentro de Lím
 Formato de DECISIONES.md: decisión, dato, qué decidimos y qué haríamos distinto. Se esperan al menos estas, y cada una solo se cuenta si tiene su medición:
 
 - **1.** orden de pagos en el número de hoy contra el reparto de 14 días: [por medir].
-- **2.** modelo contra regla robusta, por pares de semillas y con intervalo: [por medir].
+- **2.** modelo contra regla robusta, por pares de semillas y con intervalo [hecho, respaldo]: 20 semillas (1 a 20), 400 personas cada una, al P20. Diferencia modelo menos regla2 en pagos descubiertos: +0,433 puntos porcentuales, IC 95 % bootstrap de 2 000 remuestreos [+0,311; +0,563]; en gasto: +0,309 soles por día [+0,269; +0,356]. Origen: `eval/resultados/pares.csv` y `pares_mediciones.csv`, commit 63d75db (rama `feat/gino-eval-frontera`, aún no está en main) y decisión #23. Ningún intervalo contiene 0, pero el modelo se mueve a lo largo de la frontera (más gasto y más descubiertos al mismo cuantil) y no la supera: no cumple el umbral de adopción. La fila #23 no anota la versión del generador usada [verificar antes de citar].
 - **3.** qué variable aporta y cuál no, con las ablaciones: [por medir].
-- **4.** prueba contra generador perturbado: [por medir].
-- **5.** cuantil conservador elegido a partir de la frontera: [por medir].
+- **4.** prueba contra generador perturbado [hecho, respaldo]: al P20, pagos descubiertos y gasto en soles por día. Prueba (80 personas, meses 21 a 24): regla1 6,87 % y 84,91; regla2 2,69 % y 83,75; modelo 3,24 % y 83,98. Perturbado: regla1 16,45 % y 62,78; regla2 11,93 % y 61,82; modelo 12,31 % y 62,17. Origen: `eval/resultados/frontera.csv` y `frontera_perturbado.csv`, commit 04404fc, decisión #23.
+- **5.** cuantil conservador elegido a partir de la frontera [hecho, respaldo]: el P20 se fijó en el pre-registro (commit 005fb50, 11:58) antes de la primera frontera (04404fc, 12:32). En la frontera de regla2 en la prueba (`frontera.csv`): P5 2,47 % y 83,14; P20 2,69 % y 83,75; P50 4,56 % y 84,96; P80 16,65 % y 87,17. De P5 a P20 el gasto sube 0,61 soles por día con 0,22 puntos más de descubiertos; el P80 multiplica los descubiertos por 6,2 para ganar 3,42 soles por día más que el P20. Se mantiene el P20; es un criterio de compromiso, no una prueba de que sea el óptimo.
 - **6.** alternativas rechazadas con su dato (por ejemplo, más variables o más arquetipos que no mejoran): [por medir].
 - **7.** robustez: fuzz sin excepciones, mutaciones detectadas, hash idéntico: [por medir].
-- **8.** escala y tiempos de respuesta: [por medir].
+- **8.** escala y tiempos de respuesta: [por medir]. (Solo se midió el tiempo de simulación del respaldo: 305 s la prueba y 325 s el perturbado, decisión #23; no es la latencia del servicio.)
+- **9.** sesgos por arquetipo y por tercil de ingreso y de volatilidad: [por medir].
+- **10.** sin IA generativa en el núcleo [hecho]: decisión #20 de DECISIONES.md (14-nov 12:05), con las explicaciones por plantilla.
+- **11.** dueños de `eval/` y del asistente [hecho, falta visto de Rafael]: decisión #25 de DECISIONES.md (14-nov 12:25).
 
 ### Autocrítica prevista (decirla antes de que pregunten)
 
@@ -589,7 +592,7 @@ Formato de DECISIONES.md: decisión, dato, qué decidimos y qué haríamos disti
 
 ### Números para tener de memoria (se completan el domingo)
 
-Frontera: pagos descubiertos y gasto permitido por método y cuantil, en la prueba y en el perturbado. Pares de semillas: diferencia media e intervalo del modelo contra la regla robusta. Calibración del P20. Mutaciones detectadas sobre las hechas. Latencia p50 y p95 por pantalla. Hash de la tabla de resultados. Todos [por medir].
+Frontera: pagos descubiertos y gasto permitido por método y cuantil, en la prueba y en el perturbado. Pares de semillas: diferencia media e intervalo del modelo contra la regla robusta. Calibración del P20. Mutaciones detectadas sobre las hechas. Latencia p50 y p95 por pantalla. Hash de la tabla de resultados. La frontera y los pares ya están medidos con el simulador de respaldo (decisiones 2, 4 y 5 de la lista de arriba) [hecho, respaldo]; calibración del P20, mutaciones, latencias y hash siguen [por medir].
 
 ## 16. Riesgos y plan B
 
@@ -739,18 +742,18 @@ scripts/auditar_recomendacion.py <registro_id>
 |---|---|---|
 | horizontes_dias | 3, 7, 14 | Fijo |
 | cuantiles | 0.05, 0.20, 0.50, 0.80 | Fijo |
-| cuantil_conservador | 0.20 | Se confirma con la frontera [por medir] |
-| colchon | Por fijar | Antes de ver resultados |
-| umbral_historia_semanas | 4 | Antes de ver resultados |
-| umbrales_confianza | Por fijar | Antes de ver resultados |
+| cuantil_conservador | 0.20 | Fijado antes de ver resultados (commit 005fb50); consistente con la frontera, decisión 5 [hecho, respaldo] |
+| colchon | 0 | Fijado antes de ver resultados (commit 005fb50) [hecho] |
+| umbral_historia_semanas | 4 | Fijado antes de ver resultados (commit 005fb50) [hecho] |
+| umbrales_confianza | ancho_alto 0.5, ancho_bajo 1.2 | Fijado antes de ver resultados (commit 005fb50) [hecho] |
 | ventana_regla_robusta_semanas | 8 | Fijo |
 | semillas_evaluacion | 20 o más | Fijo |
 | semilla_generador | Una fija, anotada en el README | Fijo |
 | variables_sensibles | edad, genero, ubicacion, distrito, nombre, dni, telefono | Fijo; la ingesta descarta y la prueba verifica |
-| umbral_alerta_sesgo | Por fijar | Antes de ver resultados |
+| umbral_alerta_sesgo | 0.05 | Fijado antes de ver resultados (commit 005fb50) [hecho]; la medición de sesgos sigue [por medir] |
 | patrones_pii | DNI de 8 digitos, telefono de 9 digitos, correo, tarjeta de 13 a 19 digitos | Fijo |
 | asistente.activado, asistente.modo | falso, modo 1 (sin LLM) | El modo 2 exige además generativa.activada |
-| asistente.max_caracteres, max_palabras, umbral_intencion, minimo_rag, max_preguntas_por_minuto | 200, 120, por fijar, por fijar, 10 | Por fijar antes de ver resultados |
+| asistente.max_caracteres, max_palabras, umbral_intencion, minimo_rag, max_preguntas_por_minuto | 200, 120, 0.30, por fijar, 10 | umbral_intencion 0.30 fijado en la decisión #24 de DECISIONES.md [hecho]; el resto, por fijar antes de ver resultados |
 | generativa.activada | falso | Solo con las cinco condiciones del diseño de la opción B |
 | generativa.proveedor | ninguno (openai al activar) | Variable LLM_PROVEEDOR; clave en LLM_API_KEY dentro de .env |
 | generativa.timeout_s, reintentos, temperatura, max_tokens, max_palabras | 6, 1, 0, 250, 90 | Por fijar |
