@@ -2,9 +2,7 @@
 
 archivo -> ingesta -> regla 2 -> motor -> servicio -> Decision registrada y auditable.
 
-Está marcado xfail(strict=True) mientras ingesta, reglas y motor sean esqueletos.
-Cuando las tres capas funcionen, esta prueba empieza a pasar, `strict` la marca
-como fallo y Anderson quita la marca: ese es el aviso de que el control 1 está listo.
+Ingesta, reglas y motor ya son reales: se quitó la marca xfail(strict=True) (control 1 listo).
 """
 
 from __future__ import annotations
@@ -32,8 +30,6 @@ def srv_real(cfg, tmp_path, ruta_movimientos_minimo):
     servicio.reiniciar()
 
 
-@pytest.mark.xfail(strict=True, raises=NotImplementedError,
-                   reason="control 1 (13:00): faltan ingesta (Mathias), regla 2 (Rafael) y motor (Sebastián)")
 def test_flujo_completo_con_regla2(srv_real):
     d = srv_real.consultar("P0002", date(2025, 11, 20), "regla2")
     assert isinstance(d, Decision)
