@@ -206,6 +206,100 @@ def test_proximos_pagos_arma_los_dias_hasta_el_pago(sim):
 
 # --- frontera usa el respaldo cuando simular.py sigue en esqueleto ---
 
+# --- series diarias para el experimento de elegibilidad (solo regla2, meses 13-24) ---
+
+def _pron14(p5, p50, p80):
+    def q(a, b, c):
+        return Cuantiles(p5=a, p20=b, p50=b, p80=c)
+
+    return Pronostico(por_horizonte={3: q(0.0, 0.0, 0.0), 7: q(0.0, 0.0, 0.0), 14: q(p5, p50, p80)})
+
+
+def test_semaforo_verde_amber_rojo_y_sin_pagos(sim):
+    # pago de 300 a 3 días; h3 manda en d=3: p5=0 y p50=300 (ámbar si el saldo es 100)
+    pron = Pronostico(por_horizonte={
+        3: Cuantiles(p5=0.0, p20=0.0, p50=300.0, p80=300.0),
+        7: Cuantiles(p5=0.0, p20=0.0, p50=0.0, p80=0.0),
+        14: Cuantiles(p5=0.0, p20=0.0, p50=0.0, p80=0.0)})
+    assert sim._semaforo_ventana(700.0, [(3, 300.0)], pron) == "verde"  # 700 - 300 >= 0 con P5
+    assert sim._semaforo_ventana(100.0, [(3, 300.0)], pron) == "ambar"  # con P5 no (-200), con P50 sí (100)
+    assert sim._semaforo_ventana(-1.0, [(3, 300.0)], pron) == "rojo"  # ni con P50: -1 + 300 - 300 < 0
+    assert sim._semaforo_ventana(5000.0, [], pron) == "sin_pagos"
+
+
+def test_semaforo_toma_el_peor_de_los_pagos_de_la_ventana(sim):
+    pron = _pron()
+    # saldo 400: el pago de 300 a 3 días se cubre; el de 200 a 10 días ya no (400 - 500 < 0): peor = rojo
+    assert sim._semaforo_ventana(400.0, [(3, 300.0), (10, 200.0)], pron) == "rojo"
+    assert sim._semaforo_ventana(600.0, [(3, 300.0), (10, 200.0)], pron) == "verde"
+
+
+@pytest.mark.parametrize("p5,p50,p80,semanas,esperada", [
+    (80.0, 100.0, 120.0, 10, "alta"),   # ancho (120-80)/100 = 0.4 < 0.5
+    (60.0, 100.0, 120.0, 10, "media"),  # ancho 0.6
+    (0.0, 100.0, 150.0, 10, "baja"),    # ancho 1.5 > 1.2
+    (80.0, 100.0, 120.0, 3, "baja"),    # poca historia: baja aunque el ancho sea bueno
+    (0.0, 0.0, 0.0, 10, "alta"),       # ancho 0 / max(0, 1) = 0
+    (0.0, 0.0, 5.0, 10, "baja"),       # ancho 5 / max(0, 1) = 5
+])
+def test_confianza_como_el_motor_con_los_umbrales_del_preregistro(sim, cfg, p5, p50, p80, semanas, esperada):
+    assert sim._confianza(_pron14(p5, p50, p80), semanas, cfg) == esperada
+
+
+def _serie(sim, cfg, monkeypatch, saldo=1000.0, factor=1.0, pron=None):
+    _parchar(sim, monkeypatch, pron or _pron())
+    hist, etiquetas = _caso(saldo=saldo)
+    return sim.serie_diaria(hist, etiquetas, cfg, factor_gasto=factor, meses=(21, 21))
+
+
+def test_serie_formato_dias_completos_sin_duplicados(sim, cfg, monkeypatch):
+    s = _serie(sim, cfg, monkeypatch)
+    assert list(s.columns) == ["customer_id", "fecha", "semaforo", "pago_descubierto", "confianza", "arquetipo",
+                               "pagos_con_fecha_mes"]
+    assert len(s) == 30 and not s.duplicated(["customer_id", "fecha"]).any()  # septiembre de 2026 completo
+    assert s["fecha"].iloc[0] == "2026-09-01" and s["fecha"].iloc[-1] == "2026-09-30"
+    assert s["pago_descubierto"].dtype == bool
+    assert set(s["semaforo"]) <= {"verde", "ambar", "rojo", "sin_pagos"}
+    assert set(s["arquetipo"]) == {"asalariado"}
+    assert (s["pagos_con_fecha_mes"] == 1).all()  # un pago real en el mes de septiembre
+
+
+def test_serie_a_mano_con_saldo_suficiente(sim, cfg, monkeypatch):
+    s = _serie(sim, cfg, monkeypatch)
+    assert list(s["semaforo"].iloc[:4]) == ["verde"] * 4  # 1000, 950, 904, 861 cubren el pago de 300 con P5
+    assert not s["pago_descubierto"].any()
+
+
+def test_serie_marca_el_dia_del_pago_descubierto(sim, cfg, monkeypatch):
+    s = _serie(sim, cfg, monkeypatch, saldo=100.0)
+    assert list(s["pago_descubierto"].iloc[:5]) == [False, False, False, True, False]  # el 4 de septiembre
+    assert list(s["semaforo"].iloc[:3]) == ["rojo"] * 3
+    assert list(s["confianza"].iloc[:2]) == ["baja", "baja"]  # ancho 0, pero solo hay 1 día de historia (< 4 semanas)
+
+
+def test_serie_menor_gasto_gasta_el_75_por_ciento(sim, cfg, monkeypatch):
+    monkeypatch.setattr(sim, "_numero_hoy", lambda *a, **k: 40)
+    normal = _serie(sim, cfg, monkeypatch)
+    menor = sim.serie_menor_gasto(*_caso(), cfg, meses=(21, 21))
+    assert normal.attrs["gasto_medio_dia"] == pytest.approx(40.0)
+    assert menor.attrs["gasto_medio_dia"] == pytest.approx(30.0)  # 25 % menos
+    assert sim.FACTOR_MENOR_GASTO == 0.75
+
+
+def test_serie_sin_fuga_el_pronostico_solo_ve_historia_previa(sim, cfg, monkeypatch):
+    vistos = []
+
+    def espia(metodo, hist, fecha, modelo, cfg):
+        vistos.append((metodo, pd.Timestamp(fecha), hist["fecha_hora"].max()))
+        return _pron()
+
+    monkeypatch.setattr(sim, "_pronosticar", espia)
+    monkeypatch.setattr(sim, "_pagos_inferidos", lambda hist, mes_inicio: [])
+    hist, etiquetas = _caso()
+    sim.serie_diaria(hist, etiquetas, cfg, meses=(21, 21))
+    assert vistos and {m for m, _, _ in vistos} == {"regla2"} and all(u < d for _, d, u in vistos)
+
+
 def test_frontera_cae_al_respaldo_si_simular_es_esqueleto():
     frontera = _cargar("frontera")
     with pytest.warns(UserWarning, match="RESPALDO"):

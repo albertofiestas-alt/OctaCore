@@ -196,3 +196,160 @@ def simular_persona(historia_completa, etiquetas, cfg, metodo: str, cuantil, mod
         saldo = saldo_dia
     return {"pagos_descubiertos": int(descubiertos), "pagos_totales": int(total),
             "gasto_permitido_dia": float(np.mean(gastos))}
+
+
+# --- series diarias para el experimento de elegibilidad (Judas): solo regla2, meses 13-24 ---
+# Misma simulación de arriba (regla2 al cuantil conservador del pre-registro, pagos inferidos, gasto = numero_hoy), pero
+# registra una fila por persona y día. RESPALDO: sale de este simulador y no del motor oficial.
+
+MESES_SERIE = (13, 24)
+FACTOR_MENOR_GASTO = 0.75  # "gasto 25 % menor" para la prueba de incentivo (pedido de Gino)
+COLUMNAS_SERIE = ["customer_id", "fecha", "semaforo", "pago_descubierto", "confianza", "arquetipo",
+                  "pagos_con_fecha_mes"]
+_GRAVEDAD = {"verde": 0, "ambar": 1, "rojo": 2}
+
+
+def _semaforo_ventana(saldo: float, proximos: list[tuple[int, float]], pron) -> str:
+    """Peor semáforo entre los pagos de la ventana (plan del motor, sin colchón): cobertura(q) = saldo + ingreso(d, q)
+    - pagos con día <= d. Verde si cubre con P5; ámbar si cubre con P50 y no con P5; rojo si ni así; sin_pagos si no hay."""
+    if not proximos:
+        return "sin_pagos"
+    peor = "verde"
+    for d, _ in proximos:
+        acumulado = sum(m for dd, m in proximos if dd <= d)
+
+        def cubre(nombre: str, d=d, acumulado=acumulado) -> bool:
+            return saldo + _ingreso_conservador(pron, d, nombre) - acumulado >= 0
+
+        estado = "verde" if cubre("p5") else "ambar" if cubre("p50") else "rojo"
+        if _GRAVEDAD[estado] > _GRAVEDAD[peor]:
+            peor = estado
+    return peor
+
+
+def _confianza(pron, semanas_historia: int, cfg) -> str:
+    """Confianza como el plan del motor, con los umbrales del pre-registro: ancho = (p80 - p5) / max(p50, 1) a 14 días.
+    Baja si hay menos semanas de historia que el umbral o el ancho supera ancho_bajo; alta si el ancho es menor que
+    ancho_alto con historia suficiente; media en los demás casos."""
+    prereg = cfg["preregistro"]
+    c = pron.por_horizonte[max(pron.por_horizonte)]
+    ancho = (c.p80 - c.p5) / max(c.p50, 1.0)
+    if semanas_historia < int(prereg["umbral_historia_semanas"]) or ancho > float(prereg["umbrales_confianza"]["ancho_bajo"]):
+        return "baja"
+    return "alta" if ancho < float(prereg["umbrales_confianza"]["ancho_alto"]) else "media"
+
+
+def _serie_persona(historia_completa, etiquetas, cfg, factores=(1.0,), meses=MESES_SERIE) -> list[pd.DataFrame]:
+    """Una serie diaria por factor de gasto (gasto del día = numero_hoy * factor), compartiendo el pronóstico por día."""
+    nombre = f"p{round(100 * float(cfg['preregistro']['cuantil_conservador']))}"
+    colchon = float(cfg["preregistro"]["colchon"] or 0.0)
+    historia = historia_completa.sort_values("fecha_hora", kind="stable").reset_index(drop=True)
+    ingresos, pagos_reales = _flujos_reales(historia, etiquetas)
+    hist = historia.drop_duplicates(subset=["customer_id", "fecha_hora", "monto", "comercio", "tipo"]).reset_index(drop=True)
+    inicio = _inicio_mes(meses[0])
+    dias = pd.date_range(inicio, _inicio_mes(meses[1] + 1) - pd.Timedelta(days=1), freq="D")
+
+    previos = hist[hist["fecha_hora"] < inicio]
+    saldo0 = float(previos["saldo"].iloc[-1]) if len(previos) else 0.0
+    fechas = hist["fecha_hora"].to_numpy()
+    cid = hist["customer_id"].iloc[0]
+    primer_dia = hist["fecha_hora"].min().normalize()
+    # etiqueta de arquetipo vigente cada día (solo para reportar): la del último movimiento hasta ese día
+    arq_filas = etiquetas["arquetipo"].reindex(historia["transaction_id"]).to_numpy()
+    por_dia = pd.Series(arq_filas, index=historia["fecha_hora"].dt.normalize()).groupby(level=0).last()
+    arquetipos = por_dia.reindex(pd.date_range(min(por_dia.index.min(), dias[0]), dias[-1])).ffill().reindex(dias)
+    pagos_mes: dict[tuple[int, int], int] = {}
+    for d, montos in pagos_reales.items():
+        pagos_mes[(d.year, d.month)] = pagos_mes.get((d.year, d.month), 0) + len(montos)
+
+    saldo = {f: saldo0 for f in factores}
+    filas: dict[float, list] = {f: [] for f in factores}
+    gastos: dict[float, list] = {f: [] for f in factores}
+    inferidos, mes_actual = [], None
+    for t in dias:
+        if (t.year, t.month) != mes_actual:
+            mes_actual = (t.year, t.month)
+            inferidos = _pagos_inferidos(hist, pd.Timestamp(t.year, t.month, 1))
+        k = int(np.searchsorted(fechas, t.to_datetime64(), side="left"))  # solo movimientos con fecha_hora < t
+        clave = (cid, "regla2", id(None), t, k)
+        if clave not in _CACHE:
+            _CACHE[clave] = _pronosticar("regla2", hist.iloc[:k], t, None, cfg)
+        pron = _CACHE[clave]
+        proximos = _proximos(inferidos, t)
+        confianza = _confianza(pron, int((t - primer_dia).days // 7), cfg)
+        for f in factores:
+            s = saldo[f]
+            semaforo = _semaforo_ventana(s, proximos, pron)
+            gasto = _numero_hoy(s, proximos, pron, nombre, colchon) * f
+            gastos[f].append(gasto)
+            s_dia = s + ingresos.get(t, 0.0) - gasto
+            descubierto = False
+            for monto in pagos_reales.get(t, []):
+                s_dia -= monto
+                descubierto = descubierto or s_dia < 0
+            saldo[f] = s_dia
+            filas[f].append((cid, t.strftime("%Y-%m-%d"), semaforo, bool(descubierto), confianza, arquetipos[t],
+                             pagos_mes.get((t.year, t.month), 0)))
+    series = []
+    for f in factores:
+        df = pd.DataFrame(filas[f], columns=COLUMNAS_SERIE)
+        df.attrs["gasto_medio_dia"] = float(np.mean(gastos[f]))
+        series.append(df)
+    return series
+
+
+def serie_diaria(historia_completa, etiquetas, cfg, factor_gasto: float = 1.0, meses=MESES_SERIE) -> pd.DataFrame:
+    """Una fila por día (completo) de los meses `meses`: customer_id, fecha, semaforo, pago_descubierto, confianza,
+    arquetipo, pagos_con_fecha_mes. Solo regla2, con historia anterior a cada día. RESPALDO (no es el motor oficial)."""
+    return _serie_persona(historia_completa, etiquetas, cfg, (factor_gasto,), meses)[0]
+
+
+def serie_menor_gasto(historia_completa, etiquetas, cfg, meses=MESES_SERIE) -> pd.DataFrame:
+    """Lo mismo con la persona gastando 25 % menos que el número de hoy (prueba de incentivo)."""
+    return serie_diaria(historia_completa, etiquetas, cfg, FACTOR_MENOR_GASTO, meses)
+
+
+def _trabajo_persona(historia, etiquetas):
+    """Un proceso por persona: ambas series con un solo pronóstico por día."""
+    from contratos import cargar_config
+
+    normal, menor = _serie_persona(historia, etiquetas, cargar_config(), (1.0, FACTOR_MENOR_GASTO))
+    return normal, menor
+
+
+def generar_series(df: pd.DataFrame, n_procesos: int = 8, destino=None) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Series de todas las personas de `df` (con etiquetas y fecha_hora datetime) en paralelo; escribe serie_diaria.csv
+    y serie_menor_gasto.csv en `destino` (por defecto eval/resultados). Falla si hay (customer_id, fecha) repetidos."""
+    from pathlib import Path
+
+    from joblib import Parallel, delayed
+
+    from contratos import ETIQUETAS_REFERENCIA
+
+    destino = Path(destino) if destino else Path(__file__).resolve().parent / "resultados"
+    personas = []
+    for _, g in df.groupby("customer_id", sort=True):
+        personas.append((g.drop(columns=list(ETIQUETAS_REFERENCIA)).reset_index(drop=True),
+                         g.set_index("transaction_id")[list(ETIQUETAS_REFERENCIA)]))
+    pares = Parallel(n_jobs=n_procesos)(delayed(_trabajo_persona)(h, e) for h, e in personas)
+    normal = pd.concat([p[0] for p in pares], ignore_index=True)
+    menor = pd.concat([p[1] for p in pares], ignore_index=True)
+    for nombre, serie in (("serie_diaria.csv", normal), ("serie_menor_gasto.csv", menor)):
+        if serie.duplicated(["customer_id", "fecha"]).any():
+            raise ValueError(f"{nombre}: hay filas repetidas por persona y día")
+        destino.mkdir(parents=True, exist_ok=True)
+        serie.to_csv(destino / nombre, index=False, lineterminator="\n")
+    return normal, menor
+
+
+if __name__ == "__main__":
+    import sys
+    import warnings
+
+    warnings.simplefilter("ignore")
+    ruta = sys.argv[1] if len(sys.argv) > 1 else "data/generado/generado/movimientos.csv"
+    procesos = int(sys.argv[2]) if len(sys.argv) > 2 else 8
+    datos = pd.read_csv(ruta, parse_dates=["fecha_hora"])
+    n, m = generar_series(datos, procesos)
+    print(f"serie_diaria.csv {len(n)} filas; serie_menor_gasto.csv {len(m)} filas; "
+          f"personas {n['customer_id'].nunique()}", flush=True)
