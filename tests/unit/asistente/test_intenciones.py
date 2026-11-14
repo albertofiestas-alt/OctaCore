@@ -157,6 +157,9 @@ def _p(texto, cfg, nombre="que_pasa_si", **kw):
         ("si cobro S/200 el día 5 y gasto 80 hoy", [(5, 200.0)], 80.0),
         ("y si cobro S/1,500.50 el día 3", [(3, 1500.5)], 0.0),
         ("y si no entra ningún ingreso esta semana", [], 0.0),
+        ("¿Cuánto podría gastar si cobro S/250 el día 3?", [(3, 250.0)], 0.0),  # 'gastar' pero el monto es un cobro
+        ("cuanto podria gastar si cobro s/400 el dia 12", [(12, 400.0)], 0.0),
+        ("y si gasto s/300 en una compra", [], 300.0),
     ],
 )
 def test_parametros_que_pasa_si(cfg, texto, ingresos, gasto):
@@ -191,6 +194,36 @@ def test_parametros_fuera_de_rango_se_rechaza(cfg, texto, motivo):
 def test_parametros_toma_los_del_llm_si_el_texto_no_los_trae(cfg):
     p = _p("y si me depositan algo", cfg, monto=120.0, dia=4)
     assert [(i["dia"], i["monto"]) for i in p["ingresos_extra"]] == [(4, 120.0)]
+
+
+def test_parametros_sobre_todas_las_que_pasa_si_del_csv(cfg):
+    """Regresión: ninguna fila se rechaza y un texto con 'cobro/recibo/...' y sin 'gasto' nunca da gasto_hoy."""
+    import pandas as pd
+
+    filas = pd.read_csv(it._ruta(cfg["asistente"]["csv_preguntas"]))
+    for texto in filas[filas.intencion == "que_pasa_si"].texto:
+        p = _p(texto, cfg)
+        if any(c.isdigit() for c in texto):
+            assert p["ingresos_extra"] or p["gasto_hoy"] > 0, texto
+        t = texto.lower()
+        if any(w in t for w in ("cobro", "recibo", "pagan", "gano", "ingreso de", "adelantan", "entra un")) and "si gasto" not in t:
+            assert p["gasto_hoy"] == 0.0, texto
+
+
+@pytest.mark.parametrize(
+    "texto,esperada",
+    [
+        ("¿Por qué está tan bajo mi número?", "explicar_numero"),  # 'que es' no es subcadena de 'que esta'
+        ("¿hoy sí me alcanza para la luz?", "estado_pago"),  # 'y si' no es subcadena de 'hoy si'
+        ("¿qué acciones puedo tomar?", None),  # 'acciones' no manda al rechazo fijo
+    ],
+)
+def test_palabras_clave_respetan_limites_de_palabra(cfg, texto, esperada):
+    bajo = it.Intencion("concepto", 0.1)
+    nombre = it._ajustar_con_palabras_clave(bajo, texto, cfg).nombre
+    assert nombre != "fuera_de_alcance"
+    if esperada:
+        assert nombre == esperada
 
 
 def test_parametros_del_llm_tambien_se_validan(cfg):
