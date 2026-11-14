@@ -56,7 +56,9 @@ def test_las_seis_intenciones_con_datos_reales(srv, persona, tmp_path):
 
     dia = base.por_pago[0].dia if base.por_pago else 5
     pago = preguntar(persona, f"me alcanza para el pago del dia {dia}")
-    assert pago.intencion == "estado_pago" and pago.datos["verificacion"] == "ok" and f"S/{n}" in pago.texto
+    assert pago.intencion == "estado_pago" and pago.datos["verificacion"] == "ok"
+    if base.por_pago:
+        assert f"S/{int(base.por_pago[0].monto)}" in pago.texto or f"S/{base.por_pago[0].monto:.2f}" in pago.texto
 
     propuesta = preguntar(persona, "que hago para llegar a mi pago")
     assert propuesta.intencion == "propuesta" and propuesta.datos["verificacion"] == "ok"

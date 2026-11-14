@@ -82,11 +82,23 @@ def test_prohibida_o_pii(cfg, texto):
     assert good is False and "prohibida_o_pii" in motivos
 
 
-@pytest.mark.parametrize("intencion", ["explicar_numero", "estado_pago", "que_pasa_si"])
+@pytest.mark.parametrize("intencion", ["explicar_numero", "que_pasa_si"])
 def test_falta_cifra_clave(cfg, intencion):
     res = {**RESULTADOS, "intencion": intencion}
     good, motivos = ok({"respuesta": "Datos: el pago de S/220 del dia 7 queda cubierto.", "citas": []}, res, cfg=cfg)
     assert good is False and motivos == ["falta_cifra_clave"]
+
+
+def test_cifra_clave_explicita_manda_sobre_el_numero_de_hoy(cfg):
+    res = {**RESULTADOS, "intencion": "estado_pago", "cifra_clave": 220.0}
+    assert ok({"respuesta": "El pago de S/220 del dia 7 esta cubierto.", "citas": []}, res, cfg=cfg) == (True, [])
+    good, motivos = ok({"respuesta": "El pago del dia 7 esta cubierto.", "citas": []}, res, cfg=cfg)
+    assert good is False and motivos == ["falta_cifra_clave"]
+
+
+def test_estado_pago_sin_pago_que_nombrar_no_exige_cifra(cfg):
+    res = {**RESULTADOS, "intencion": "estado_pago", "cifra_clave": None}
+    assert ok({"respuesta": "No hay pagos con fecha por ahora.", "citas": []}, res, cfg=cfg) == (True, [])
 
 
 def test_concepto_no_exige_cifra_clave(cfg):

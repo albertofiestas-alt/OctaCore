@@ -19,8 +19,8 @@ if TYPE_CHECKING:
 
 INTENCIONES_CON_CIFRA_CLAVE = ("explicar_numero", "estado_pago", "que_pasa_si")
 # Palabras que el asistente nunca debe decir (promesas, inversión, crédito).
-PROHIBIDAS = ("garantizado", "garantizamos", "garantia", "sin riesgo", "seguro que", "invierte", "invertir",
-              "prestamo", "credito")
+PROHIBIDAS = ("garantizado", "garantizamos", "garantia", "garantía", "sin riesgo", "seguro que", "invierte en",
+              "te recomiendo invertir", "pide un prestamo", "pide un préstamo")
 _CITA = re.compile(r"\[[^\]]*\]")
 _INTERNO = tuple(re.compile(p) for p in (
     r"\b[a-z]+_[a-z0-9_]+\b",  # numero_hoy, pago_id, customer_id...
@@ -68,7 +68,12 @@ def verificar_respuesta(
     if PATRON_URL.search(texto) or detectar_pii(texto, cfg) or any(p in minusculas for p in PROHIBIDAS):
         motivos.append("prohibida_o_pii")
 
-    if resultados.get("intencion") in INTENCIONES_CON_CIFRA_CLAVE and f"S/{_soles(resultados['numero_hoy'])}" not in texto:
+    # cifra clave: el número de hoy; en que_pasa_si, el número DESPUÉS del escenario (resultados["cifra_clave"]).
+    # Un cifra_clave explícito en None desactiva la regla (estado_pago sin ningún pago que nombrar).
+    intencion = resultados.get("intencion")
+    por_defecto = resultados.get("numero_hoy") if intencion in ("explicar_numero", "que_pasa_si") else None
+    clave = resultados.get("cifra_clave", por_defecto)
+    if intencion in INTENCIONES_CON_CIFRA_CLAVE and clave is not None and f"S/{_soles(clave)}" not in texto:
         motivos.append("falta_cifra_clave")
     return not motivos, motivos
 

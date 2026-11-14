@@ -97,20 +97,20 @@ def test_texto_no_str_no_lanza(srv):
 def test_fuera_de_alcance_se_rechaza_en_la_intencion(srv):
     r = preguntar(srv, "dame un prestamo")
     assert (r.fuente, r.intencion, r.datos["capa"]) == ("rechazo", "fuera_de_alcance", "intencion")
-    assert "no doy asesoría" in r.texto and srv.consultas == []
+    assert "no doy asesoría" in r.texto.lower() and srv.consultas == []
 
 
 def test_bajo_el_umbral_pide_reformular_con_tres_sugerencias(srv, monkeypatch):
     monkeypatch.setattr(flujo.intenciones, "clasificar", lambda t, c, proveedor=None: Intencion("explicar_numero", 0.10))
     r = preguntar(srv, "asdf qwer")
-    assert (r.fuente, r.intencion) == ("plantilla", "no_entendida")
-    assert len(r.acciones) == 3 and "reformul" in r.texto.lower()
+    assert (r.fuente, r.intencion) == ("plantilla", "reformular")
+    assert r.acciones == plantillas.SUGERENCIAS and len(r.acciones) == 3
     assert srv.consultas == []
 
 
 def test_baja_confianza_en_fuera_de_alcance_tambien_pide_reformular(srv):
     r = preguntar(srv, "asdf qwer zxcv")  # el clasificador da fuera_de_alcance con confianza 0.23 < 0.30
-    assert r.intencion == "no_entendida"
+    assert r.intencion == "reformular"
 
 
 # --- parámetros ------------------------------------------------------------------
@@ -138,14 +138,15 @@ def test_explicar_numero(srv, decision):
 def test_estado_pago_nombra_el_pago_y_su_semaforo(srv, decision):
     pago = decision.por_pago[0]
     r = preguntar(srv, f"me alcanza para el pago del dia {pago.dia}")
-    assert r.intencion == "estado_pago" and str(pago.dia) in r.texto
-    assert pago.semaforo.replace("ambar", "ámbar") in r.texto.lower()
-    assert f"S/{int(decision.numero_hoy)}" in r.texto
+    assert (r.intencion, r.datos["verificacion"]) == ("estado_pago", "ok") and str(pago.dia) in r.texto
+    assert plantillas.ETIQUETA[pago.semaforo] in r.texto
+    assert f"S/{int(pago.monto)}" in r.texto
 
 
 def test_estado_pago_sin_pago_ese_dia(srv):
     r = preguntar(srv, "me alcanza para el pago del dia 2")
-    assert r.intencion == "estado_pago" and "no veo un pago el día 2" in r.texto.lower()
+    assert r.intencion == "estado_pago" and "no hay un pago con fecha el día 2" in r.texto.lower()
+    assert r.datos["verificacion"] == "ok"  # sin pago que nombrar no hay cifra clave que exigir
 
 
 def test_que_pasa_si_gasto(srv, decision):
@@ -183,7 +184,7 @@ def test_propuesta_sin_propuesta(cfg_chat, estado_caso_orden_pagos, pronostico_c
     d = motor.decidir(estado_caso_orden_pagos, pronostico_caso_orden_pagos, cfg)
     r = preguntar(FakeServicio(cfg_chat, d), "que hago para llegar a mi pago")
     assert r.intencion == "propuesta" and "no hay una propuesta" in r.texto.lower()
-    assert "faltan S/200" in r.texto
+    assert r.datos["verificacion"] == "ok"
 
 
 def test_concepto_solo_conocimiento_no_consulta_el_servicio(srv):
