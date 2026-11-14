@@ -90,7 +90,12 @@ def test_menos_semillas_que_el_preregistro_es_error(pares_mod, monkeypatch):
     assert not pares_mod.RUTA_SALIDA.exists()
 
 
-def test_sin_medicion_real_falla_claro(pares_mod):
-    # mientras generar/entrenar/simular no existan, pares no inventa resultados
+def test_sin_medicion_real_falla_claro(pares_mod, monkeypatch):
+    # si el gancho de medición falla (aquí simulado: _medir_semilla aún sin implementar), pares no inventa resultados.
+    # Adaptada por Gino: el gancho ya existe en esta rama, así que se simula el esqueleto.
+    def esqueleto(semilla):
+        raise NotImplementedError("gancho sin implementar")
+
+    monkeypatch.setattr(pares_mod, "_medir_semilla", esqueleto)
     with pytest.raises(NotImplementedError):
         pares_mod.pares(20)
