@@ -81,8 +81,10 @@ def _sin_etiquetas(df: pd.DataFrame) -> pd.DataFrame:
     return df.drop(columns=[c for c in ETIQUETAS_REFERENCIA if c in df.columns])
 
 
-def _entrenar_modelo(df: pd.DataFrame, cfg):
-    """Modelo entrenado con personas de entrenamiento y meses 1-16, calibrado con los meses 17-20 (mismas personas)."""
+def _entrenar_modelo(df: pd.DataFrame, cfg, semilla: int | None = None):
+    """Modelo entrenado con personas de entrenamiento y meses 1-16, calibrado con los meses 17-20 (mismas personas).
+
+    `semilla`: la del modelo; sin ella, la primera de cfg["semillas_evaluacion"] (los pares de semillas pasan la suya)."""
     part = particion(df)
     ini_val = _inicio_mes(part["meses_val"][0])
     fin_val = _inicio_mes(part["meses_val"][1] + 1)
@@ -90,7 +92,7 @@ def _entrenar_modelo(df: pd.DataFrame, cfg):
     de_entrenamiento = sin[sin["customer_id"].isin(part["train_personas"])]
     train = de_entrenamiento[de_entrenamiento["fecha_hora"] < ini_val]
     val = de_entrenamiento[de_entrenamiento["fecha_hora"] < fin_val]
-    modelo = entrenar(train, cfg, int(cfg["semillas_evaluacion"][0]))
+    modelo = entrenar(train, cfg, int(cfg["semillas_evaluacion"][0] if semilla is None else semilla))
     return calibrar(modelo, val, ini_val)
 
 
