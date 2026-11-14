@@ -1,6 +1,6 @@
 # Asistente (opción C). Dueños: Gino (intenciones, eval), Mathias (guardia). null = [por fijar ANTES de ver resultados].
 modo: 1                       # 1 = sin LLM (siempre disponible); 2 = con LLM (necesita autorización de la opción B)
-umbral_intencion: null        # confianza mínima para no pedir reformular [por fijar en el pre-registro]
+umbral_intencion: 0.30         # fijado 14-nov 12:18 por Gino (DECISIONES #24); medido en validación, no en el ciego
 max_caracteres: 200           # guardia
 max_palabras: 120             # verificador de salida
 
