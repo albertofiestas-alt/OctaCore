@@ -227,6 +227,34 @@ class Decision(_Contrato):
     explicacion_fuente: FuenteExplicacion = "plantilla"
 
 
+FuenteRespuesta = Literal["motor", "kb", "generativa", "plantilla", "rechazo"]
+
+
+class IngresoExtra(_Contrato):
+    """Ingreso hipotético CONOCIDO para una simulación (opción C)."""
+
+    dia: int = Field(ge=0, le=14)
+    monto: float = Field(ge=0, le=10000)
+
+
+class Escenario(_Contrato):
+    """Escenario hipotético: hasta 3 ingresos extra y un gasto hoy (opción C)."""
+
+    ingresos_extra: tuple[IngresoExtra, ...] = Field(default=(), max_length=3)
+    gasto_hoy: float = Field(default=0.0, ge=0, le=10000)
+
+
+class Respuesta(_Contrato):
+    """Respuesta del asistente (opción C)."""
+
+    texto: str
+    intencion: str
+    fuente: FuenteRespuesta
+    citas: list[str] = Field(default_factory=list)
+    datos: dict[str, Any] = Field(default_factory=dict)
+    acciones: list[str] = Field(default_factory=list)
+    registro_id: str = ""
+
 class Registro(_Contrato):
     """Una línea JSON por recomendación, para poder reproducirla y auditarla."""
 
@@ -249,10 +277,13 @@ __all__ = [
     "Decision",
     "DecisionPago",
     "ETIQUETAS_REFERENCIA",
+    "Escenario",
     "EstadoPersona",
     "FuenteExplicacion",
+    "FuenteRespuesta",
     "HORIZONTES",
     "Horizonte",
+    "IngresoExtra",
     "Metodo",
     "Movimiento",
     "NOMBRES_CUANTILES",
@@ -263,6 +294,7 @@ __all__ = [
     "Propuesta",
     "Registro",
     "ReporteCalidad",
+    "Respuesta",
     "Semaforo",
     "Tipo",
 ]
